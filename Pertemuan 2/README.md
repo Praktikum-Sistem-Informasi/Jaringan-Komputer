@@ -12,11 +12,9 @@
 ```
 .
 ├── soal/       # Soal atau instruksi tugas
-├── src/        # Tempat menulis kode jawaban
 └── docs/       # Materi pendukung (slide, referensi)
 ```
 - `soal/` — berisi skenario tugas: rancangan topologi 3 Switch & 6 PC, serta instruksi konfigurasi VTP Server/Transparent/Client.
-- `src/` — berisi file konfigurasi/topologi Cisco Packet Tracer (`.pkt`) hasil pengerjaan praktikan.
 - `docs/` — berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi VLAN/VTP).
 
 ## 🚀 Cara Menjalankan
