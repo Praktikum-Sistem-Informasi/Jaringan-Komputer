@@ -32,10 +32,10 @@ Switch(config)# hostname Switch0
 ### 1. Konfigurasi Dasar & CLI Cisco
 
 **Hierarki mode CLI Cisco:**
-- **User Exec Mode (`Switch>`)** — level pertama saat mengakses perangkat; hanya bisa melihat informasi dasar tanpa hak melakukan perubahan konfigurasi.
-- **Privileged Exec Mode (`Switch#`)** — untuk melihat informasi detail sistem seperti tabel routing, interface, protokol, dan konfigurasi berjalan. Masuk dengan perintah `enable`.
-- **Global Configuration Mode (`Switch(config)#`)** — mode utama untuk perubahan konfigurasi global seperti hostname, password, pembuatan user, dan lainnya. Masuk dengan perintah `configure terminal`.
-- **Interface Configuration Mode (`Switch(config-if)#`)** — sub-mode untuk memodifikasi parameter port interface tertentu. Masuk dengan perintah `interface [nama_interface]`.
+- **User Exec Mode (`Switch>`)**  level pertama saat mengakses perangkat; hanya bisa melihat informasi dasar tanpa hak melakukan perubahan konfigurasi.
+- **Privileged Exec Mode (`Switch#`)**  untuk melihat informasi detail sistem seperti tabel routing, interface, protokol, dan konfigurasi berjalan. Masuk dengan perintah `enable`.
+- **Global Configuration Mode (`Switch(config)#`)**  mode utama untuk perubahan konfigurasi global seperti hostname, password, pembuatan user, dan lainnya. Masuk dengan perintah `configure terminal`.
+- **Interface Configuration Mode (`Switch(config-if)#`)**  sub-mode untuk memodifikasi parameter port interface tertentu. Masuk dengan perintah `interface [nama_interface]`.
 
 **Cheatsheet CLI Konfigurasi Dasar:**
 
