@@ -98,7 +98,7 @@ Switch(config-if)# exit
 
 **Uji Verifikasi:**
 1. Jalankan perintah verifikasi: `Switch# show interface trunk`.
-2. Perhatikan baris **Vlans allowed on trunk** — port harus menunjukkan angka **20** saja.
+2. Perhatikan baris **Vlans allowed on trunk** port harus menunjukkan angka **20** saja.
 3. Lakukan tes ping antar-PC di VLAN 20 (harus sukses), lalu uji ping antar-PC di VLAN 10 (harus gagal/RTO karena telah diblokir di jalur trunk).
 
 ### 5. VLAN Trunking Protocol (VTP)
@@ -106,9 +106,9 @@ Switch(config-if)# exit
 Pada jaringan berskala besar dengan puluhan switch, konfigurasi pembuatan VLAN satu per satu secara manual sangat tidak efisien. **VTP (VLAN Trunking Protocol)** adalah protokol *Cisco Proprietary* (hak milik Cisco) yang memungkinkan administrator mengelola pembuatan, penghapusan, dan pengubahan nama VLAN secara terpusat dari satu switch utama. Konfigurasi VTP disimpan dalam file `vlan.dat` pada memori flash.
 
 **VTP membagi switch ke dalam 3 peran (mode):**
-1. **VTP Server (default)** — membuat, mengubah, atau menghapus VLAN serta menyebarkan pembaruan database (*advertisement*) ke seluruh switch klien.
-2. **VTP Client** — menerima dan menerapkan perubahan database VLAN dari server; tidak dapat membuat atau memodifikasi VLAN secara lokal.
-3. **VTP Transparent** — berfungsi sebagai penyalur, meneruskan iklan VTP ke switch lain tetapi tidak menerapkan perubahan tersebut pada database internalnya sendiri.
+1. **VTP Server (default)** membuat, mengubah, atau menghapus VLAN serta menyebarkan pembaruan database (*advertisement*) ke seluruh switch klien.
+2. **VTP Client** menerima dan menerapkan perubahan database VLAN dari server; tidak dapat membuat atau memodifikasi VLAN secara lokal.
+3. **VTP Transparent** berfungsi sebagai penyalur, meneruskan iklan VTP ke switch lain tetapi tidak menerapkan perubahan tersebut pada database internalnya sendiri.
 
 > ⚠️ **Peringatan Keamanan:** Setiap pembaruan ditandai dengan **Revision Number**. Jika switch client dengan nomor revisi lebih tinggi dimasukkan ke jaringan, database VLAN server dapat terhapus secara otomatis. Selalu reset switch sebelum menghubungkannya kembali ke domain VTP aktif.
 
