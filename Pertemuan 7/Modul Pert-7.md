@@ -41,16 +41,29 @@ Dalam cara kerjanya, infrastruktur WLAN sangat mengandalkan perangkat pusat yang
  
 <img width="940" height="316" alt="Menu konfigurasi fisik/GUI Access Point" src="https://github.com/user-attachments/assets/a4efeda3-93e6-4fcb-b65f-24258bfdeeab" />
 
---
-
+---
 Secara bawaan (default), jaringan pada Access Point terbuka tanpa keamanan. Oleh karena itu, kita perlu mengatur konfigurasi SSID, sandi, dan jenis enkripsinya seperti pada gambar berikut:
- 
+
+<img width="320" height="258" alt="image" src="https://github.com/user-attachments/assets/d61a1077-718f-4845-a29a-b941f67ae841" /> 
+
+<br>
+
 <img width="573" height="297" alt="Konfigurasi SSID dan enkripsi WPA2-PSK pada Access Point" src="https://github.com/user-attachments/assets/97c61a18-4e2e-4905-be48-3fbf1b8fc46f" />
 
-
+---
 Langkah selanjutnya, buka menu Config pada Smartphone dan pilih antarmuka Wireless0. Hubungkan perangkat ke jaringan Access Point dengan memasukkan kata sandi yang telah dikonfigurasi sebelumnya, seperti pada gambar berikut:
- 
-<img width="573" height="549" alt="Menghubungkan Smartphone ke jaringan WLAN melalui interface Wireless0" src="https://github.com/user-attachments/assets/bd1ad694-6fdf-4781-a10a-16e4e23a7b57" />
+
+ <img width="573" height="551" alt="image" src="https://github.com/user-attachments/assets/2794f37d-7fa3-4188-bd31-5c59b6d29b27" />
+
+---
+Berbeda dengan perangkat Smartphone yang sudah memiliki fitur nirkabel bawaan, pada perangkat Laptop kita harus menyesuaikan modul fisiknya terlebih dahulu. Masuk ke tab Physical, matikan daya laptop, lepaskan modul LAN bawaan, dan ganti dengan modul wireless WPC300N seperti pada gambar berikut:
+
+<img width="576" height="303" alt="image" src="https://github.com/user-attachments/assets/f7ff1660-355c-4823-a661-fba1aa642b9c" />
+
+---
+Langkah selanjutnya, bisa melakukan konfigurasi seperti pada smartphone :
+
+<img width="573" height="551" alt="image" src="https://github.com/user-attachments/assets/6611b8eb-1eee-486b-94ac-61a98c554fde" />
 
 
 ### 2. Deklarasi & Akses VLAN
