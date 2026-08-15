@@ -118,6 +118,24 @@ Ketika pengguna menjalankan `enable` router akan meminta password sebelum member
 
 Manajemen user lokal digunakan untuk membuat akun pengguna pada perangkat Cisco, sehingga setiap pengguna dapat memiliki username dan password sendiri.
 
+<img width="631" height="73" alt="image" src="https://github.com/user-attachments/assets/2cac42b9-1456-41ee-ba31-af21d39ca0e2" />
+
+Akun tersebut dapat digunakan untuk autentikasi, terutama ketika mengonfigurasi akses seperti SSH atau Telnet menggunakan `login local`.
+
+<img width="617" height="55" alt="image" src="https://github.com/user-attachments/assets/07483399-463e-4d92-abe4-3b717ea1388f" />
+
+**Cheatsheet CLI**
+
+| Perintah | Fungsi |
+|---|---|
+| `username roni secret roni12345` | Membuat username `roni` dengan password yang tersimpan secara terenkripsi |
+| `show running-config \| include username` | Menampilkan (verifikasi) konfigurasi username lokal |
+| `no username admin` | Menghapus username `admin` |
+
+---
+
+
+
 
 
 
