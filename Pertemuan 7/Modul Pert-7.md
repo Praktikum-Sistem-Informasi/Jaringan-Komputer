@@ -68,7 +68,41 @@ Langkah selanjutnya, bisa melakukan konfigurasi seperti pada smartphone :
 
 ### 2. Keamanan CLI (Command Line Interface)
 
-Ini konsep dasar mengamankan akses ke router/switch Cisco supaya nggak sembarang orang bisa masuk dan konfigurasi perangkat:
+<img width="159" height="163" alt="image" src="https://github.com/user-attachments/assets/442a3aa1-ed71-4fae-9ebd-dab98371f7fa" />
+
+Konsep ini mengamankan akses ke router/switch Cisco melalui CLI, supaya tidak sembarang orang bisa masuk dan mengubah konfigurasi perangkat.
+ 
+#### A. Pengamanan Konsol Fisik (`line console 0`)
+ 
+Mengunci akses lewat **port console** (kabel fisik yang terhubung langsung ke router). Walau seseorang punya akses fisik ke perangkat, tetap dibutuhkan password untuk masuk ke mode user EXEC.
+
+**konfigurasi line console 0**
+
+<img width="618" height="149" alt="image" src="https://github.com/user-attachments/assets/10d23244-4785-49b1-a38a-f8b3001dbada" />
+
+---
+**Melakukan pengecekan line console 0**
+
+**Cheatsheet CLI**
+
+| Perintah | Fungsi |
+|---|---|
+| `line console 0` | Masuk ke mode konfigurasi line console (0 = console pertama/satu-satunya di kebanyakan device) |
+| `password 12345` | Menentukan password yang harus dimasukkan saat login |
+| `login` | **Wajib** ada — perintah ini yang mengaktifkan pengecekan password. Tanpa `login`, password yang di-set tidak akan pernah diminta |
+| `exit` | Keluar dari mode line console |
+| `do show running-config \| section line con` | Menampilkan (verifikasi) bagian konfigurasi `line console` saja dari running-config, tanpa perlu keluar dulu dari mode konfigurasi (`do` memungkinkan menjalankan perintah show dari dalam config mode) |
+ 
+---
+
+
+
+
+
+
+
+
+
 
 
 ### 3. VLAN Trunking
