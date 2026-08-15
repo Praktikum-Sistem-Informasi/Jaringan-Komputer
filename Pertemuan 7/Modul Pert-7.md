@@ -18,47 +18,40 @@
 - `soal/` — berisi skenario tugas: ?
 - `docs/` — berisi modul ini beserta materi pendukung lain (?).
 
-## 🚀 Cara Menjalankan
+## 🚀 Cara Menjalankan Cisco Packet Trace
 Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alur pengerjaannya:
 ```
-# 1. Buka file topologi pada Cisco Packet Tracer (src/topologi.pkt)
-# 2. Klik perangkat Switch, buka tab CLI, lalu masukkan perintah konfigurasi, contoh:
-Switch> enable
-Switch# configure terminal
-Switch(config)# hostname Switch0
+1. Buka aplikasi Cisco Packet Tracer (matikan jaringan internet).
+2. Buat topologi jaringan baru sesuai intruksi
+3. Hubungkan perangkat sesuai topologi (gunakan kabel yang sesuai ).
+4. Klik masing-masing perangkat untuk membuka menu konfigurasi 
+   (tab Config/GUI/CLI) sesuai intruksi.
+5. Simpan file .pkt secara berkala.
 ```
 
 ## 📖 Materi Praktikum
 
-### 1. Konfigurasi Dasar & CLI Cisco
+### 1. WLAN (Wireless Local Area Network)
+ 
+WLAN (Wireless Local Area Network) adalah sistem jaringan komputer yang mencakup area lokal tertentu seperti gedung perkantoran, kampus, atau rumah tanpa menggunakan sambungan kabel fisik untuk menghubungkan perangkat-perangkat di dalamnya. Sebagai gantinya, WLAN memanfaatkan teknologi frekuensi radio untuk mengirimkan dan menerima data melalui medium udara. Frekuensi yang paling umum digunakan berada pada pita gelombang radio 2,4 GHz dan 5 GHz, yang beroperasi berdasarkan standar teknis IEEE 802.11, atau yang secara komersial lebih akrab kita sebut dengan Wi-Fi.
+ 
+Dalam cara kerjanya, infrastruktur WLAN sangat mengandalkan perangkat pusat yang disebut Access Point (AP) atau wireless router. Perangkat ini berfungsi sebagai stasiun pemancar dan penerima (transceiver) yang menjembatani lalu lintas data antara perangkat nirkabel pengguna — seperti laptop, tablet, dan ponsel pintar — dengan jaringan kabel utama atau koneksi penyedia internet (ISP). Ketika pengguna berpindah tempat di dalam batas area cakupan sinyal Access Point tersebut, koneksi perangkat akan tetap terjaga secara otomatis. Hal ini memberikan tingkat mobilitas, skalabilitas, dan fleksibilitas tinggi yang tidak bisa ditawarkan oleh jaringan berbasis kabel (LAN) tradisional.
+ 
+#### Konfigurasi WLAN
+ 
+<img width="940" height="316" alt="Menu konfigurasi fisik/GUI Access Point" src="https://github.com/user-attachments/assets/a4efeda3-93e6-4fcb-b65f-24258bfdeeab" />
 
-**Hierarki mode CLI Cisco:**
-- **User Exec Mode (`Switch>`)**  level pertama saat mengakses perangkat; hanya bisa melihat informasi dasar tanpa hak melakukan perubahan konfigurasi.
-- **Privileged Exec Mode (`Switch#`)**  untuk melihat informasi detail sistem seperti tabel routing, interface, protokol, dan konfigurasi berjalan. Masuk dengan perintah `enable`.
-- **Global Configuration Mode (`Switch(config)#`)**  mode utama untuk perubahan konfigurasi global seperti hostname, password, pembuatan user, dan lainnya. Masuk dengan perintah `configure terminal`.
-- **Interface Configuration Mode (`Switch(config-if)#`)**  sub-mode untuk memodifikasi parameter port interface tertentu. Masuk dengan perintah `interface [nama_interface]`.
+--
 
-**Cheatsheet CLI Konfigurasi Dasar:**
+Secara bawaan (default), jaringan pada Access Point terbuka tanpa keamanan. Oleh karena itu, kita perlu mengatur konfigurasi SSID, sandi, dan jenis enkripsinya seperti pada gambar berikut:
+ 
+<img width="573" height="297" alt="Konfigurasi SSID dan enkripsi WPA2-PSK pada Access Point" src="https://github.com/user-attachments/assets/97c61a18-4e2e-4905-be48-3fbf1b8fc46f" />
 
-| Fungsi | Perintah CLI | Penjelasan |
-|---|---|---|
-| Masuk Privilege Mode | `Switch> enable` | Berpindah ke level pemeriksaan sistem. |
-| Masuk Global Config | `Switch# configure terminal` | Berpindah ke mode konfigurasi global. |
-| Mengubah Hostname | `Switch(config)# hostname [Nama_Baru]` | Mengubah identitas nama perangkat. |
-| Menyimpan Konfigurasi | `Switch# write` atau `copy run start` | Menyimpan konfigurasi aktif (running-config) ke NVRAM (startup-config) agar tidak hilang saat perangkat mati (reboot). |
-| Mereset Konfigurasi | `Switch# write erase` | Menghapus seluruh file konfigurasi kembali ke pengaturan pabrik. |
-| Melihat Status Port | `Switch# show ip interface brief` | Menampilkan ringkasan status fisik dan logis (up/down) seluruh interface. |
-| Melihat Konfigurasi | `Switch# show running-config` | Menampilkan file konfigurasi yang sedang berjalan di RAM. |
 
-**Konfigurasi Keamanan (Password):**
-Pemberian autentikasi diperlukan agar tidak sembarang orang dapat mengonfigurasi perangkat.
-- Password konsol digunakan saat ada yang mengakses perangkat lewat port konsol fisik.
-- Password masuk Privilege Mode:
-  ```
-  Switch(config)# enable password coba1   # teks biasa, tidak terenkripsi
-  Switch(config)# enable secret coba2     # terenkripsi kuat
-  ```
-  > Jika keduanya dikonfigurasi, sistem Cisco secara otomatis akan memprioritaskan penggunaan `enable secret` karena faktor keamanan enkripsi.
+Langkah selanjutnya, buka menu Config pada Smartphone dan pilih antarmuka Wireless0. Hubungkan perangkat ke jaringan Access Point dengan memasukkan kata sandi yang telah dikonfigurasi sebelumnya, seperti pada gambar berikut:
+ 
+<img width="573" height="549" alt="Menghubungkan Smartphone ke jaringan WLAN melalui interface Wireless0" src="https://github.com/user-attachments/assets/bd1ad694-6fdf-4781-a10a-16e4e23a7b57" />
+
 
 ### 2. Deklarasi & Akses VLAN
 
