@@ -41,7 +41,6 @@ Dalam cara kerjanya, infrastruktur WLAN sangat mengandalkan perangkat pusat yang
  
 <img width="940" height="316" alt="Menu konfigurasi fisik/GUI Access Point" src="https://github.com/user-attachments/assets/a4efeda3-93e6-4fcb-b65f-24258bfdeeab" />
 
----
 Secara bawaan (default), jaringan pada Access Point terbuka tanpa keamanan. Oleh karena itu, kita perlu mengatur konfigurasi SSID, sandi, dan jenis enkripsinya seperti pada gambar berikut:
 
 <img width="320" height="258" alt="image" src="https://github.com/user-attachments/assets/d61a1077-718f-4845-a29a-b941f67ae841" /> 
@@ -50,17 +49,14 @@ Secara bawaan (default), jaringan pada Access Point terbuka tanpa keamanan. Oleh
 
 <img width="573" height="297" alt="Konfigurasi SSID dan enkripsi WPA2-PSK pada Access Point" src="https://github.com/user-attachments/assets/97c61a18-4e2e-4905-be48-3fbf1b8fc46f" />
 
----
 Langkah selanjutnya, buka menu Config pada Smartphone dan pilih antarmuka Wireless0. Hubungkan perangkat ke jaringan Access Point dengan memasukkan kata sandi yang telah dikonfigurasi sebelumnya, seperti pada gambar berikut:
 
  <img width="573" height="551" alt="image" src="https://github.com/user-attachments/assets/2794f37d-7fa3-4188-bd31-5c59b6d29b27" />
 
----
 Berbeda dengan perangkat Smartphone yang sudah memiliki fitur nirkabel bawaan, pada perangkat Laptop kita harus menyesuaikan modul fisiknya terlebih dahulu. Masuk ke tab Physical, matikan daya laptop, lepaskan modul LAN bawaan, dan ganti dengan modul wireless WPC300N seperti pada gambar berikut:
 
 <img width="576" height="303" alt="image" src="https://github.com/user-attachments/assets/f7ff1660-355c-4823-a661-fba1aa642b9c" />
 
----
 Langkah selanjutnya, bisa melakukan konfigurasi seperti pada smartphone :
 
 <img width="573" height="551" alt="image" src="https://github.com/user-attachments/assets/6611b8eb-1eee-486b-94ac-61a98c554fde" />
@@ -79,12 +75,10 @@ Pengamanan konsol fisik bertujuan untuk mencegah orang yang memiliki akses langs
 
 <img width="618" height="149" alt="image" src="https://github.com/user-attachments/assets/10d23244-4785-49b1-a38a-f8b3001dbada" />
 
----
-Ketika konfigurasi berhasil maka saat membuka perangkat maka akan diminta password
+Ketika konfigurasi berhasil maka saat membuka perangkat akan diminta password
 
 <img width="558" height="184" alt="image" src="https://github.com/user-attachments/assets/d730c84b-93fc-4d22-97b6-86adfc7a3dbe" />
 
----
 **Cheatsheet CLI**
 
 | Perintah | Fungsi |
@@ -96,6 +90,33 @@ Ketika konfigurasi berhasil maka saat membuka perangkat maka akan diminta passwo
 | `show running-config \| section line con` | Menampilkan (verifikasi) bagian konfigurasi `line console` saja dari running-config |
  
 ---
+
+#### B. Pengamanan Privilege Mode (`enable secret`)
+
+Privilege Mode adalah mode dengan hak akses tinggi yang ditandai dengan prompt `Router#`
+
+Pada mode ini pengguna dapat menjalankan perintah administrasi dan konfigurasi penting pada perangkat. Oleh karena itu, akses ke mode ini perlu diamankan menggunakan `enable secret`.
+
+<img width="637" height="91" alt="image" src="https://github.com/user-attachments/assets/b3aeb2c2-d33a-43e7-8635-eb28b120fb7d" />
+
+Ketika pengguna menjalankan `enable` router akan meminta password sebelum memberikan akses ke Privileged Mode.
+
+<img width="514" height="89" alt="image" src="https://github.com/user-attachments/assets/52e48ed7-61c3-40b6-8d89-5279f728614f" />
+
+**Cheatsheet CLI**
+
+| Perintah | Fungsi |
+|---|---|
+| `enable secret 12345` | Menentukan password untuk mengamankan akses ke Privilege EXEC Mode (`Router#`) |
+| `enable` | Masuk dari User EXEC Mode (`Router>`) ke Privilege EXEC Mode (`Router#`) |
+| `show running-config \| include enable secret` | Menampilkan (verifikasi) konfigurasi `enable secret` yang tersimpan di running-config |
+| `no enable secret` | Menghapus konfigurasi `enable secret` |
+
+---
+
+#### C. Manajemen User Lokal (`username`)
+
+Manajemen user lokal digunakan untuk membuat akun pengguna pada perangkat Cisco, sehingga setiap pengguna dapat memiliki username dan password sendiri.
 
 
 
