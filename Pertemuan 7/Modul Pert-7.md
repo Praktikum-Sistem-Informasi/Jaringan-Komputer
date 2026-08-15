@@ -65,6 +65,7 @@ Langkah selanjutnya, bisa melakukan konfigurasi seperti pada smartphone :
 
 <img width="573" height="551" alt="image" src="https://github.com/user-attachments/assets/6611b8eb-1eee-486b-94ac-61a98c554fde" />
 
+---
 
 ### 2. Keamanan CLI (Command Line Interface)
 
@@ -74,15 +75,16 @@ Konsep ini mengamankan akses ke router/switch Cisco melalui CLI, supaya tidak se
  
 #### A. Pengamanan Konsol Fisik (`line console 0`)
  
-Mengunci akses lewat **port console** (kabel fisik yang terhubung langsung ke router). Walau seseorang punya akses fisik ke perangkat, tetap dibutuhkan password untuk masuk ke mode user EXEC.
-
-**konfigurasi line console 0**
+Pengamanan konsol fisik bertujuan untuk mencegah orang yang memiliki akses langsung ke perangkat router atau switch melalui port Console masuk dan melakukan konfigurasi tanpa izin. Dengan memberikan password pada line console 0, setiap kali seseorang mengakses perangkat melalui koneksi console, perangkat akan meminta password terlebih dahulu.
 
 <img width="618" height="149" alt="image" src="https://github.com/user-attachments/assets/10d23244-4785-49b1-a38a-f8b3001dbada" />
 
 ---
-**Melakukan pengecekan line console 0**
+Ketika konfigurasi berhasil maka saat membuka perangkat maka akan diminta password
 
+<img width="558" height="184" alt="image" src="https://github.com/user-attachments/assets/d730c84b-93fc-4d22-97b6-86adfc7a3dbe" />
+
+---
 **Cheatsheet CLI**
 
 | Perintah | Fungsi |
@@ -91,7 +93,7 @@ Mengunci akses lewat **port console** (kabel fisik yang terhubung langsung ke ro
 | `password 12345` | Menentukan password yang harus dimasukkan saat login |
 | `login` | **Wajib** ada — perintah ini yang mengaktifkan pengecekan password. Tanpa `login`, password yang di-set tidak akan pernah diminta |
 | `exit` | Keluar dari mode line console |
-| `do show running-config \| section line con` | Menampilkan (verifikasi) bagian konfigurasi `line console` saja dari running-config, tanpa perlu keluar dulu dari mode konfigurasi (`do` memungkinkan menjalankan perintah show dari dalam config mode) |
+| `show running-config \| section line con` | Menampilkan (verifikasi) bagian konfigurasi `line console` saja dari running-config |
  
 ---
 
