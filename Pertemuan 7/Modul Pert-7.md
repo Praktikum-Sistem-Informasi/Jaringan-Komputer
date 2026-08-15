@@ -66,17 +66,10 @@ Langkah selanjutnya, bisa melakukan konfigurasi seperti pada smartphone :
 <img width="573" height="551" alt="image" src="https://github.com/user-attachments/assets/6611b8eb-1eee-486b-94ac-61a98c554fde" />
 
 
-### 2. Deklarasi & Akses VLAN
+### 2. Keamanan CLI (Command Line Interface)
 
-Virtual LAN (VLAN) adalah metode untuk membagi satu jaringan fisik menjadi beberapa segmen jaringan logis (virtual) yang terpisah. Perangkat hanya dapat berkomunikasi dengan perangkat lain yang berada di dalam satu VLAN yang sama. VLAN membantu mengisolasi lalu lintas data, meningkatkan keamanan jaringan (security), serta mengefisiensikan bandwidth. VLAN hanya didukung pada switch manageable (seperti Cisco Catalyst) dan tidak didukung pada switch unmanageable.
+Ini konsep dasar mengamankan akses ke router/switch Cisco supaya nggak sembarang orang bisa masuk dan konfigurasi perangkat:
 
-**Skenario:** Buat VLAN 10 dengan nama Marketing dan VLAN 20 dengan nama Sales, lalu daftarkan port interface komputer ke VLAN tersebut.
-
-Langkah kerja:
-1. **Deklarasi VLAN ID dan Nama** pada Global Configuration Mode.
-2. **Verifikasi Database VLAN**  gunakan perintah `Switch# show vlan brief` untuk memastikan VLAN telah terdaftar.
-3. **Mendaftarkan Port Switch ke VLAN (Access Mode)**  daftarkan port `fa0/1` ke VLAN 10 dan port `fa0/3` ke VLAN 20.
-4. **Uji Koneksi**  lakukan tes ping dari komputer di VLAN 10 ke komputer di VLAN 20. Hasilnya harus *Request Timed Out* (RTO) karena berada di VLAN yang berbeda dan lalu lintasnya terisolasi.
 
 ### 3. VLAN Trunking
 
