@@ -1,66 +1,76 @@
-# Soal Praktikum Singkat, Pertemuan 6: DHCP (Dynamic Host Configuration Protocol)
+# Soal Praktikum Singkat, Pertemuan 6: DHCP, DNS, dan Web Server
 
 ## 📋 Deskripsi Tugas
-Praktikan diminta mengonfigurasi DHCP sederhana pada satu Router untuk melayani satu segmen jaringan. Soal ini dirancang untuk dikerjakan dalam waktu 30 menit di kelas.
+Praktikan diminta mengonfigurasi satu topologi sederhana yang menggabungkan tiga layanan sekaligus: DHCP (di Router), DNS, dan Web Server (keduanya di Server), lalu membuktikan bahwa client bisa mengakses sebuah halaman web hanya dengan mengetik nama domain di browser.
+
+> ⏱️ **Catatan waktu:** soal ini dipadatkan untuk 3 topik sekaligus. Realistisnya butuh sekitar 35 sampai 40 menit kalau dikerjakan pelan-pelan, jadi kerjakan langkah demi langkah tanpa berhenti lama di satu bagian, dan jangan ragu lanjut ke langkah berikutnya dulu kalau ada bagian yang belum sempurna.
 
 ## 🧰 Alat & Bahan
 - Aplikasi **Cisco Packet Tracer**
 - **1 unit Router** Cisco
+- **1 unit Server**
 - **1 unit Switch**
 - **3 unit PC**
-- Kabel Straight (PC ke switch, switch ke router)
+- Kabel Straight (PC ke switch, switch ke router dan server)
 
 ## 🗺️ Topologi Jaringan
-Rancang topologi dengan susunan sebagai berikut:
 
 | Perangkat | Peran | Keterangan |
 |---|---|---|
 | Router | DHCP Server | Melayani permintaan IP dari PC 1, PC 2, dan PC 3 |
-| Switch | Penghubung | Menghubungkan Router ke ketiga PC |
+| Server | DNS dan Web Server | Menjawab query domain, sekaligus menyajikan halaman web |
+| Switch | Penghubung | Menghubungkan Router, Server, dan ketiga PC |
 | PC 1, PC 2, PC 3 | Host | Diatur ke mode IP Configuration DHCP |
 
 Gunakan pengalamatan berikut sebagai acuan:
 
-| Network | Gateway (interface Router) |
-|---|---|
-| 192.168.10.0/24 | 192.168.10.1 |
+| Network | Gateway (interface Router) | IP Server |
+|---|---|---|
+| 192.168.10.0/24 | 192.168.10.1 | 192.168.10.2 (statis) |
 
 ## 📝 Instruksi Pengerjaan
 
 ### Langkah 1. Konfigurasi Dasar (5 menit)
-1. Berikan **hostname** pada Router.
-2. Konfigurasikan IP address statis pada interface Router yang terhubung ke Switch, sesuai gateway di atas.
-3. Pastikan interface dalam kondisi aktif (`no shutdown`).
+1. Berikan **hostname** pada Router, lalu konfigurasikan IP address statis pada interface yang terhubung ke Switch sesuai gateway di atas.
+2. Berikan IP address statis pada Server, jangan gunakan DHCP untuk Server itu sendiri.
 
-### Langkah 2. Konfigurasi DHCP pada Router (10 menit)
+### Langkah 2. Konfigurasi DHCP pada Router (5 menit)
 1. Buat pool DHCP menggunakan `ip dhcp pool [nama_pool]`.
-2. Tentukan `network`, `default-router`, dan `dns-server` sesuai pengalamatan yang direncanakan.
-3. Verifikasi pool yang sudah dibuat dengan `show ip dhcp pool`.
+2. Tentukan `network`, `default-router`, dan `dns-server` (isi dengan IP Server, karena Server yang akan menjalankan DNS).
+3. Verifikasi dengan `show ip dhcp pool`.
 
-### Langkah 3. Uji Koneksi pada Sisi Client (10 menit)
-1. Atur ketiga PC ke mode IP Configuration **DHCP**.
-2. Jalankan `ipconfig` pada tiap PC untuk melihat IP yang diterima, lalu catat hasilnya.
-3. Jalankan `show ip dhcp binding` pada Router untuk memastikan ketiga PC tercatat.
+### Langkah 3. Konfigurasi DNS pada Server (5 menit)
+1. Buka Server, tab **Config**, pilih layanan **DNS**, lalu aktifkan Service: On.
+2. Tambahkan satu **A Record**: isi Name dengan nama domain bebas (misalnya `praktisi.web.id`), dan Address dengan IP Server itu sendiri.
+3. Klik **Add** untuk menyimpan record.
 
-### Langkah 4. Rapikan dan Kumpulkan (5 menit)
-1. Simpan konfigurasi (`write` atau `copy run start`).
-2. Ambil screenshot hasil `ipconfig` dan `show ip dhcp binding`.
+### Langkah 4. Konfigurasi Web Server (5 menit)
+1. Masih pada Server, buka layanan **HTTP**, lalu aktifkan Service: On.
+2. Buka file `index.html`, ubah sedikit isinya (misalnya tambahkan nama kelompok), lalu simpan.
+
+### Langkah 5. Uji Koneksi pada Sisi Client (10 menit)
+1. Atur ketiga PC ke mode IP Configuration **DHCP**, lalu jalankan `ipconfig` untuk memastikan IP dan DNS server sudah diterima.
+2. Buka **Web Browser** pada salah satu PC, ketik nama domain yang sudah didaftarkan di Langkah 3.
+3. Pastikan halaman `index.html` yang sudah diubah tadi berhasil tampil.
+
+### Langkah 6. Rapikan dan Kumpulkan (5 menit)
+1. Simpan konfigurasi Router (`write` atau `copy run start`).
+2. Ambil screenshot hasil `ipconfig`, tampilan browser yang berhasil membuka domain, dan konfigurasi DNS/HTTP pada Server.
 
 ## 📊 Tabel Hasil Uji Coba
 
 | No | Pengujian | Hasil | Keterangan |
 |---|---|---|---|
-| 1 | IP yang diterima PC 1 setelah `ipconfig` | | |
-| 2 | IP yang diterima PC 2 setelah `ipconfig` | | |
-| 3 | IP yang diterima PC 3 setelah `ipconfig` | | |
-| 4 | `show ip dhcp binding` pada Router menampilkan ketiga PC | | |
+| 1 | IP dan DNS server yang diterima PC setelah `ipconfig` | | |
+| 2 | Domain berhasil dibuka lewat Web Browser | | |
+| 3 | Isi halaman web sesuai perubahan yang dilakukan pada `index.html` | | |
 
 ## ❓ Pertanyaan Analisis
-1. Jelaskan proses DORA yang terjadi saat PC pertama kali meminta IP address ke DHCP.
-2. Apa fungsi perintah `default-router` dan `dns-server` di dalam pool DHCP?
+1. Urutkan dan jelaskan secara singkat apa yang terjadi mulai dari PC menyalakan browser dan mengetik nama domain, sampai halaman web akhirnya tampil di layar.
+2. Apa yang akan terjadi jika Server tidak diberi IP address statis, melainkan ikut mengambil IP dari DHCP?
 
 ## 📤 Ketentuan Pengumpulan
 - File topologi Cisco Packet Tracer (`.pkt`) dikumpulkan pada folder `src/`.
 - Tabel hasil uji coba dan jawaban pertanyaan analisis dikumpulkan langsung pada file ini.
-- Sertakan screenshot hasil `ipconfig` tiap PC dan `show ip dhcp binding` pada Router sebagai bukti pengerjaan.
+- Sertakan screenshot hasil `ipconfig`, tampilan browser, dan konfigurasi DNS/HTTP pada Server sebagai bukti pengerjaan.
 - Batas waktu pengumpulan: akhir sesi kelas hari ini.
