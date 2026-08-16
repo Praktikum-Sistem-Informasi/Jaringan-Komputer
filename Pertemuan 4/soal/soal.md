@@ -74,7 +74,7 @@ Ambil screenshot `show ip route` dari Topologi A dan B, serta hasil `ping` PC1 k
 
 | No | Pengujian                                                      | Topologi A (Static) | Topologi B (RIP) |
 |----|----------------------------------------------------------------|---------------------|------------------|
-| 1  | Kode route yang muncul pada `show ip route`                    |                     |                  |
+| 1  | Kode route yang muncul pada `show ip route` (S/R)                    |                     |                  |
 | 2  | Ping PC1 ke PC2 sebelum link R1-R2 diputus                     |                     |                  |
 | 3  | Ping PC1 ke PC2 setelah link R1-R2 diputus                     |                     |                  |
 | 4  | Apakah jalur alternatif (via R3) otomatis dipakai setelah link diputus? |                     |                  |
