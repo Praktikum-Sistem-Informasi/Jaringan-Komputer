@@ -14,8 +14,8 @@
 ├── soal/       # Soal atau instruksi tugas
 └── docs/       # Materi pendukung (slide, referensi)
 ```
-- `soal/` — berisi skenario tugas: rancangan topologi dengan DHCP router dan DHCP server berjalan pada segmen berbeda.
-- `docs/` — berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi DHCP).
+- `soal/`: berisi skenario tugas rancangan topologi dengan DHCP router dan DHCP server berjalan pada segmen berbeda.
+- `docs/`: berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi DHCP).
 
 ## 🚀 Cara Menjalankan
 Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alur pengerjaannya:
@@ -32,10 +32,10 @@ Router(config)#
 ### 1. Konsep Dasar DHCP
 DHCP (Dynamic Host Configuration Protocol) adalah protokol yang digunakan untuk memberikan konfigurasi IP address, subnet mask, default gateway, dan DNS secara otomatis kepada client, tanpa perlu konfigurasi manual satu per satu. Proses pemberian alamat ini dikenal sebagai **DORA**:
 
-- **Discover** — client mengirim broadcast mencari DHCP server yang aktif di jaringan.
-- **Offer** — DHCP server merespons dengan menawarkan satu alamat IP yang tersedia.
-- **Request** — client meminta secara resmi alamat IP yang ditawarkan tersebut.
-- **Acknowledge** — server mengonfirmasi dan client resmi menggunakan alamat IP tersebut untuk periode waktu tertentu (lease time).
+- **Discover**. Client mengirim broadcast untuk mencari DHCP server yang aktif di jaringan.
+- **Offer**. DHCP server merespons dengan menawarkan satu alamat IP yang tersedia.
+- **Request**. Client meminta secara resmi alamat IP yang ditawarkan tersebut.
+- **Acknowledge**. Server mengonfirmasi, dan client resmi menggunakan alamat IP tersebut untuk periode waktu tertentu (lease time).
 
 Sesuai arahan Praz, DHCP tetap dipakai pada praktikum ini karena mekanismenya merepresentasikan kondisi jaringan nyata, di mana alokasi IP jarang dilakukan secara statis satu per satu. Pada pertemuan ini, DHCP dikonfigurasi menggunakan **kombinasi antara Router dan Server** dalam satu topologi.
 
@@ -56,7 +56,7 @@ Router Cisco memiliki fitur DHCP server bawaan (IOS DHCP Server) yang bisa langs
 | Melihat binding | `Router# show ip dhcp binding` | Menampilkan daftar IP yang sudah disewakan ke client beserta MAC address-nya. |
 | Melihat pool | `Router# show ip dhcp pool` | Menampilkan status dan statistik pool DHCP yang aktif. |
 
-**Step By Step:**
+**Langkah kerja:**
 ```
 Router(config)# ip dhcp excluded-address 192.168.10.1 192.168.10.10
 Router(config)# ip dhcp pool LAN_ROUTER
@@ -88,7 +88,7 @@ Untuk segmen jaringan yang lebih besar, DHCP dijalankan dari perangkat **Server*
 
 ### 4. Kombinasi DHCP Router dan Server dalam Satu Topologi
 
-Karena DHCP router dan DHCP server berjalan bersamaan dalam satu topologi, **konfigurasi pool/scope di router tidak boleh sama dengan konfigurasi di server**, baik dari sisi network address maupun rentang IP yang dibagikan. Jika keduanya menggunakan rentang yang sama atau tumpang tindih, akan terjadi **konflik alamat (IP conflict)** — dua perangkat berbeda berpotensi mendapatkan IP yang identik dari dua sumber DHCP yang berbeda.
+Karena DHCP router dan DHCP server berjalan bersamaan dalam satu topologi, **konfigurasi pool/scope di router tidak boleh sama dengan konfigurasi di server**, baik dari sisi network address maupun rentang IP yang dibagikan. Jika keduanya menggunakan rentang yang sama atau tumpang tindih, akan terjadi **konflik alamat (IP conflict)**, di mana dua perangkat berbeda berpotensi mendapatkan IP yang identik dari dua sumber DHCP yang berbeda.
 
 **Contoh pembagian scope yang benar (tidak bentrok):**
 
@@ -106,15 +106,14 @@ Karena DHCP router dan DHCP server berjalan bersamaan dalam satu topologi, **kon
 Meskipun router juga mampu menjalankan fungsi DHCP, penggunaan DHCP server tersendiri lebih relevan untuk kebutuhan **jaringan berskala besar**. Beberapa alasannya:
 
 - Server DHCP dirancang untuk menangani volume permintaan IP yang jauh lebih banyak dan lebih stabil dibanding fitur DHCP bawaan router.
-- Manajemen lebih terpusat — administrasi, monitoring, dan pencatatan (logging) alokasi IP lebih mudah dilakukan dari satu titik.
+- Manajemen lebih terpusat, sehingga administrasi, monitoring, dan pencatatan (logging) alokasi IP lebih mudah dilakukan dari satu titik.
 - Lebih mudah diskalakan ketika jaringan bertambah besar, tanpa membebani performa router yang idealnya fokus pada fungsi routing.
 
 Karena itu, kombinasi router (untuk segmen kecil/lokal) dan server (untuk kebutuhan jaringan besar) menjadi pendekatan yang lebih realistis dibanding hanya mengandalkan salah satunya.
 
 ## 📝 Catatan
-- Deadline pengumpulan: [tanggal]
-- Asisten yang membawakan: [nama]
+- 
 
 ## 📚 Referensi
-- Cisco. *IP Addressing: DHCP Configuration Guide — Configuring the Cisco IOS DHCP Server*. [cisco.com](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/15-mt/dhcp-15-mt-book/config-dhcp-server.html)
-- Droms, R. *RFC 2131 — Dynamic Host Configuration Protocol*. Internet Engineering Task Force (IETF). [datatracker.ietf.org/doc/html/rfc2131](https://datatracker.ietf.org/doc/html/rfc2131)
+- Cisco. *IP Addressing: DHCP Configuration Guide, Configuring the Cisco IOS DHCP Server*. [cisco.com](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/15-mt/dhcp-15-mt-book/config-dhcp-server.html)
+- Droms, R. *RFC 2131, Dynamic Host Configuration Protocol*. Internet Engineering Task Force (IETF). [datatracker.ietf.org/doc/html/rfc2131](https://datatracker.ietf.org/doc/html/rfc2131)
