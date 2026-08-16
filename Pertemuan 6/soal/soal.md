@@ -3,8 +3,6 @@
 ## 📋 Deskripsi Tugas
 Praktikan diminta mengonfigurasi satu topologi sederhana yang menggabungkan tiga layanan sekaligus: DHCP (di Router), DNS, dan Web Server (keduanya di Server), lalu membuktikan bahwa client bisa mengakses sebuah halaman web hanya dengan mengetik nama domain di browser.
 
-> ⏱️ **Catatan waktu:** soal ini dipadatkan untuk 3 topik sekaligus. Realistisnya butuh sekitar 35 sampai 40 menit kalau dikerjakan pelan-pelan, jadi kerjakan langkah demi langkah tanpa berhenti lama di satu bagian, dan jangan ragu lanjut ke langkah berikutnya dulu kalau ada bagian yang belum sempurna.
-
 ## 🧰 Alat & Bahan
 - Aplikasi **Cisco Packet Tracer**
 - **1 unit Router** Cisco
