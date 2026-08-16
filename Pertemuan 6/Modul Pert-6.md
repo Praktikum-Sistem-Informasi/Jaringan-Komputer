@@ -1,4 +1,4 @@
-# Pertemuan 6: DHCP (Dynamic Host Configuration Protocol)
+# Pertemuan 6: DHCP, DNS, dan Web Server
 
 ## 🎯 Tujuan Pembelajaran
 - Praktikan mampu memahami konsep dasar DHCP dan proses DORA (Discover, Offer, Request, Acknowledge) dalam pemberian alamat IP secara otomatis.
@@ -6,7 +6,10 @@
 - Praktikan mampu mengonfigurasi layanan DHCP pada perangkat Server di Cisco Packet Tracer.
 - Praktikan mampu mengonfigurasi topologi yang menggabungkan DHCP router dan DHCP server secara bersamaan tanpa terjadi konflik scope.
 - Praktikan mampu menjelaskan alasan penggunaan DHCP server (bukan hanya router) untuk kebutuhan jaringan berskala besar.
-- Praktikan mampu melakukan verifikasi konfigurasi DHCP menggunakan perintah `show ip dhcp binding`, `show ip dhcp pool`, dan pengecekan IP pada sisi client.
+- Praktikan mampu memahami konsep DNS dan mengonfigurasi resource record pada DNS server agar sebuah domain dapat diakses menggunakan nama, bukan alamat IP.
+- Praktikan mampu memahami konsep dasar Web Server dan mengonfigurasi layanan HTTP pada perangkat Server di Cisco Packet Tracer.
+- Praktikan mampu menghubungkan DHCP, DNS, dan Web Server dalam satu alur kerja: client mendapat IP dari DHCP, mengetik nama domain di browser, domain tersebut diterjemahkan oleh DNS, lalu halaman web diambil dari Web Server.
+- Praktikan mampu melakukan verifikasi konfigurasi menggunakan perintah `show ip dhcp binding`, `show ip dhcp pool`, `nslookup`, dan pengujian akses lewat Web Browser pada PC.
 
 ## 📁 Struktur Folder
 ```
@@ -14,8 +17,8 @@
 ├── soal/       # Soal atau instruksi tugas
 └── docs/       # Materi pendukung (slide, referensi)
 ```
-- `soal/`: berisi skenario tugas rancangan topologi dengan DHCP router dan DHCP server berjalan pada segmen berbeda.
-- `docs/`: berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi DHCP).
+- `soal/`: berisi skenario tugas rancangan topologi dengan DHCP router dan DHCP server, DNS, serta Web Server pada satu topologi.
+- `docs/`: berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi DHCP, DNS, dan HTTP).
 
 ## 🚀 Cara Menjalankan
 Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alur pengerjaannya:
@@ -26,6 +29,7 @@ Router> enable
 Router# configure terminal
 Router(config)#
 ```
+
 
 ## 📖 Materi Praktikum
 
@@ -111,9 +115,45 @@ Meskipun router juga mampu menjalankan fungsi DHCP, penggunaan DHCP server terse
 
 Karena itu, kombinasi router (untuk segmen kecil/lokal) dan server (untuk kebutuhan jaringan besar) menjadi pendekatan yang lebih realistis dibanding hanya mengandalkan salah satunya.
 
+### 6. Konsep dan Konfigurasi DNS
+
+DNS (Domain Name System) adalah layanan yang menerjemahkan nama domain yang mudah diingat manusia (misalnya `praktisi-unmul.web.id`) menjadi alamat IP yang sebenarnya dipakai perangkat untuk saling terhubung. Tanpa DNS, pengguna harus mengetik alamat IP secara langsung setiap kali ingin mengakses sebuah layanan.
+
+**Langkah kerja pada Server:**
+1. Klik perangkat **Server**, buka tab **Config**, pilih menu **DNS** pada bagian Services.
+2. Aktifkan **Service: On**.
+3. Tambahkan record baru dengan mengisi:
+   - **Type**: A Record
+   - **Name**: nama domain yang diinginkan, misalnya `praktisi-unmul.web.id`
+   - **Address**: IP address Server itu sendiri
+4. Klik **Add**, lalu pastikan record tersebut muncul di daftar.
+
+**Langkah kerja pada Client:**
+1. Buka PC, masuk ke **IP Configuration**.
+2. Isi kolom **DNS Server** dengan IP address Server yang menjalankan layanan DNS (atau pastikan opsi ini otomatis terisi jika PC menerima IP lewat DHCP yang sudah dikonfigurasi dengan `dns-server`).
+
+**Uji Verifikasi:** Buka **Command Prompt** pada PC, lalu jalankan `nslookup [nama_domain]` untuk memastikan domain tersebut berhasil diterjemahkan ke IP address Server yang benar.
+
+### 7. Konsep dan Konfigurasi Web Server
+
+Web Server adalah perangkat atau layanan yang menyimpan dan menyajikan halaman web kepada client melalui protokol **HTTP** (Hypertext Transfer Protocol) pada port 80. Ketika client mengetik alamat domain atau IP di browser, permintaan tersebut dikirim ke Web Server, yang kemudian membalas dengan konten halaman web yang diminta.
+
+**Langkah kerja pada Server:**
+1. Klik perangkat **Server**, buka tab **Config**, pilih menu **HTTP** pada bagian Services.
+2. Aktifkan **HTTP: On**.
+3. Buka tab file `index.html` yang tersedia, lalu ubah isi kontennya sesuai kebutuhan (misalnya nama kelompok atau judul praktikum) sebagai bukti konfigurasi berhasil dilakukan.
+4. Simpan perubahan.
+
+**Uji Verifikasi:** Buka PC, pilih aplikasi **Web Browser** pada tab Desktop, lalu ketik IP address Server atau nama domain yang sudah didaftarkan di DNS (jika DNS sudah dikonfigurasi pada langkah sebelumnya). Halaman `index.html` yang sudah diubah harus tampil di browser.
+
+> ⚠️ **Catatan:** Jika mengetik nama domain di browser tidak berhasil, tetapi mengetik IP address berhasil, kemungkinan besar konfigurasi DNS pada PC atau record di Server belum benar. Periksa kembali langkah pada bagian DNS sebelum melanjutkan.
+
 ## 📝 Catatan
-- 
+- Deadline pengumpulan: [tanggal]
+- Asisten yang membawakan: [nama]
 
 ## 📚 Referensi
 - Cisco. *IP Addressing: DHCP Configuration Guide, Configuring the Cisco IOS DHCP Server*. [cisco.com](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/15-mt/dhcp-15-mt-book/config-dhcp-server.html)
 - Droms, R. *RFC 2131, Dynamic Host Configuration Protocol*. Internet Engineering Task Force (IETF). [datatracker.ietf.org/doc/html/rfc2131](https://datatracker.ietf.org/doc/html/rfc2131)
+- Mockapetris, P. *RFC 1035, Domain Names, Implementation and Specification*. Internet Engineering Task Force (IETF). [datatracker.ietf.org/doc/html/rfc1035](https://datatracker.ietf.org/doc/html/rfc1035)
+- Fielding, R., dan Reschke, J. *RFC 7230, Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing*. Internet Engineering Task Force (IETF). [datatracker.ietf.org/doc/html/rfc7230](https://datatracker.ietf.org/doc/html/rfc7230)
