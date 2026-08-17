@@ -368,11 +368,10 @@ Berikut cheatsheet CLI untuk konfigurasi SSH:
 
 
 
-### 6. Tugas & Evaluasi Praktikum
-1. Rancang topologi di Cisco Packet Tracer menggunakan 3 Switch dan 6 PC!
-2. Konfigurasikan switch pertama sebagai VTP Server, switch kedua sebagai VTP Transparent, dan switch ketiga sebagai VTP Client!
-3. Buat VLAN 10 (Marketing) dan VLAN 20 (Sales) di Switch Server!
-4. Lakukan verifikasi, apakah VLAN tersebut sukses didistribusikan ke VTP Client? Jelaskan analisis Anda mengapa switch transparent tidak memiliki VLAN tersebut!
+### 4. Tugas & Evaluasi Praktikum
+1. Buat topologi sederhana di Cisco Packet Tracer menggunakan **1 Router** dan **1 PC** (hubungkan langsung menggunakan kabel console)!
+2. Konfigurasikan **password pada line console 0** dengan password bebas (contoh: `12345`), lalu aktifkan `login` supaya password diminta saat login!
+3. Screenshot hasil uji verifikasi (saat membuka kembali akses ke Router, harus muncul prompt `Password:`)!
 
 ## 📝 Catatan
 - Deadline pengumpulan: [tanggal]
