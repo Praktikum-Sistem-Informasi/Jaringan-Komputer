@@ -210,7 +210,7 @@ Sama seperti pada metode RoAS, PC1 dan PC2 dikonfigurasi dengan IP address, subn
 
 # Access Control List (ACL)
 
-### 5. Pengertian ACL
+### 1. Pengertian ACL
 
 Access Control List (ACL) adalah kumpulan aturan berurutan (*sequential statements*) yang dikonfigurasi pada router atau switch Layer 3 untuk mengizinkan (*permit*) atau menolak (*deny*) paket data yang melewati sebuah interface, berdasarkan kriteria seperti alamat IP sumber/tujuan, jenis protokol (TCP, UDP, ICMP, dan lain-lain), serta nomor port.
 
@@ -225,7 +225,7 @@ ACL bekerja layaknya seorang penjaga gerbang: setiap paket yang melewati interfa
 - **QoS** — mengklasifikasikan trafik untuk diprioritaskan.
 - **NAT & VPN** — menentukan trafik mana yang perlu di-translate atau dienkripsi.
 
-### 6. Cara Kerja ACL
+### 2. Cara Kerja ACL
 
 Setiap ACL terdiri atas satu atau lebih *access control entries* (ACE) yang diproses secara berurutan dari atas ke bawah (*top-down*). Alurnya sebagai berikut:
 
@@ -247,11 +247,11 @@ Setiap ACL terdiri atas satu atau lebih *access control entries* (ACE) yang dipr
 
 Cara cepat menghitung wildcard mask: kurangi setiap oktet subnet mask dari 255. Contoh: `255.255.255.192` → wildcard `0.0.0.63` (255−192=63). Kata kunci `any` adalah singkatan dari `0.0.0.0 255.255.255.255`, sedangkan `host <ip>` adalah singkatan dari `<ip> 0.0.0.0`.
 
-### 7. Jenis-Jenis ACL
+### 3. Jenis-Jenis ACL
 
 Ada tiga jenis utama ACL pada Cisco IOS, dibedakan dari kriteria penyaringan dan cara identifikasinya: **Standard ACL**, **Extended ACL**, dan **Named ACL**.
 
-#### 7.1 Standard ACL
+#### 3.1 Standard ACL
 
 Standard ACL hanya menyaring paket berdasarkan alamat IP **sumber** saja, diidentifikasi dengan nomor **1–99** atau **1300–1999** (*expanded*).
 
@@ -285,7 +285,7 @@ Standard IP access list 10
     20 permit any
 ```
 
-#### 7.2 Extended ACL
+#### 3.2 Extended ACL
 
 Extended ACL menyaring berdasarkan kombinasi IP sumber, IP **tujuan**, protokol (TCP/UDP/ICMP/IP), serta nomor port. Diidentifikasi dengan nomor **100–199** atau **2000–2699** (*expanded*).
 
@@ -319,7 +319,7 @@ Extended IP access list 110
     30 permit ip any any
 ```
 
-#### 7.3 Named ACL
+#### 3.3 Named ACL
 
 Named ACL pada dasarnya adalah Standard/Extended ACL yang diberi **nama** (bukan nomor) sebagai identitasnya, sehingga lebih mudah dibaca dan dikelola.
 
@@ -356,7 +356,7 @@ R1(config-ext-nacl)# no 20
 R1(config-ext-nacl)# exit
 ```
 
-#### 7.4 Perbandingan Jenis ACL
+#### 3.4 Perbandingan Jenis ACL
 
 | Aspek | Standard ACL | Extended ACL | Named ACL |
 |---|---|---|---|
@@ -365,7 +365,7 @@ R1(config-ext-nacl)# exit
 | Penempatan ideal | Dekat tujuan (destination) | Dekat sumber (source) | Mengikuti jenis dasarnya |
 | Edit per baris | Tidak | Tidak | Ya (sequence number) |
 
-### 8. Aturan Penempatan ACL
+### 4. Aturan Penempatan ACL
 
 - **Inbound ACL** — paket diperiksa ACL sebelum diproses tabel routing; lebih efisien jika paket memang akan ditolak.
 - **Outbound ACL** — paket diproses routing dulu, baru diperiksa ACL sebelum keluar interface.
@@ -373,7 +373,7 @@ R1(config-ext-nacl)# exit
 - **Extended ACL** → letakkan dekat **sumber**, karena sudah mengenali IP tujuan & protokol, sehingga paket yang seharusnya ditolak bisa langsung dibuang lebih awal.
 - Setiap interface hanya boleh punya maksimal **satu ACL per arah, per protokol**.
 
-### 9. Verifikasi ACL
+### 5. Verifikasi ACL
 
 | Perintah | Fungsi |
 |---|---|
@@ -392,7 +392,7 @@ R1(config-ext-nacl)# exit
 | Trafik yang seharusnya diizinkan malah ditolak | Urutan ACE salah | Susun ulang dari yang paling spesifik ke paling umum |
 | Trafik sumber lain ikut terblokir | Standard ACL diterapkan terlalu dekat sumber | Pindahkan ke interface dekat destination |
 
-### 10. Tugas & Evaluasi Praktikum
+### 6. Tugas & Evaluasi Praktikum
 
 
 
