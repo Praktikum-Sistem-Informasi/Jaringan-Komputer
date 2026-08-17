@@ -211,7 +211,7 @@ Konfigurasi IP di switch:
 Switch>enable
 Switch#configure terminal
 Switch(config)#interface vlan 1
-Switch(config-if)#ip address 192.168.10.253 255.255.255.0
+Switch(config-if)#ip address 192.168.10.254 255.255.255.0
 Switch(config-if)#no shutdown
 ```
 Konfigurasi Telnet di switch:
@@ -231,7 +231,7 @@ Switch(config)#exit
 ```
 **Uji Verifikasi:**
 
-Buka command prompt di salah satu perangkat pada pc lalu masu kedalam telnet menggunakan IP
+Buka command prompt di salah satu perangkat lalu masuk kedalam telnet menggunakan IP
 
 <img width="1045" height="306" alt="image" src="https://github.com/user-attachments/assets/8b25cf8e-e1ce-42e1-a93e-32d71f106c57" />
 
@@ -290,10 +290,73 @@ Router(config-if)#ip address 192.168.20.1 255.255.255.0
 Router(config-if)#no shutdown
 Router(config-if)#exit
 ```
+Konfigurasi IP di switch:
 
+```
+Switch>enable
+Switch#configure terminal
+Switch(config)#interface vlan 1
+Switch(config-if)#ip address 192.168.10.253 255.255.255.0
+Switch(config-if)#no shutdown
+```
+
+
+Konfigurasi SSH di router:
+
+```
+Router(config)#username roni secret 67890
+Router(config)#hostname roni
+roni(config)#ip domain-name roni.org
+roni(config)#crypto key generate rsa
+How many bits in the modulus [512]: 512
+roni(config)#line vty 0 4
+roni(config-line)#transport input ssh
+roni(config-line)#login local
+roni(config-line)#exit
+roni(config)#enable secret 67890
+roni(config)#exit
+```
 
 **Uji Verifikasi:**
+
+Buka command prompt di salah satu perangkat lalu masuk kedalam SSH menggunakan `ssh -l [host name IP address]`
+
+<img width="1045" height="306" alt="image" src="https://github.com/user-attachments/assets/8b25cf8e-e1ce-42e1-a93e-32d71f106c57" />
+
+```
+C:\>ssh -l roni 192.168.10.1
+
+Password: 
+
+
+
+roni>enable
+Password: 
+roni#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+roni(config)#
+roni#
+```
 **Cheatsheet CLI**
+Berikut cheatsheet CLI untuk konfigurasi SSH:
+
+| Perintah | Fungsi |
+|---|---|
+| `enable` / `en` | Masuk ke privileged EXEC mode |
+| `configure terminal` / `conf t` | Masuk ke global configuration mode |
+| `interface gig0/0` | Masuk ke konfigurasi interface tertentu pada router |
+| `ip address <ip> <subnet>` | Memberikan alamat IP pada interface |
+| `no shutdown` | Mengaktifkan interface |
+| `username <nama> secret <pw>` | Membuat akun user lokal beserta passwordnya untuk autentikasi SSH |
+| `hostname <nama>` | Mengganti nama perangkat (device name), wajib diubah dari default sebelum generate RSA key |
+| `ip domain-name <domain>` | Menentukan domain name perangkat, dibutuhkan untuk proses generate RSA key |
+| `crypto key generate rsa` | Membuat pasangan kunci enkripsi RSA yang digunakan SSH untuk mengamankan koneksi |
+| `line vty 0 4` | Masuk ke konfigurasi line VTY 0–4 untuk mengatur akses remote |
+| `transport input ssh` | Membatasi jenis protokol remote access yang diizinkan pada line VTY hanya SSH |
+| `login local` | Mengaktifkan autentikasi menggunakan username & password lokal (bukan hanya password) |
+| `enable secret <password>` | Mengatur password terenkripsi untuk masuk ke privileged EXEC mode |
+| `exit` | Keluar dari mode konfigurasi saat ini |
+| `ssh -l <username> <ip>` | Melakukan koneksi remote ke perangkat tujuan menggunakan SSH dengan username tertentu |
 
 #### C. Perbandingan Telnet dan SSH
 - **Metode Autentikasi:** Telnet hanya mengandalkan satu metode, yaitu kombinasi username dan password yang dikirim secara langsung tanpa perlindungan apa pun. Metode ini rentan terhadap serangan brute force maupun penyadapan langsung karena password terlihat jelas saat dikirim. SSH menawarkan fleksibilitas dan keamanan yang lebih baik. Selain bisa menggunakan password, SSH juga mendukung autentikasi dengan SSH key pair. Metode berbasis key ini jauh lebih aman karena private key tidak pernah dikirim melalui jaringan, sehingga risiko pencurian kredensial berkurang signifikan dibanding Telnet.
