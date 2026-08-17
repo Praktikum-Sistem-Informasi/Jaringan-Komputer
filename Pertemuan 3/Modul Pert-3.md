@@ -31,7 +31,7 @@ Router(config)# interface gigabitEthernet 0/0.10
 
 ## 📖 Materi Praktikum
 
-# Bagian A — Inter-VLAN Routing
+# Inter-VLAN Routing
 
 ### 1. Pengertian Inter-VLAN Routing
 
@@ -208,7 +208,7 @@ Sama seperti pada metode RoAS, PC1 dan PC2 dikonfigurasi dengan IP address, subn
 
 **Uji Verifikasi:** Lakukan tes ping dari PC1 (VLAN 10) ke PC2 (VLAN 20) dan sebaliknya. Jika Inter-VLAN Routing berhasil dikonfigurasi (baik dengan RoAS maupun SVI), hasil ping harus *Reply*, bukan lagi *Request Timed Out* (RTO).
 
-# Bagian B — Access Control List (ACL)
+# Access Control List (ACL)
 
 ### 5. Pengertian ACL
 
