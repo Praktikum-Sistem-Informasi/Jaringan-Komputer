@@ -18,6 +18,8 @@ Host Range   = (NA + 1)  sampai  (BC - 1)
 SM           = 255.255.255.256 - Total IP
 ```
 
+**Soal**
+
 Tentukan **Total IP, Usable Host, Network Address, Broadcast Address, Host Range, dan Subnet Mask** dari alamat IP berikut `192.168.5.70/26`
 
 
