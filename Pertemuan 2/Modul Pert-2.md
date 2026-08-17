@@ -73,7 +73,7 @@ Langkah kerja:
 
 ### 3. VLAN Trunking
 
-Jika komputer di VLAN 10 pada Switch Gedung 1 ingin terhubung dengan komputer di VLAN 10 pada Switch Gedung 2, dibutuhkan jalur **Trunking**. Trunking membawa lalu lintas data dari berbagai VLAN yang berbeda melalui satu koneksi kabel fisik yang sama secara bersamaan, sehingga menghemat kabel fisik dan mengoptimalkan bandwidth. Protokol enkapsulasi trunking standar industri terbuka yang digunakan adalah **IEEE 802.1Q (dot1q)**, yang menyisipkan tag 4-byte pada frame data.
+Trunking adalah metode yang digunakan untuk menghubungkan beberapa VLAN melalui satu jalur kabel fisik yang sama sambil tetap menjaga lalu lintas data agar tetap terisolasi satu sama lain. Jika komputer di VLAN 10 pada Switch Gedung 1 ingin terhubung dengan komputer di VLAN 10 pada Switch Gedung 2, dibutuhkan jalur **Trunking**. Trunking membawa lalu lintas data dari berbagai VLAN yang berbeda melalui satu koneksi kabel fisik yang sama secara bersamaan, sehingga menghemat kabel fisik dan mengoptimalkan bandwidth. Protokol enkapsulasi trunking standar industri terbuka yang digunakan adalah **IEEE 802.1Q (dot1q)**, yang menyisipkan tag 4-byte pada frame data.
 
 **Langkah kerja:** Hubungkan kedua switch menggunakan kabel Cross-Over pada port FastEthernet0/10, lalu ubah port penghubung tersebut ke mode Trunk pada kedua switch:
 ```
