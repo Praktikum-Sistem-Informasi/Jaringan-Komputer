@@ -128,11 +128,11 @@ Topologi jaringan menggambarkan bagaimana perangkat-perangkat dalam suatu jaring
 
 Topologi Bus
 
-<img width="820" height="361" alt="image" src="https://github.com/user-attachments/assets/8f196d13-1dd5-494c-9cef-5f323d77ef86" />
+<img width="984" height="499" alt="image" src="https://github.com/user-attachments/assets/3211beba-93bf-4e3b-b17e-7bbb7526c6de" />
 
 Topologi Star
 
-<img width="540" height="480" alt="image" src="https://github.com/user-attachments/assets/787fcc3d-41fc-4bbb-bfef-824f2a42187b" />
+<img width="696" height="574" alt="image" src="https://github.com/user-attachments/assets/7ddd7b30-547a-48c1-93ef-f45704e169ac" />
 
 Topologi Ring
 
@@ -140,7 +140,7 @@ Topologi Ring
 
 Topologi Mesh
 
-<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/88c400d3-1d40-4083-aa2a-2641b1818050" />
+<img width="368" height="271" alt="image" src="https://github.com/user-attachments/assets/2a269396-469d-49d7-bd29-5927438b3f05" />
 
 Topologi Tree
 
@@ -213,70 +213,124 @@ Contoh: subnet mask oktet terakhir 192 (`/26`) → block size = 256 − 192 = 64
 ---
 
 ### 4. Perhitungan Subnetting IPv4
-
+ 
 **Langkah-Langkah Perhitungan Subnetting**
-
-1. Tentukan alamat IP dan prefix CIDR awal yang akan dibagi (misal `192.168.1.0/24`).
-2. Tentukan kebutuhan: berdasarkan jumlah subnet atau jumlah host per subnet.
-3. Hitung jumlah bit yang perlu dipinjam dari host bit (`2^n`).
-4. Tentukan subnet mask baru dan notasi CIDR baru.
-5. Hitung block size untuk menentukan batas-batas setiap subnet.
-6. Tentukan Network Address, Broadcast Address, dan Host Range setiap subnet.
-
-**Rumus Cepat**
-
+1. Tentukan alamat IP dan prefix CIDR yang diketahui (misal `192.168.10.150/27`).
+2. Hitung **Total IP** dalam satu blok subnet menggunakan CIDR.
+3. Hitung **Usable Host**, yaitu jumlah host yang benar-benar dapat digunakan.
+4. Tentukan **Network Address (NA)** — blok subnet tempat IP tersebut berada.
+5. Tentukan **Broadcast Address (BC)** dari blok subnet tersebut.
+6. Tentukan **Host Range** (host minimum dan host maksimum).
+7. Tentukan **Subnet Mask (SM)** dari blok subnet tersebut.
+   
+**Ringkasan Rumus Subnetting — Cheat Sheet**
+ 
+| Yang Dicari | Rumus |
+|---|---|
+| Total IP | `2^(32 − CIDR)` |
+| Usable Host | `Total IP − 2` |
+| Network Address (NA) | `(Nilai Oktet IP ÷ Total IP) × Total IP` *(hasil bagi dibulatkan ke bawah)* |
+| Broadcast Address (BC) | `NA + Total IP − 1` |
+| Host Minimum | `NA + 1` |
+| Host Maximum | `BC − 1` |
+| Subnet Mask (SM) | `255.255.255.256 − Total IP` |
+ 
+**Contoh Perhitungan**
+ 
+Diketahui alamat IP: `192.168.10.150/27`. Tentukan Total IP, Usable Host, Network Address, Broadcast Address, Host Range, dan Subnet Mask.
+ 
+**1. Total IP**
 ```
-Jumlah Total IP     = 2^h        (h = jumlah bit host, termasuk network & broadcast address)
-Jumlah Host Usable  = 2^h - 2
+Rumus  : Total IP = 2^(32 - CIDR)
+Hitung : = 2^(32 - 27) = 2^5
+Hasil  : Total IP = 32 IP
 ```
-
-**Tabel Referensi Cepat CIDR /25 – /30**
-
-| Prefix CIDR | Subnet Mask (Oktet Terpengaruh) | Block Size | Jumlah Host Usable |
-|---|---|---|---|
-| /25 | 128 | 128 | 126 |
-| /26 | 192 | 64 | 62 |
-| /27 | 224 | 32 | 30 |
-| /28 | 240 | 16 | 14 |
-| /29 | 248 | 8 | 6 |
-| /30 | 252 | 4 | 2 |
-
-**Contoh 1: Subnetting berdasarkan CIDR /26**
-
-Diketahui alamat jaringan `192.168.1.0/26`. Tentukan subnet mask, jumlah host per subnet, network address, broadcast address, dan host range.
-- Prefix `/26` → 26 bit network, 6 bit host (32 − 26 = 6).
-- Subnet Mask: `255.255.255.192`
-- Block Size = 256 − 192 = 64
-- Jumlah Host Usable = 2⁶ − 2 = **62 host per subnet**
-
-| Subnet ke- | Network Address | Host Range | Broadcast Address |
-|---|---|---|---|
-| 1 | 192.168.1.0 | 192.168.1.1 – 192.168.1.62 | 192.168.1.63 |
-| 2 | 192.168.1.64 | 192.168.1.65 – 192.168.1.126 | 192.168.1.127 |
-| 3 | 192.168.1.128 | 192.168.1.129 – 192.168.1.190 | 192.168.1.191 |
-| 4 | 192.168.1.192 | 192.168.1.193 – 192.168.1.254 | 192.168.1.255 |
-
+ 
+**2. Usable Host**
+```
+Rumus  : Usable Host = Total IP - 2
+Hitung : = 32 - 2
+Hasil  : Usable Host = 30 Host
+```
+ 
+**3. Network Address (NA)**
+```
+Rumus  : NA = (Nilai Oktet 4 IP ÷ Total IP) × Total IP
+Hitung : = 150 ÷ 32 = 4,xxx  →  4 × 32
+Hasil  : NA = 192.168.10.128
+```
+ 
+**4. Broadcast Address (BC)**
+```
+Rumus  : BC = NA + Total IP - 1
+Hitung : = 128 + 32 - 1
+Hasil  : BC = 192.168.10.159
+```
+ 
+**5. Host Range**
+```
+Host Minimum = NA + 1  = 128 + 1 = 129
+Host Maximum = BC - 1  = 159 - 1 = 158
+Hasil : Host Range = 192.168.10.129 - 192.168.10.158
+```
+ 
+**6. Subnet Mask (SM)**
+```
+Rumus  : SM = 255.255.255.256 - Total IP
+Hitung : = 255.255.255.256 - 32
+Hasil  : SM = 255.255.255.224
+```
+ 
+> 💡 **Kesimpulan:** IP `192.168.10.150/27` berada pada subnet `192.168.10.128/27`, dengan Network Address `192.168.10.128`, Broadcast Address `192.168.10.159`, Host Range `192.168.10.129 – 192.168.10.158`, dan Subnet Mask `255.255.255.224`.
+ 
 **Contoh 2: Subnetting berdasarkan kebutuhan jumlah host**
+ 
+Sebuah kantor memiliki jaringan `192.168.10.0/24` dan membutuhkan subnet yang mampu menampung minimal 25 host per subnet. Tentukan CIDR yang sesuai, lalu hitung subnet pertamanya.
+ 
+1. Cari CIDR dengan Usable Host ≥ 25. Coba `/27`: Total IP = 2^(32−27) = 32 → Usable Host = 32 − 2 = **30 Host** (mencukupi). Coba `/28`: Total IP = 2^(32−28) = 16 → Usable Host = 16 − 2 = 14 Host (tidak mencukupi).
+2. Maka CIDR yang dipakai adalah **/27**.
+3. Hitung subnet pertama untuk IP `192.168.10.0/27`:
+```
+Total IP : 2^(32-27) = 32
+NA       : (0 ÷ 32) × 32 = 0        → 192.168.10.0
+BC       : 0 + 32 - 1  = 31         → 192.168.10.31
+Host Min : 0 + 1  = 1               → 192.168.10.1
+Host Max : 31 - 1 = 30              → 192.168.10.30
+SM       : 255.255.255.256 - 32 = 255.255.255.224
+```
+ 
+4. Subnet berikutnya tinggal menambahkan kelipatan Total IP (32) pada oktet terakhir: `192.168.10.32/27`, `192.168.10.64/27`, `192.168.10.96/27`, dan seterusnya.
+   
+**Tabel Referensi Cepat CIDR /25 – /30**
+ 
+| Prefix CIDR | Total IP | Subnet Mask | Usable Host |
+|---|---|---|---|
+| /25 | 128 | 255.255.255.128 | 126 |
+| /26 | 64 | 255.255.255.192 | 62 |
+| /27 | 32 | 255.255.255.224 | 30 |
+| /28 | 16 | 255.255.255.240 | 14 |
+| /29 | 8 | 255.255.255.248 | 6 |
+| /30 | 4 | 255.255.255.252 | 2 |
+ 
+> 💡 **Catatan:** Kerjakan perhitungan subnetting secara manual dengan rumus di atas (tanpa kalkulator subnetting online) terlebih dahulu, agar benar-benar memahami konsep pembagian blok Network Address, Broadcast Address, dan Host Range sebelum menggunakan alat bantu otomatis.
 
-Sebuah kantor memiliki jaringan `192.168.10.0/24` dan membutuhkan subnet yang mampu menampung minimal 25 host per subnet. Tentukan CIDR yang sesuai.
-1. Cari nilai `h` (bit host) terkecil sehingga `2^h - 2 ≥ 25`. Untuk h = 5: 2⁵ − 2 = 30 (mencukupi). Untuk h = 4: 2⁴ − 2 = 14 (tidak mencukupi).
-2. Maka digunakan h = 5 bit host → bit network = 32 − 5 = 27, atau CIDR **/27**.
-3. Subnet Mask untuk `/27` = `255.255.255.224`, block size = 256 − 224 = 32.
-4. Subnet pertama: Network Address `192.168.10.0`, Host Range `192.168.10.1 – 192.168.10.30`, Broadcast Address `192.168.10.31`.
-5. Subnet kedua: Network Address `192.168.10.32`, Host Range `192.168.10.33 – 192.168.10.62`, Broadcast Address `192.168.10.63`, dan seterusnya.
-
-> 💡 **Catatan:** Kerjakan perhitungan subnetting secara manual (tanpa kalkulator subnetting online) terlebih dahulu, agar benar-benar memahami konsep pembagian bit network dan host sebelum menggunakan alat bantu otomatis.
 
 ### 5. Tugas & Evaluasi Praktikum
-1. Jelaskan perbedaan antara Network Address, Broadcast Address, dan Host Address, disertai contoh alamat IP!
-2. Gambarkan dan jelaskan perbedaan topologi Star dan topologi Mesh, lengkap dengan kelebihan dan kekurangannya!
-3. Diberikan alamat jaringan `172.16.0.0/23`, tentukan subnet mask, block size, jumlah host usable, network address, broadcast address, dan host range untuk 2 subnet pertama jika jaringan tersebut disubnetting menjadi `/25`!
-4. Sebuah perusahaan membutuhkan 6 subnet dengan alamat awal `10.10.10.0/24`. Tentukan CIDR yang sesuai dan tabel pembagian subnet-nya!
-5. Jelaskan mengapa Private IP Address tidak dapat diakses langsung dari internet, dan sebutkan teknologi yang memungkinkan perangkat dengan Private IP Address tetap dapat mengakses internet!
+1. Tentukan Total IP, Usable Host, Network Address, Broadcast Address, Host Range, dan Subnet Mask dari `192.168.5.70/26`!
+2. Tentukan Total IP, Usable Host, Network Address, Broadcast Address, Host Range, dan Subnet Mask dari `172.16.30.100/27`!
+3. Tentukan CIDR yang paling sesuai (paling efisien) untuk sebuah ruang laboratorium yang membutuhkan jaringan untuk 20 perangkat, lalu buktikan dengan perhitungan Usable Host!
+4. Jelaskan perbedaan antara Network Address, Host Address, dan Broadcast Address, disertai contoh alamat IP!
+5. Jelaskan perbedaan Private IP Address dan Public IP Address, serta sebutkan salah satu rentang Private IP Address!
+6. Jelaskan perbedaan topologi Star dan topologi Bus, lengkap dengan satu kelebihan dan satu kekurangan masing-masing!
+
 
 ## 📝 Catatan
+- Link pengumpulan: [link gform]
 - Deadline pengumpulan: [tanggal]
 - Asisten yang membawakan: [nama]
+
+## 📚 Referensi
+- Modul Praktikum Jaringan Komputer
 
 ## 📚 Referensi
 - Modul Praktikum Jaringan Komputer — Pertemuan 1: Pengenalan IP Address, Topologi Jaringan, dan Dasar-Dasar Subnetting
