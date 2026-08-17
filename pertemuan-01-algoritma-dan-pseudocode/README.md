@@ -1,12 +1,14 @@
-# Pertemuan 3: Inter-VLAN Routing (Router-on-a-Stick & SVI)
+# Pertemuan 3: Inter-VLAN Routing & Access Control List (ACL)
 
 ## 🎯 Tujuan Pembelajaran
 - Praktikan mampu memahami konsep dasar dan cara kerja Inter-VLAN Routing.
 - Praktikan mampu menjelaskan peran VLAN tagging (IEEE 802.1Q) dan trunk link dalam proses routing antar-VLAN.
 - Praktikan mampu membedakan karakteristik metode Router-on-a-Stick (RoAS) dan Switch Virtual Interface (SVI).
-- Praktikan mampu mengonfigurasi Inter-VLAN Routing menggunakan metode RoAS pada router dan switch Cisco.
-- Praktikan mampu mengonfigurasi Inter-VLAN Routing menggunakan metode SVI pada multilayer switch Cisco.
-- Praktikan mampu melakukan verifikasi dan pengujian konektivitas antar-VLAN.
+- Praktikan mampu mengonfigurasi Inter-VLAN Routing menggunakan metode RoAS dan SVI pada perangkat Cisco.
+- Praktikan mampu memahami konsep dasar dan cara kerja Access Control List (ACL), termasuk wildcard mask.
+- Praktikan mampu membedakan karakteristik Standard ACL, Extended ACL, dan Named ACL beserta aturan penempatannya.
+- Praktikan mampu mengonfigurasi Standard, Extended, dan Named ACL pada router Cisco.
+- Praktikan mampu melakukan verifikasi dan troubleshooting konfigurasi Inter-VLAN Routing maupun ACL.
 
 ## 📁 Struktur Folder
 ```
@@ -14,8 +16,8 @@
 ├── soal/       # Soal atau instruksi tugas
 └── docs/       # Materi pendukung (slide, referensi)
 ```
-- `soal/` — berisi skenario tugas: rancangan topologi router + switch, serta instruksi konfigurasi RoAS dan SVI.
-- `docs/` — berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi VLAN/Inter-VLAN Routing).
+- `soal/` — berisi skenario tugas: rancangan topologi router + switch + multi-subnet, serta instruksi konfigurasi RoAS/SVI dan Standard/Extended/Named ACL.
+- `docs/` — berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi VLAN/ACL).
 
 ## 🚀 Cara Menjalankan
 Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alur pengerjaannya:
@@ -28,6 +30,8 @@ Router(config)# interface gigabitEthernet 0/0.10
 ```
 
 ## 📖 Materi Praktikum
+
+# Bagian A — Inter-VLAN Routing
 
 ### 1. Pengertian Inter-VLAN Routing
 
@@ -192,7 +196,7 @@ Sama seperti pada metode RoAS, PC1 dan PC2 dikonfigurasi dengan IP address, subn
 | Biaya perangkat | Relatif lebih murah | Lebih mahal |
 | Cocok untuk | Jaringan kecil, lab, cabang kecil | Jaringan menengah-besar, kampus, kantor pusat |
 
-### 4. Verifikasi
+### 4. Verifikasi Inter-VLAN Routing
 
 | Perintah | Fungsi |
 |---|---|
@@ -204,16 +208,197 @@ Sama seperti pada metode RoAS, PC1 dan PC2 dikonfigurasi dengan IP address, subn
 
 **Uji Verifikasi:** Lakukan tes ping dari PC1 (VLAN 10) ke PC2 (VLAN 20) dan sebaliknya. Jika Inter-VLAN Routing berhasil dikonfigurasi (baik dengan RoAS maupun SVI), hasil ping harus *Reply*, bukan lagi *Request Timed Out* (RTO).
 
-### 5. Tugas & Evaluasi Praktikum
-1. Rancang topologi di Cisco Packet Tracer menggunakan 1 Router, 1 Switch, dan 2 PC untuk metode RoAS!
-2. Konfigurasikan VLAN 10 dan VLAN 20, port trunk, serta sub-interface router sesuai langkah pada bagian 3.1!
-3. Uji konektivitas antar-PC dengan perintah `ping`, lalu dokumentasikan hasilnya!
-4. Ulangi langkah 1–3 menggunakan metode SVI dengan 1 Switch Layer 3 dan 2 PC (tanpa router), sesuai bagian 3.2!
-5. Bandingkan hasil `show ip route` pada kedua metode, lalu jelaskan analisis Anda mengapa hasilnya bisa berbeda!
+# Bagian B — Access Control List (ACL)
+
+### 5. Pengertian ACL
+
+Access Control List (ACL) adalah kumpulan aturan berurutan (*sequential statements*) yang dikonfigurasi pada router atau switch Layer 3 untuk mengizinkan (*permit*) atau menolak (*deny*) paket data yang melewati sebuah interface, berdasarkan kriteria seperti alamat IP sumber/tujuan, jenis protokol (TCP, UDP, ICMP, dan lain-lain), serta nomor port.
+
+ACL bekerja layaknya seorang penjaga gerbang: setiap paket yang melewati interface yang dipasangi ACL akan dicocokkan dengan daftar aturan yang telah dibuat, kemudian diizinkan atau ditolak berdasarkan aturan yang paling pertama cocok.
+
+> **Ilustrasi:** Melanjutkan topologi Bagian A, misalkan perusahaan tidak ingin VLAN Sales (VLAN 20) bisa mengakses server data keuangan sama sekali, sementara VLAN Finance (VLAN 10) boleh mengaksesnya. Setelah Inter-VLAN Routing aktif, semua VLAN sebenarnya sudah bisa saling terhubung — ACL-lah yang memberi router kemampuan untuk secara selektif menyaring trafik semacam ini.
+
+**Fungsi dan manfaat ACL:**
+- **Keamanan jaringan** — membatasi akses ke perangkat atau subnet tertentu.
+- **Kontrol trafik** — membatasi jenis trafik tertentu untuk menghemat bandwidth.
+- **Filtering rute** — memfilter update routing bersama fitur `distribute-list`.
+- **QoS** — mengklasifikasikan trafik untuk diprioritaskan.
+- **NAT & VPN** — menentukan trafik mana yang perlu di-translate atau dienkripsi.
+
+### 6. Cara Kerja ACL
+
+Setiap ACL terdiri atas satu atau lebih *access control entries* (ACE) yang diproses secara berurutan dari atas ke bawah (*top-down*). Alurnya sebagai berikut:
+
+1. Paket dibandingkan dengan ACE pertama pada ACL.
+2. Jika kondisi cocok, aksi *permit* atau *deny* langsung dijalankan; proses pencocokan berhenti.
+3. Jika tidak cocok, paket dibandingkan dengan ACE berikutnya, dan seterusnya hingga akhir daftar.
+4. Jika paket tidak cocok dengan ACE mana pun, paket tersebut akan ditolak secara otomatis oleh aturan *implicit deny* yang tersembunyi di akhir setiap ACL.
+
+> ⚠️ **Implicit Deny:** Setiap ACL Cisco selalu diakhiri dengan aturan `deny any` yang tidak terlihat pada konfigurasi. Artinya, jika sebuah ACL hanya berisi aturan *permit* tanpa ada satu pun *deny* eksplisit, seluruh trafik yang tidak memenuhi kriteria *permit* tersebut akan otomatis ditolak.
+
+**Wildcard Mask:** ACL Cisco tidak menggunakan subnet mask biasa, melainkan *wildcard mask* untuk menentukan rentang IP yang dicocokkan. Prinsipnya berkebalikan dengan subnet mask: bit `0` berarti oktet harus cocok persis, bit `1` berarti oktet boleh bernilai apa saja (diabaikan).
+
+| Kebutuhan | Subnet Mask | Wildcard Mask |
+|---|---|---|
+| Host tunggal (192.168.10.5) | 255.255.255.255 | 0.0.0.0 |
+| Subnet /24 (192.168.10.0) | 255.255.255.0 | 0.0.0.255 |
+| Subnet /16 (172.16.0.0) | 255.255.0.0 | 0.0.255.255 |
+| Semua alamat (any) | 0.0.0.0 | 255.255.255.255 |
+
+Cara cepat menghitung wildcard mask: kurangi setiap oktet subnet mask dari 255. Contoh: `255.255.255.192` → wildcard `0.0.0.63` (255−192=63). Kata kunci `any` adalah singkatan dari `0.0.0.0 255.255.255.255`, sedangkan `host <ip>` adalah singkatan dari `<ip> 0.0.0.0`.
+
+### 7. Jenis-Jenis ACL
+
+Ada tiga jenis utama ACL pada Cisco IOS, dibedakan dari kriteria penyaringan dan cara identifikasinya: **Standard ACL**, **Extended ACL**, dan **Named ACL**.
+
+#### 7.1 Standard ACL
+
+Standard ACL hanya menyaring paket berdasarkan alamat IP **sumber** saja, diidentifikasi dengan nomor **1–99** atau **1300–1999** (*expanded*).
+
+**Karakteristik:**
+- Hanya mengenali IP sumber, tidak bisa berdasarkan IP tujuan, protokol, atau port.
+- Karena hanya mengenali IP sumber, sebaiknya diterapkan **sedekat mungkin dengan tujuan (destination)**.
+- Cocok untuk kebutuhan filtering sederhana, misalnya memblokir satu subnet agar tidak bisa mengakses jaringan lain sama sekali.
+
+**Konfigurasi Standard ACL** — *Skenario: blokir seluruh trafik dari VLAN 20 (Sales, 192.168.20.0/24) menuju subnet Server (192.168.30.0/24), subnet lain tetap diizinkan.*
+
+```
+! ===== 1. Membuat ACL =====
+R1> enable
+R1# configure terminal
+R1(config)# access-list 10 deny 192.168.20.0 0.0.0.255
+R1(config)# access-list 10 permit any
+
+! ===== 2. Menerapkan ACL pada interface (dekat tujuan, arah outbound) =====
+R1(config)# interface gigabitEthernet 0/2
+R1(config-if)# ip access-group 10 out
+R1(config-if)# exit
+```
+
+> ⚠️ **Catatan:** Baris `permit any` wajib ditambahkan secara eksplisit. Tanpa baris ini, seluruh trafik lain (termasuk dari VLAN Finance) ikut ditolak karena *implicit deny*.
+
+**Verifikasi:**
+```
+R1# show access-lists 10
+Standard IP access list 10
+    10 deny 192.168.20.0, wildcard bits 0.0.0.255
+    20 permit any
+```
+
+#### 7.2 Extended ACL
+
+Extended ACL menyaring berdasarkan kombinasi IP sumber, IP **tujuan**, protokol (TCP/UDP/ICMP/IP), serta nomor port. Diidentifikasi dengan nomor **100–199** atau **2000–2699** (*expanded*).
+
+**Karakteristik:**
+- Dapat memfilter berdasarkan IP sumber DAN tujuan, protokol, serta port.
+- Karena sudah mengenali IP tujuan, sebaiknya diterapkan **sedekat mungkin dengan sumber (source)**.
+- Lebih fleksibel namun lebih kompleks dibanding Standard ACL.
+
+**Konfigurasi Extended ACL** — *Skenario: PC1 (192.168.10.10, VLAN Finance) hanya boleh mengakses Server1 (192.168.30.10) via HTTP (port 80); trafik lain dari PC1 ke Server1 ditolak; tujuan lain tetap diizinkan.*
+
+```
+! ===== 1. Membuat ACL =====
+R1> enable
+R1# configure terminal
+R1(config)# access-list 110 permit tcp host 192.168.10.10 host 192.168.30.10 eq 80
+R1(config)# access-list 110 deny ip host 192.168.10.10 host 192.168.30.10
+R1(config)# access-list 110 permit ip any any
+
+! ===== 2. Menerapkan ACL pada interface (dekat sumber, arah inbound) =====
+R1(config)# interface gigabitEthernet 0/0
+R1(config-if)# ip access-group 110 in
+R1(config-if)# exit
+```
+
+**Verifikasi:**
+```
+R1# show access-lists 110
+Extended IP access list 110
+    10 permit tcp host 192.168.10.10 host 192.168.30.10 eq www
+    20 deny ip host 192.168.10.10 host 192.168.30.10
+    30 permit ip any any
+```
+
+#### 7.3 Named ACL
+
+Named ACL pada dasarnya adalah Standard/Extended ACL yang diberi **nama** (bukan nomor) sebagai identitasnya, sehingga lebih mudah dibaca dan dikelola.
+
+**Karakteristik:**
+- Menggunakan nama deskriptif (misal `ONLY_HTTP_TO_SERVER`) alih-alih nomor.
+- Mendukung penghapusan/penyisipan satu baris (ACE) tertentu tanpa menghapus seluruh ACL, menggunakan nomor *sequence*.
+- Tetap harus dideklarasikan sebagai `standard` atau `extended` saat pembuatan.
+
+**Konfigurasi Named ACL** — *skenario sama seperti 7.2, ditulis ulang dengan nama:*
+
+```
+! ===== 1. Membuat Named ACL =====
+R1> enable
+R1# configure terminal
+R1(config)# ip access-list extended ONLY_HTTP_TO_SERVER
+R1(config-ext-nacl)# permit tcp host 192.168.10.10 host 192.168.30.10 eq 80
+R1(config-ext-nacl)# deny ip host 192.168.10.10 host 192.168.30.10
+R1(config-ext-nacl)# permit ip any any
+R1(config-ext-nacl)# exit
+
+! ===== 2. Menerapkan pada interface =====
+R1(config)# interface gigabitEthernet 0/0
+R1(config-if)# ip access-group ONLY_HTTP_TO_SERVER in
+R1(config-if)# exit
+```
+
+**Menyisipkan/menghapus baris tertentu:**
+```
+R1(config)# ip access-list extended ONLY_HTTP_TO_SERVER
+! Menyisipkan aturan baru di antara sequence 10 dan 20
+R1(config-ext-nacl)# 15 permit tcp host 192.168.10.10 host 192.168.30.10 eq 443
+! Menghapus baris sequence 20 tanpa menghapus ACL secara keseluruhan
+R1(config-ext-nacl)# no 20
+R1(config-ext-nacl)# exit
+```
+
+#### 7.4 Perbandingan Jenis ACL
+
+| Aspek | Standard ACL | Extended ACL | Named ACL |
+|---|---|---|---|
+| Kriteria filter | IP sumber saja | IP sumber, tujuan, protokol, port | Sama seperti Standard/Extended |
+| Identifikasi | Nomor 1–99 / 1300–1999 | Nomor 100–199 / 2000–2699 | Nama (teks) |
+| Penempatan ideal | Dekat tujuan (destination) | Dekat sumber (source) | Mengikuti jenis dasarnya |
+| Edit per baris | Tidak | Tidak | Ya (sequence number) |
+
+### 8. Aturan Penempatan ACL
+
+- **Inbound ACL** — paket diperiksa ACL sebelum diproses tabel routing; lebih efisien jika paket memang akan ditolak.
+- **Outbound ACL** — paket diproses routing dulu, baru diperiksa ACL sebelum keluar interface.
+- **Standard ACL** → letakkan dekat **tujuan**, karena tidak mengenali IP tujuan sehingga berisiko memblokir trafik yang seharusnya masih boleh lewat jika diletakkan terlalu dekat sumber.
+- **Extended ACL** → letakkan dekat **sumber**, karena sudah mengenali IP tujuan & protokol, sehingga paket yang seharusnya ditolak bisa langsung dibuang lebih awal.
+- Setiap interface hanya boleh punya maksimal **satu ACL per arah, per protokol**.
+
+### 9. Verifikasi ACL
+
+| Perintah | Fungsi |
+|---|---|
+| `show access-lists` | Menampilkan semua ACL beserta jumlah paket yang cocok (*match*) tiap baris |
+| `show access-lists <nomor/nama>` | Menampilkan detail satu ACL tertentu |
+| `show ip interface <interface>` | Menampilkan ACL yang diterapkan pada suatu interface beserta arahnya |
+| `show running-config` | Menampilkan konfigurasi ACL secara lengkap sesuai urutan baris |
+| `ping` / `traceroute` | Menguji apakah trafik benar-benar diizinkan atau ditolak sesuai ACL |
+
+**Masalah umum:**
+
+| Gejala | Penyebab | Solusi |
+|---|---|---|
+| Semua trafik terblokir | Lupa `permit any` di akhir ACL | Tambahkan baris permit eksplisit sebelum implicit deny |
+| ACL tidak berefek | Belum ada `ip access-group` di interface | Terapkan ACL pada interface dengan arah in/out yang benar |
+| Trafik yang seharusnya diizinkan malah ditolak | Urutan ACE salah | Susun ulang dari yang paling spesifik ke paling umum |
+| Trafik sumber lain ikut terblokir | Standard ACL diterapkan terlalu dekat sumber | Pindahkan ke interface dekat destination |
+
+### 10. Tugas & Evaluasi Praktikum
+
+
 
 ## 📝 Catatan
 - Deadline pengumpulan: [tanggal]
 - Asisten yang membawakan: [nama]
 
 ## 📚 Referensi
-- Modul Praktikum Jaringan Komputer — Inter-VLAN Routing: Router-on-a-Stick (RoAS) & Switch Virtual Interface (SVI)
+- Modul Praktikum Jaringan Komputer — Inter-VLAN Routing (RoAS & SVI) dan Access Control List (Standard, Extended, Named ACL)
