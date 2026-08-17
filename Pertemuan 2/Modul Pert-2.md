@@ -67,8 +67,29 @@ Virtual LAN (VLAN) adalah metode untuk membagi satu jaringan fisik menjadi beber
 
 Langkah kerja:
 1. **Deklarasi VLAN ID dan Nama** pada Global Configuration Mode.
-2. **Verifikasi Database VLAN**  gunakan perintah `Switch# show vlan brief` untuk memastikan VLAN telah terdaftar.
-3. **Mendaftarkan Port Switch ke VLAN (Access Mode)**  daftarkan port `fa0/1` ke VLAN 10 dan port `fa0/3` ke VLAN 20.
+   ```
+     Switch(config)#vlan 10
+     Switch(config-vlan)#name Marketing
+     Switch(config-vlan)#exit
+     Switch(config)#vlan 20
+     Switch(config-vlan)#name Sales
+     Switch(config-vlan)#exit
+   ```
+2. **Verifikasi Database VLAN**  gunakan perintah `Switch(config)#do show vlan brief` untuk memastikan VLAN telah terdaftar.
+3. **Mendaftarkan Port Switch ke VLAN (Access Mode)**  daftarkan port `fa0/1` ke VLAN 10 dan port `fa0/10` ke VLAN 20.
+   ```
+   Switch(config)#interface fastEthernet 0/1
+   Switch(config-if)#switchport mode access
+   Switch(config-if)#switchport access vlan 10
+   Switch(config-if)#exit
+   Switch(config)#
+   ```
+   ```
+   Switch(config)#interface fastEthernet 0/10
+   Switch(config-if)#switchport mode access
+   Switch(config-if)#switchport access vlan 20
+   Switch(config-if)#exit
+   Switc
 4. **Uji Koneksi**  lakukan tes ping dari komputer di VLAN 10 ke komputer di VLAN 20. Hasilnya harus *Request Timed Out* (RTO) karena berada di VLAN yang berbeda dan lalu lintasnya terisolasi.
 
 ### 3. VLAN Trunking
