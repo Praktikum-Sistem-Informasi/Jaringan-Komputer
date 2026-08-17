@@ -36,10 +36,10 @@ Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alu
 WLAN (Wireless Local Area Network) adalah sistem jaringan komputer yang mencakup area lokal tertentu seperti gedung perkantoran, kampus, atau rumah tanpa menggunakan sambungan kabel fisik untuk menghubungkan perangkat-perangkat di dalamnya. Sebagai gantinya, WLAN memanfaatkan teknologi frekuensi radio untuk mengirimkan dan menerima data melalui medium udara. Frekuensi yang paling umum digunakan berada pada pita gelombang radio 2,4 GHz dan 5 GHz, yang beroperasi berdasarkan standar teknis IEEE 802.11, atau yang secara komersial lebih akrab kita sebut dengan Wi-Fi.
  
 Dalam cara kerjanya, infrastruktur WLAN sangat mengandalkan perangkat pusat yang disebut Access Point (AP) atau wireless router. Perangkat ini berfungsi sebagai stasiun pemancar dan penerima (transceiver) yang menjembatani lalu lintas data antara perangkat nirkabel pengguna — seperti laptop, tablet, dan ponsel pintar — dengan jaringan kabel utama atau koneksi penyedia internet (ISP). Ketika pengguna berpindah tempat di dalam batas area cakupan sinyal Access Point tersebut, koneksi perangkat akan tetap terjaga secara otomatis. Hal ini memberikan tingkat mobilitas, skalabilitas, dan fleksibilitas tinggi yang tidak bisa ditawarkan oleh jaringan berbasis kabel (LAN) tradisional.
+
+**Langkah kerja:**
  
-#### Konfigurasi WLAN
- 
-<img width="940" height="316" alt="Menu konfigurasi fisik/GUI Access Point" src="https://github.com/user-attachments/assets/a4efeda3-93e6-4fcb-b65f-24258bfdeeab" />
+<img width="1438" height="571" alt="image" src="https://github.com/user-attachments/assets/928db12c-1df9-4694-9605-cadd0495e52b" />
 
 Secara bawaan (default), jaringan pada Access Point terbuka tanpa keamanan. Oleh karena itu, kita perlu mengatur konfigurasi SSID, sandi, dan jenis enkripsinya seperti pada gambar berikut:
 
@@ -73,11 +73,34 @@ Konsep ini mengamankan akses ke router/switch Cisco melalui CLI, supaya tidak se
  
 Pengamanan konsol fisik bertujuan untuk mencegah orang yang memiliki akses langsung ke perangkat router atau switch melalui port Console masuk dan melakukan konfigurasi tanpa izin. Dengan memberikan password pada line console 0, setiap kali seseorang mengakses perangkat melalui koneksi console, perangkat akan meminta password terlebih dahulu.
 
-<img width="618" height="149" alt="image" src="https://github.com/user-attachments/assets/10d23244-4785-49b1-a38a-f8b3001dbada" />
+**Langkah kerja:**
+
+```
+Router>en
+Router#conf t
+Router(config)#line console 0
+Router(config-line)#password 12345
+Router(config-line)#login
+Router(config-line)#exit
+Router(config)#
+```
+
+**Uji Verifikasi:**
 
 Ketika konfigurasi berhasil maka saat membuka perangkat akan diminta password
 
-<img width="558" height="184" alt="image" src="https://github.com/user-attachments/assets/d730c84b-93fc-4d22-97b6-86adfc7a3dbe" />
+```
+User Access Verification
+
+Password:
+
+Router>en
+Router#show running-config | section line con
+line con 0
+ password 12345
+ login
+Router#
+```
 
 **Cheatsheet CLI**
 
@@ -97,11 +120,25 @@ Privilege Mode adalah mode dengan hak akses tinggi yang ditandai dengan prompt `
 
 Pada mode ini pengguna dapat menjalankan perintah administrasi dan konfigurasi penting pada perangkat. Oleh karena itu, akses ke mode ini perlu diamankan menggunakan `enable secret`.
 
-<img width="637" height="91" alt="image" src="https://github.com/user-attachments/assets/b3aeb2c2-d33a-43e7-8635-eb28b120fb7d" />
+**Langkah kerja:**
+
+```
+Router>en
+Router#conf t
+Router(config)#enable secret 67890
+Router(config)#
+```
+**Uji Verifikasi:**
 
 Ketika pengguna menjalankan `enable` router akan meminta password sebelum memberikan akses ke Privileged Mode.
 
-<img width="514" height="89" alt="image" src="https://github.com/user-attachments/assets/52e48ed7-61c3-40b6-8d89-5279f728614f" />
+```
+Router>en
+Password:
+Router#show running-config | include enable secret
+enable secret 5 $1$mERr$QIs3x0SqQACMwbwSHN8Y7.
+Router#
+```
 
 **Cheatsheet CLI**
 
@@ -114,103 +151,65 @@ Ketika pengguna menjalankan `enable` router akan meminta password sebelum member
 
 ---
 
-#### C. Manajemen User Lokal (`username`)
+#### C. Konfigurasi Hostname
 
-Manajemen user lokal digunakan untuk membuat akun pengguna pada perangkat Cisco, sehingga setiap pengguna dapat memiliki username dan password sendiri.
+Konfigurasi hostname digunakan untuk **mengubah nama perangkat Cisco**, sehingga identitas router atau switch lebih mudah dikenali pada CLI. Secara default, nama perangkat adalah `Router` atau `Switch`.
 
-<img width="631" height="73" alt="image" src="https://github.com/user-attachments/assets/2cac42b9-1456-41ee-ba31-af21d39ca0e2" />
+**Langkah kerja:**
 
-Akun tersebut dapat digunakan untuk autentikasi, terutama ketika mengonfigurasi akses seperti SSH atau Telnet menggunakan `login local`.
+```text
+Router#conf t
+Router(config)#hostname roni
+roni(config)#ex
+roni#
+````
 
-<img width="617" height="55" alt="image" src="https://github.com/user-attachments/assets/07483399-463e-4d92-abe4-3b717ea1388f" />
+**Uji Verifikasi:**
+
+Setelah hostname diubah, prompt CLI akan berubah dari `Router#` menjadi `roni#`.
+
+```text
+roni#show running-config | include hostname
+hostname roni
+roni#
+```
 
 **Cheatsheet CLI**
 
 | Perintah | Fungsi |
-|---|---|
-| `username roni secret roni12345` | Membuat username `roni` dengan password yang tersimpan secara terenkripsi |
-| `show running-config \| include username` | Menampilkan (verifikasi) konfigurasi username lokal |
-| `no username admin` | Menghapus username `admin` |
+| ----|---|
+| `hostname roni`                           | Mengubah nama perangkat menjadi `roni`        |
+| `show running-config \| include hostname` | Menampilkan (verifikasi) konfigurasi hostname |
+| `no hostname`                             | Mengembalikan hostname ke default `Router`    |
 
 ---
 
+### 3. Remote Access (Telnet dan SSH)
 
+#### A. Telnet
 
+Telnet (Telecommunication Network) adalah salah satu protokol jaringan tertua yang digunakan untuk tujuan serupa, yaitu mengakses dan mengontrol perangkat dari jarak jauh. Telnet mulai digunakan sejak tahun 1969, jauh sebelum SSH diciptakan, dan berjalan pada port default 23. Protokol ini memungkinkan pengguna melakukan remote login, menjalankan perintah, serta mengonfigurasi perangkat jaringan seperti router dan switch dari jarak jauh.
+Kelemahan utama Telnet terletak pada sisi keamanannya. Seluruh data yang dikirim melalui protokol ini, termasuk username dan password, dikirim dalam bentuk plain text tanpa enkripsi sama sekali. Akibatnya, data tersebut sangat rentan disadap (sniffing) oleh pihak lain yang berada di jalur jaringan yang sama, misalnya menggunakan tools seperti Wireshark. Informasi sensitif seperti password pun bisa dengan mudah terbaca oleh pihak yang tidak berwenang. Karena kelemahan inilah, Telnet kini sudah jarang digunakan dan telah digantikan oleh SSH.
 
-
-
-
-
-
-
-
-
-
-### 3. VLAN Trunking
-
-Jika komputer di VLAN 10 pada Switch Gedung 1 ingin terhubung dengan komputer di VLAN 10 pada Switch Gedung 2, dibutuhkan jalur **Trunking**. Trunking membawa lalu lintas data dari berbagai VLAN yang berbeda melalui satu koneksi kabel fisik yang sama secara bersamaan, sehingga menghemat kabel fisik dan mengoptimalkan bandwidth. Protokol enkapsulasi trunking standar industri terbuka yang digunakan adalah **IEEE 802.1Q (dot1q)**, yang menyisipkan tag 4-byte pada frame data.
-
-**Langkah kerja:** Hubungkan kedua switch menggunakan kabel Cross-Over pada port FastEthernet0/10, lalu ubah port penghubung tersebut ke mode Trunk pada kedua switch:
-```
-Switch(config)# interface FastEthernet0/10
-Switch(config-if)# switchport mode trunk
-Switch(config-if)# exit
-```
-
-**Uji Verifikasi:** Ketikkan perintah `show interface trunk` pada switch untuk memastikan port `Fa0/10` telah sukses beroperasi dalam status *trunking*. Setelah trunk aktif, komputer di VLAN yang sama antar-switch akan sukses terhubung (*ping reply*).
-
-### 4. Allowed Trunking
-
-Secara default, sebuah port trunk akan mengizinkan seluruh VLAN (ID 1–1005) untuk lewat. **Allowed Trunking** adalah fitur pengontrol lalu lintas data untuk menetapkan daftar spesifik VLAN ID mana saja yang diizinkan melewati jalur komunikasi trunk tersebut. Dengan menerapkan fitur ini, lalu lintas data dari VLAN yang tidak ada di dalam daftar secara otomatis akan diblokir demi efisiensi bandwidth dan memperketat keamanan jaringan.
-
-**Skenario:** Konfigurasikan port trunk `FastEthernet0/10` agar hanya mengizinkan lalu lintas VLAN 20 (Sales) saja, sedangkan VLAN lain diblokir.
-
-```
-Switch(config)# interface FastEthernet0/10
-Switch(config-if)# switchport trunk allowed vlan 20
-Switch(config-if)# exit
-```
-
+**Langkah kerja:**
 **Uji Verifikasi:**
-1. Jalankan perintah verifikasi: `Switch# show interface trunk`.
-2. Perhatikan baris **Vlans allowed on trunk** port harus menunjukkan angka **20** saja.
-3. Lakukan tes ping antar-PC di VLAN 20 (harus sukses), lalu uji ping antar-PC di VLAN 10 (harus gagal/RTO karena telah diblokir di jalur trunk).
+**Cheatsheet CLI**
+### B. SSH
+SSH (Secure Shell) adalah protokol jaringan yang digunakan untuk mengakses dan mengontrol perangkat atau server dari jarak jauh secara aman. Protokol ini dikembangkan pada tahun 1995 sebagai pengganti Telnet dan rlogin, yang sebelumnya mengirim data dalam bentuk teks biasa (plain text) sehingga rentan disadap. SSH mengatasi masalah ini dengan mengenkripsi seluruh data yang dipertukarkan antara client dan server. Dengan begitu, meskipun data disadap, isinya tetap tidak dapat dibaca. SSH umumnya berjalan pada port default 22.
+Dengan SSH, pengguna dapat melakukan login jarak jauh ke suatu perangkat dan menjalankan perintah sistem seolah-olah berada langsung di depan perangkat tersebut. SSH juga memungkinkan transfer file secara aman melalui SCP atau SFTP, serta port forwarding/tunneling. Proses autentikasinya bisa menggunakan kombinasi username-password, atau menggunakan SSH key pair (public key dan private key) yang lebih aman karena tidak mudah dibobol. SSH banyak digunakan oleh administrator jaringan dan sistem, termasuk untuk mengelola perangkat seperti router dan switch Cisco. Karena itu, SSH menjadi salah satu fondasi penting dalam keamanan siber dan pengelolaan infrastruktur TI.
 
-### 5. VLAN Trunking Protocol (VTP)
+**Langkah kerja:**
+**Uji Verifikasi:**
+**Cheatsheet CLI**
 
-Pada jaringan berskala besar dengan puluhan switch, konfigurasi pembuatan VLAN satu per satu secara manual sangat tidak efisien. **VTP (VLAN Trunking Protocol)** adalah protokol *Cisco Proprietary* (hak milik Cisco) yang memungkinkan administrator mengelola pembuatan, penghapusan, dan pengubahan nama VLAN secara terpusat dari satu switch utama. Konfigurasi VTP disimpan dalam file `vlan.dat` pada memori flash.
+#### C. Perbandingan Telnet dan SSH
+- **Metode Autentikasi:** Telnet hanya mengandalkan satu metode, yaitu kombinasi username dan password yang dikirim secara langsung tanpa perlindungan apa pun. Metode ini rentan terhadap serangan brute force maupun penyadapan langsung karena password terlihat jelas saat dikirim. SSH menawarkan fleksibilitas dan keamanan yang lebih baik. Selain bisa menggunakan password, SSH juga mendukung autentikasi dengan SSH key pair. Metode berbasis key ini jauh lebih aman karena private key tidak pernah dikirim melalui jaringan, sehingga risiko pencurian kredensial berkurang signifikan dibanding Telnet.
+- **Integritas Data (Data Integrity):** Telnet tidak memiliki mekanisme untuk memverifikasi apakah data yang diterima masih sama persis dengan data yang dikirim. Akibatnya, data berpotensi dimodifikasi di tengah jalan tanpa terdeteksi, misalnya melalui serangan man-in-the-middle. SSH dilengkapi dengan mekanisme pengecekan integritas data menggunakan algoritma hashing. Jika ada data yang diubah atau dimanipulasi selama proses pengiriman, hal tersebut dapat terdeteksi dan koneksi bisa langsung diputus demi keamanan.
+- **Verifikasi Identitas Server:** Saat menggunakan Telnet, client tidak memiliki cara untuk memastikan bahwa server yang dihubungi benar-benar server yang sah. Kondisi ini membuat Telnet rentan terhadap serangan seperti spoofing, di mana penyerang menyamar sebagai server tujuan. SSH menggunakan sistem host key untuk memverifikasi identitas server setiap kali koneksi dibuat. Jika host key berubah secara mencurigakan, SSH akan memberi peringatan kepada pengguna. Dengan begitu, potensi serangan penyamaran server bisa dicegah lebih awal.
+- **Performa dan Overhead:** Dari segi kecepatan koneksi murni, Telnet sedikit lebih ringan karena tidak melakukan proses enkripsi/dekripsi. Secara teori, Telnet sedikit lebih cepat dan menggunakan resource lebih rendah. SSH memiliki overhead tambahan karena proses enkripsi, pertukaran kunci (key exchange), dan verifikasi integritas data. Namun, perbedaan performa ini biasanya tidak terlalu signifikan pada penggunaan modern, dan jauh sebanding dengan manfaat keamanan yang didapat.
+- **Fitur Tambahan:** Telnet hanya berfungsi sebagai media akses command-line jarak jauh dan tidak memiliki fitur tambahan lain. SSH mendukung berbagai fitur tambahan yang lebih lengkap. Contohnya adalah transfer file secara aman melalui SCP (Secure Copy Protocol) dan SFTP (SSH File Transfer Protocol), port forwarding/tunneling untuk mengamankan aplikasi lain, serta kompresi data yang bisa mempercepat transfer pada koneksi lambat.
+- **Penggunaan pada Perangkat Jaringan (Cisco):** Pada perangkat jaringan seperti router dan switch Cisco, Telnet umumnya diaktifkan menggunakan perintah dasar seperti line vty 0 4 dan password, tanpa memerlukan konfigurasi tambahan yang rumit. SSH memerlukan konfigurasi tambahan yang lebih kompleks. Konfigurasi ini meliputi pengaturan hostname, domain-name, generate RSA key (crypto key generate rsa), serta pengaktifan transport input ssh. Meski lebih rumit, hasilnya adalah akses remote yang jauh lebih aman untuk mengelola perangkat jaringan tersebut.
 
-**VTP membagi switch ke dalam 3 peran (mode):**
-1. **VTP Server (default)** membuat, mengubah, atau menghapus VLAN serta menyebarkan pembaruan database (*advertisement*) ke seluruh switch klien.
-2. **VTP Client** menerima dan menerapkan perubahan database VLAN dari server; tidak dapat membuat atau memodifikasi VLAN secara lokal.
-3. **VTP Transparent** berfungsi sebagai penyalur, meneruskan iklan VTP ke switch lain tetapi tidak menerapkan perubahan tersebut pada database internalnya sendiri.
-
-> ⚠️ **Peringatan Keamanan:** Setiap pembaruan ditandai dengan **Revision Number**. Jika switch client dengan nomor revisi lebih tinggi dimasukkan ke jaringan, database VLAN server dapat terhapus secara otomatis. Selalu reset switch sebelum menghubungkannya kembali ke domain VTP aktif.
-
-**Langkah Kerja Konfigurasi VTP** *(syarat utama: interface penghubung antar-switch sudah dikonfigurasi dalam mode Trunk)*:
-
-Konfigurasi Switch Server:
-```
-Switch0(config)# vtp mode server
-Switch0(config)# vtp domain belajar
-Switch0(config)# vtp password rahasia
-```
-
-Konfigurasi Switch Transparent:
-```
-Switch1(config)# vtp mode transparent
-Switch1(config)# vtp domain belajar
-Switch1(config)# vtp password rahasia
-```
-
-Konfigurasi Switch Client:
-```
-Switch2(config)# vtp mode client
-Switch2(config)# vtp domain belajar
-Switch2(config)# vtp password rahasia
-```
-
-**Uji Verifikasi:** Buat VLAN baru (misal VLAN 10 dan 20) di Switch Server, lalu jalankan perintah `#show vlan brief` di Switch Client. Jika database VLAN 10 dan 20 otomatis tersinkronisasi di switch client, maka konfigurasi VTP telah berhasil.
 
 ### 6. Tugas & Evaluasi Praktikum
 1. Rancang topologi di Cisco Packet Tracer menggunakan 3 Switch dan 6 PC!
@@ -223,4 +222,4 @@ Switch2(config)# vtp password rahasia
 - Asisten yang membawakan: [nama]
 
 ## 📚 Referensi
-- Modul Praktikum Jaringan Komputer — Pertemuan 2: Administrasi Perangkat Cisco & Virtual LAN (VLAN)
+- cisco book - taufik
