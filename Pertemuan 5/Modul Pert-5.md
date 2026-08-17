@@ -212,7 +212,9 @@ Untuk memastikannya, Anda bisa melakukan test ping pada PC yang berada pada satu
 jaringan ke PC jaringan lain yang terhubung pada router yang berbeda seperti pada gambar
 berikut.  
 
-<img width="429" height="405" alt="Screenshot 2026-08-18 012722" src="https://github.com/user-attachments/assets/e0f5caae-2d75-4671-89d9-ce8be74cb219" />  
+<img width="429" height="405" alt="Screenshot 2026-08-18 012722" src="https://github.com/user-attachments/assets/e0f5caae-2d75-4671-89d9-ce8be74cb219" />   
+
+
 ## 📝 Catatan
 - Deadline pengumpulan: [tanggal]
 - Asisten yang membawakan: [nama]
