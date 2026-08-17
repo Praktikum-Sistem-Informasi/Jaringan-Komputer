@@ -30,7 +30,7 @@ Router(config-if)#no shutdown (Jalankan perintah `no shutdown` pada setiap port 
 ```
 
 ## 📖 Materi Praktikum
-### 1. Dynamic Routing EIGRP
+### 1. Konfigurasi dan Penjelasan Dynamic Routing EIGRP
 EIGRP adalah protokol routing dinamis buatan Cisco yang tergolong advanced distance-vector (hybrid), karena menggabungkan karakteristik distance-vector dengan efisiensi link-state. EIGRP menggunakan algoritma DUAL (Diffusing Update Algorithm) untuk menghitung jalur terbaik (successor) sekaligus menyiapkan jalur cadangan (feasible successor), sehingga proses convergence saat terjadi perubahan topologi menjadi sangat cepat.
 
 Metrik EIGRP bersifat komposit, dihitung dari kombinasi bandwidth, delay, reliability, dan load (secara default hanya bandwidth dan delay yang dipakai). Berbeda dari RIP, EIGRP tidak mengirim update routing secara periodik penuh, melainkan hanya mengirim update parsial saat terjadi perubahan (triggered update), sehingga lebih efisien pada jaringan besar. Agar dua router dapat bertetangga, keduanya harus berada dalam Autonomous System (AS) number yang sama.
@@ -47,7 +47,7 @@ Metrik EIGRP bersifat komposit, dihitung dari kombinasi bandwidth, delay, reliab
 | Melihat topology table    | `Router# show ip eigrp topology`                           | Menampilkan seluruh jalur yang diketahui EIGRP, termasuk successor dan feasible successor.                 |
 | Melihat status protokol   | `Router# show ip protocols`                                | Menampilkan detail proses EIGRP aktif: AS number, network yang didaftarkan, dan sumber route.              |
 
-
+#### Langkah kerja:  
 <img width="557" height="309" alt="Screenshot 2026-08-18 004650" src="https://github.com/user-attachments/assets/7c405571-a207-4577-8ced-546f126cd62c" />  
 
 
@@ -127,7 +127,7 @@ ke PC jaringan lain yang terhubung pada router yang berbeda seperti pada gambar 
 <img width="429" height="405" alt="Screenshot 2026-08-18 012722" src="https://github.com/user-attachments/assets/e0f5caae-2d75-4671-89d9-ce8be74cb219" />
 
 
-### 2. Dynamic Routing OSPF
+### 2. Konfigurasi dan Penjelasan Dynamic Routing OSPF
 OSPF adalah protokol routing dinamis berbasis link-state dan merupakan standar terbuka (RFC 2328), sehingga dapat digunakan lintas vendor perangkat jaringan. Setiap router OSPF saling bertukar LSA (Link State Advertisement) untuk membentuk LSDB (Link State Database) yang identik di seluruh router dalam satu area. Dari LSDB tersebut, setiap router menghitung jalur terpendek secara independen menggunakan algoritma Dijkstra (Shortest Path First).
 
 Metrik OSPF disebut cost, yang dihitung berdasarkan bandwidth interface (semakin besar bandwidth, semakin kecil cost, semakin disukai jalurnya). Untuk menjaga skalabilitas pada jaringan besar, OSPF membagi jaringan ke dalam beberapa area, dengan Area 0 (backbone area) sebagai area utama yang menghubungkan area-area lain. Router OSPF saling mengenali tetangganya melalui pertukaran paket secara periodik untuk membentuk dan menjaga neighbor adjacency.
@@ -145,6 +145,7 @@ Metrik OSPF disebut cost, yang dihitung berdasarkan bandwidth interface (semakin
 | Melihat database OSPF     | `Router# show ip ospf database`                                         | Menampilkan seluruh LSA yang tersimpan di Link State Database (LSDB).                                      |
 | Melihat status protokol   | `Router# show ip protocols`                                             | Menampilkan detail proses OSPF aktif: router-id, area, network yang didaftarkan, dan sumber route.         |
 
+#### Langkah kerja:  
 <img width="557" height="309" alt="Screenshot 2026-08-18 004650" src="https://github.com/user-attachments/assets/7c405571-a207-4577-8ced-546f126cd62c" />  
 
 Pada konfigurasi routing OSPF, selain memperhatikan ID routing yang digunakan
