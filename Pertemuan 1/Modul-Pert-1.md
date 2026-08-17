@@ -317,11 +317,6 @@ SM       : 255.255.255.256 - 32 = 255.255.255.224
 
 ### 5. Tugas & Evaluasi Praktikum
 1. Tentukan Total IP, Usable Host, Network Address, Broadcast Address, Host Range, dan Subnet Mask dari `192.168.5.70/26`!
-2. Tentukan Total IP, Usable Host, Network Address, Broadcast Address, Host Range, dan Subnet Mask dari `172.16.30.100/27`!
-3. Tentukan CIDR yang paling sesuai (paling efisien) untuk sebuah ruang laboratorium yang membutuhkan jaringan untuk 20 perangkat, lalu buktikan dengan perhitungan Usable Host!
-4. Jelaskan perbedaan antara Network Address, Host Address, dan Broadcast Address, disertai contoh alamat IP!
-5. Jelaskan perbedaan Private IP Address dan Public IP Address, serta sebutkan salah satu rentang Private IP Address!
-6. Jelaskan perbedaan topologi Star dan topologi Bus, lengkap dengan satu kelebihan dan satu kekurangan masing-masing!
 
 
 ## 📝 Catatan
@@ -329,8 +324,6 @@ SM       : 255.255.255.256 - 32 = 255.255.255.224
 - Deadline pengumpulan: [tanggal]
 - Asisten yang membawakan: [nama]
 
-## 📚 Referensi
-- Modul Praktikum Jaringan Komputer
 
 ## 📚 Referensi
 - Modul Praktikum Jaringan Komputer — Pertemuan 1: Pengenalan IP Address, Topologi Jaringan, dan Dasar-Dasar Subnetting
