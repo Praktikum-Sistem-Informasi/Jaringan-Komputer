@@ -26,7 +26,7 @@ Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alu
 # 2. Klik perangkat Router/Switch, buka tab CLI, lalu masukkan perintah konfigurasi, contoh:
 Router> enable
 Router# configure terminal
-Router(config)# interface gigabitEthernet 0/0.10
+Router(config)# interface FastEthernet 0/0.10
 ```
 
 ## 📖 Materi Praktikum
@@ -64,7 +64,7 @@ RoAS adalah metode Inter-VLAN Routing yang hanya menggunakan satu interface fisi
 
 **Karakteristik RoAS:**
 - Menggunakan router eksternal (bukan switch) sebagai perangkat Layer 3.
-- Satu interface fisik (misal `GigabitEthernet0/0`) dipecah menjadi sub-interface (`G0/0.10`, `G0/0.20`, dst).
+- Satu interface fisik (misal `FastEthernet0/0`) dipecah menjadi sub-interface (`G0/0.10`, `G0/0.20`, dst).
 - Port switch yang terhubung ke router dikonfigurasi sebagai trunk.
 - Cocok untuk jaringan kecil-menengah, atau ketika hanya tersedia router (tanpa switch Layer 3).
 - Kekurangan: satu link fisik menjadi titik kemacetan (*bottleneck*) karena seluruh trafik antar-VLAN melewati satu kabel yang sama.
@@ -104,18 +104,18 @@ SW1(config-if)# exit
 ! ===== 4. Konfigurasi Sub-interface pada Router =====
 R1> enable
 R1# configure terminal
-R1(config)# interface gigabitEthernet 0/0
+R1(config)# interface FastEthernet 0/0
 R1(config-if)# no shutdown
 R1(config-if)# exit
 
 ! Sub-interface untuk VLAN 10
-R1(config)# interface gigabitEthernet 0/0.10
+R1(config)# interface FastEthernet 0/0.10
 R1(config-subif)# encapsulation dot1Q 10
 R1(config-subif)# ip address 192.168.10.1 255.255.255.0
 R1(config-subif)# exit
 
 ! Sub-interface untuk VLAN 20
-R1(config)# interface gigabitEthernet 0/0.20
+R1(config)# interface FastEthernet 0/0.20
 R1(config-subif)# encapsulation dot1Q 20
 R1(config-subif)# ip address 192.168.20.1 255.255.255.0
 R1(config-subif)# exit
@@ -249,8 +249,7 @@ Cara cepat menghitung wildcard mask: kurangi setiap oktet subnet mask dari 255. 
 
 ### 3. Jenis-Jenis ACL
 
-Ada tiga jenis utama ACL pada Cisco IOS, dibedakan dari kriteria penyaringan dan cara identifikasinya: **Standard ACL**, **Extended ACL**, dan **Named ACL**. Ketiganya dicoba pada skenario yang sama: memblokir VLAN 10 ↔ VLAN 30, sambil tetap mengizinkan VLAN 10 ↔ VLAN 20 dan VLAN 20 ↔ VLAN 30.
-
+Ada tiga jenis utama ACL pada Cisco IOS, dibedakan dari kriteria penyaringan dan cara identifikasinya **Standard ACL**, **Extended ACL**, dan **Named ACL**. 
 #### 3.1 Standard ACL 
 
 Standard ACL hanya menyaring paket berdasarkan alamat IP **sumber** saja, diidentifikasi dengan nomor **1–99** atau **1300–1999** (*expanded*).
@@ -260,11 +259,11 @@ Standard ACL hanya menyaring paket berdasarkan alamat IP **sumber** saja, diiden
 - Karena hanya mengenali IP sumber, sebaiknya diterapkan **sedekat mungkin dengan tujuan (destination)**.
 - Cocok untuk kebutuhan filtering sederhana, misalnya memblokir satu subnet agar tidak bisa mengakses jaringan lain sama sekali — tapi kurang cocok untuk kebutuhan "blokir pasangan VLAN tertentu saja, dua arah" seperti skenario kita.
 
-**Percobaan dengan Standard ACL:**
+**Konfigurasi Standard ACL:**
 ```
 R1(config)# access-list 10 deny 192.168.10.0 0.0.0.255
 R1(config)# access-list 10 permit any
-R1(config)# interface gigabitEthernet 0/0.30
+R1(config)# interface FastEthernet 0/0.30
 R1(config-subif)# ip access-group 10 out
 ```
 
@@ -290,12 +289,12 @@ R1(config)# access-list 110 deny ip 192.168.30.0 0.0.0.255 192.168.10.0 0.0.0.25
 R1(config)# access-list 110 permit ip any any
 
 ! ===== 2. Terapkan pada interface VLAN 10 (inbound) =====
-R1(config)# interface gigabitEthernet 0/0.10
+R1(config)# interface FastEthernet 0/0.10
 R1(config-subif)# ip access-group 110 in
 R1(config-subif)# exit
 
 ! ===== 3. Terapkan juga pada interface VLAN 30 (inbound) =====
-R1(config)# interface gigabitEthernet 0/0.30
+R1(config)# interface FastEthernet 0/0.30
 R1(config-subif)# ip access-group 110 in
 R1(config-subif)# exit
 ```
@@ -338,11 +337,11 @@ R1(config-ext-nacl)# permit ip any any
 R1(config-ext-nacl)# exit
 
 ! ===== 2. Terapkan di kedua sub-interface =====
-R1(config)# interface gigabitEthernet 0/0.10
+R1(config)# interface FastEthernet 0/0.10
 R1(config-subif)# ip access-group BLOCK_FINANCE_IT in
 R1(config-subif)# exit
 
-R1(config)# interface gigabitEthernet 0/0.30
+R1(config)# interface FastEthernet 0/0.30
 R1(config-subif)# ip access-group BLOCK_FINANCE_IT in
 R1(config-subif)# exit
 ```
