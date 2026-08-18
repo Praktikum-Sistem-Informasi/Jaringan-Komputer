@@ -1,4 +1,4 @@
-#Soal Praktikum — Pertemuan 3: Inter-VLAN Routing (Router-on-a-Stick)
+# Soal Praktikum — Pertemuan 3: Inter-VLAN Routing (Router-on-a-Stick)
 
 📋 Deskripsi Tugas
 Praktikan diminta merancang dan mengonfigurasi sebuah jaringan kampus menggunakan Cisco Packet Tracer yang menerapkan segmentasi VLAN pada tiga ruangan berbeda, kemudian menghubungkan ketiganya menggunakan metode Inter-VLAN Routing Router-on-a-Stick (RoAS), sehingga masing-masing ruangan bisa saling berkomunikasi melalui satu router meski berada di VLAN yang berbeda.
