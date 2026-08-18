@@ -251,7 +251,7 @@ Cara cepat menghitung wildcard mask: kurangi setiap oktet subnet mask dari 255. 
 
 Ada tiga jenis utama ACL pada Cisco IOS, dibedakan dari kriteria penyaringan dan cara identifikasinya: **Standard ACL**, **Extended ACL**, dan **Named ACL**. Ketiganya dicoba pada skenario yang sama: memblokir VLAN 10 ↔ VLAN 30, sambil tetap mengizinkan VLAN 10 ↔ VLAN 20 dan VLAN 20 ↔ VLAN 30.
 
-#### 3.1 Standard ACL — dan Kenapa Kurang Cocok untuk Kasus Ini
+#### 3.1 Standard ACL 
 
 Standard ACL hanya menyaring paket berdasarkan alamat IP **sumber** saja, diidentifikasi dengan nomor **1–99** atau **1300–1999** (*expanded*).
 
@@ -270,7 +270,7 @@ R1(config-subif)# ip access-group 10 out
 
 > ⚠️ **Kenapa ini belum cukup:** ACL di atas memang menahan trafik dari VLAN 10 sebelum keluar ke VLAN 30. Tapi karena Standard ACL **tidak mengenali IP tujuan**, ACL ini hanya bisa dipasang berdasarkan sumbernya saja — dan hanya menutup **satu arah** (VLAN 10 → VLAN 30). Trafik VLAN 30 → VLAN 10 tetap lolos kecuali dibuatkan ACL kedua di sisi satunya. Untuk kebutuhan **dua arah + tujuan spesifik**, **Extended ACL** adalah pilihan yang tepat.
 
-#### 3.2 Extended ACL — Solusi untuk Skenario Ini
+#### 3.2 Extended ACL 
 
 Extended ACL menyaring berdasarkan kombinasi IP sumber, IP **tujuan**, protokol (TCP/UDP/ICMP/IP), serta nomor port. Diidentifikasi dengan nomor **100–199** atau **2000–2699** (*expanded*).
 
