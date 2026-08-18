@@ -102,31 +102,42 @@ Langkah kerja:
 
 Trunking adalah metode yang digunakan untuk menghubungkan beberapa VLAN melalui satu jalur kabel fisik yang sama sambil tetap menjaga lalu lintas data agar tetap terisolasi satu sama lain. Jika komputer di VLAN 10 pada Switch Gedung 1 ingin terhubung dengan komputer di VLAN 10 pada Switch Gedung 2, dibutuhkan jalur **Trunking**. Trunking membawa lalu lintas data dari berbagai VLAN yang berbeda melalui satu koneksi kabel fisik yang sama secara bersamaan, sehingga menghemat kabel fisik dan mengoptimalkan bandwidth. Protokol enkapsulasi trunking standar industri terbuka yang digunakan adalah **IEEE 802.1Q (dot1q)**, yang menyisipkan tag 4-byte pada frame data.
 
-**Langkah kerja:** Hubungkan kedua switch menggunakan kabel Cross-Over pada port FastEthernet0/10, lalu ubah port penghubung tersebut ke mode Trunk pada kedua switch:
+**Langkah kerja:** Hubungkan kedua switch menggunakan kabel Cross-Over pada port FastEthernet0/2, lalu ubah port penghubung tersebut ke mode Trunk pada kedua switch:
+
+<img width="100%" height="400" alt="image" src="https://github.com/user-attachments/assets/2f1c9f07-47f8-4cae-a05d-00db7c137a4b" />
+
+
 ```
-Switch(config)# interface FastEthernet0/10
+Switch(config)# interface FastEthernet0/2
 Switch(config-if)# switchport mode trunk
 Switch(config-if)# exit
 ```
 
-**Uji Verifikasi:** Ketikkan perintah `show interface trunk` pada switch untuk memastikan port `Fa0/10` telah sukses beroperasi dalam status *trunking*. Setelah trunk aktif, komputer di VLAN yang sama antar-switch akan sukses terhubung (*ping reply*).
+**Uji Verifikasi:** Ketikkan perintah `do show interface trunk` pada switch untuk memastikan port `Fa0/2` telah sukses beroperasi dalam status *trunking*. Setelah trunk aktif, komputer di VLAN yang sama antar-switch akan sukses terhubung (*ping reply*).
+
+<img width="100%" height="300" alt="image" src="https://github.com/user-attachments/assets/0a7f119a-601b-46b2-8b4c-06d9cf40aabd" />
+
 
 ### 4. Allowed Trunking
 
 Secara default, sebuah port trunk akan mengizinkan seluruh VLAN (ID 1–1005) untuk lewat. **Allowed Trunking** adalah fitur pengontrol lalu lintas data untuk menetapkan daftar spesifik VLAN ID mana saja yang diizinkan melewati jalur komunikasi trunk tersebut. Dengan menerapkan fitur ini, lalu lintas data dari VLAN yang tidak ada di dalam daftar secara otomatis akan diblokir demi efisiensi bandwidth dan memperketat keamanan jaringan.
 
-**Skenario:** Konfigurasikan port trunk `FastEthernet0/10` agar hanya mengizinkan lalu lintas VLAN 20 (Sales) saja, sedangkan VLAN lain diblokir.
+**Skenario:** Konfigurasikan port trunk `FastEthernet0/2` agar hanya mengizinkan lalu lintas VLAN 20 (Sales) saja, sedangkan VLAN lain(VLAN 10) Marketing diblokir.
 
 ```
-Switch(config)# interface FastEthernet0/10
+Switch(config)# interface FastEthernet0/2
 Switch(config-if)# switchport trunk allowed vlan 20
 Switch(config-if)# exit
 ```
 
 **Uji Verifikasi:**
-1. Jalankan perintah verifikasi: `Switch# show interface trunk`.
+1. Jalankan perintah verifikasi: `Switch(config)#do show interface trunk`.
+   <img width="100%" height="300" alt="image" src="https://github.com/user-attachments/assets/9aec7604-b862-463a-9dc9-1ab9f8778172" />
+
 2. Perhatikan baris **Vlans allowed on trunk** port harus menunjukkan angka **20** saja.
 3. Lakukan tes ping antar-PC di VLAN 20 (harus sukses), lalu uji ping antar-PC di VLAN 10 (harus gagal/RTO karena telah diblokir di jalur trunk).
+   <img width="100%" height="100" alt="image" src="https://github.com/user-attachments/assets/2c63b819-4098-4586-8eb4-f868e4dab050" />
+
 
 ### 5. VLAN Trunking Protocol (VTP)
 
