@@ -130,7 +130,7 @@ R1(config-subif)# exit
 | PC1 (VLAN 10) | 192.168.10.10 | 255.255.255.0 | 192.168.10.1 |
 | PC2 (VLAN 20) | 192.168.20.10 | 255.255.255.0 | 192.168.20.1 |
 
-#### 3.2 Switch Virtual Interface (SVI)
+#### 3.2 Switch Virtual Interface / Switch Multilayer (SVI)
 
 SVI adalah interface virtual pada switch Layer 3 (*multilayer switch*) yang mewakili sebuah VLAN dalam bentuk logis. Setiap VLAN dapat memiliki satu SVI yang berfungsi sebagai *default gateway*. Routing antar-VLAN dilakukan sepenuhnya di dalam switch itu sendiri (di ASIC), tanpa memerlukan router eksternal.
 
