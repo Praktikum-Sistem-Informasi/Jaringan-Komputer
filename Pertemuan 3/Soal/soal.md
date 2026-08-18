@@ -73,14 +73,6 @@ Isi tabel berikut berdasarkan hasil pengujian yang kamu lakukan.
 2. Jelaskan fungsi `encapsulation dot1Q <vlan-id>` pada setiap sub-interface router — apa yang terjadi apabila angka VLAN ID pada perintah tersebut tidak sesuai dengan VLAN yang diizinkan pada port trunk switch?
 3. Mengapa interface fisik GigabitEthernet0/0 pada router tetap harus dalam kondisi `no shutdown`, meskipun IP address sebenarnya dipasang pada sub-interface, bukan pada interface fisiknya?
 4. Pada topologi ini, seluruh trafik dari tiga ruangan (Dosen, Lab, TU) melewati satu kabel fisik yang sama antara switch dan router. Jelaskan risiko/keterbatasan dari kondisi ini, dan apa nama metode Inter-VLAN Routing lain yang bisa mengatasi keterbatasan tersebut!
-5. Ruang Dosen biasanya menyimpan data akademik/nilai yang sensitif. Menurutmu, apakah wajar jika Lab dan TU diberi akses penuh ke Ruang Dosen tanpa pembatasan apa pun? Jelaskan alasanmu dan sebutkan fitur konfigurasi Cisco yang bisa dipakai untuk membatasi akses tersebut (jawab secara konseptual, tidak perlu konfigurasi).
-
-🎯 Tantangan Tambahan (Bonus, Opsional)
-Setelah ketiga ruangan berhasil saling terhubung, terapkan kebijakan keamanan berikut menggunakan **Extended ACL**:
-- Lab (VLAN 20) **tidak boleh** mengakses Ruang Dosen (VLAN 10) sama sekali, kedua arah.
-- Ruang Dosen (VLAN 10) tetap **boleh** mengakses TU (VLAN 30), dan Lab (VLAN 20) tetap **boleh** mengakses TU (VLAN 30).
-
-Dokumentasikan konfigurasi ACL yang kamu buat beserta hasil pengujian ping yang membuktikan kebijakan tersebut berjalan sesuai ketentuan.
 
 📤 Ketentuan Pengumpulan
 - File topologi Cisco Packet Tracer (.pkt) dikumpulkan pada folder `src/`.
