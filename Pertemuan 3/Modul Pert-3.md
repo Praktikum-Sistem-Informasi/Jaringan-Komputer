@@ -64,7 +64,7 @@ RoAS adalah metode Inter-VLAN Routing yang hanya menggunakan satu interface fisi
 
 **Karakteristik RoAS:**
 - Menggunakan router eksternal (bukan switch) sebagai perangkat Layer 3.
-- Satu interface fisik (misal `FastEthernet0/0`) dipecah menjadi sub-interface (`G0/0.10`, `G0/0.20`, dst).
+- Satu interface fisik (misal `FastEthernet0/0`) dipecah menjadi sub-interface (`Fa0/0.10`, `Fa0/0.20`, dst).
 - Port switch yang terhubung ke router dikonfigurasi sebagai trunk.
 - Cocok untuk jaringan kecil-menengah, atau ketika hanya tersedia router (tanpa switch Layer 3).
 - Kekurangan: satu link fisik menjadi titik kemacetan (*bottleneck*) karena seluruh trafik antar-VLAN melewati satu kabel yang sama.
@@ -121,7 +121,7 @@ R1(config-subif)# ip address 192.168.20.1 255.255.255.0
 R1(config-subif)# exit
 ```
 
-> ⚠️ **Catatan:** Angka pada perintah `encapsulation dot1Q <id>` harus sama persis dengan VLAN ID yang diizinkan pada port trunk switch. Interface fisik utama (`G0/0`) tetap harus dalam kondisi `no shutdown` agar sub-interface dapat aktif.
+> ⚠️ **Catatan:** Angka pada perintah `encapsulation dot1Q <id>` harus sama persis dengan VLAN ID yang diizinkan pada port trunk switch. Interface fisik utama (`Fa0/0`) tetap harus dalam kondisi `no shutdown` agar sub-interface dapat aktif.
 
 **Konfigurasi IP pada PC:**
 
