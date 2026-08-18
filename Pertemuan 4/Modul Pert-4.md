@@ -1,4 +1,4 @@
-# Pertemuan 4: Static Routing & Dynamic Routing (RIP)
+F# Pertemuan 4: Static Routing & Dynamic Routing (RIP)
 
 ## 🎯 Tujuan Pembelajaran
 - Praktikan mampu memahami konsep dasar routing serta perbedaan mendasar antara static routing dan dynamic routing pada jaringan komputer.
@@ -161,7 +161,7 @@ saja, namun belum mengetuhi jaringan yang terhubung pada router lain. Selanjutny
 bisa melakukan konfigurasi RIP pada setiap rouet dengan konfigurasi berikut.
 
 ```
-#router rip (NA jaringan yangg terhubung langsung pada
+#router rip (NA jaringan yang terhubung langsung pada
 router)
 > Konfigurasi routing dengan protokol RIP
 ```
