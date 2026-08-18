@@ -65,6 +65,9 @@ Virtual LAN (VLAN) adalah metode untuk membagi satu jaringan fisik menjadi beber
 
 **Skenario:** Buat VLAN 10 dengan nama Marketing dan VLAN 20 dengan nama Sales, lalu daftarkan port interface komputer ke VLAN tersebut.
 
+<img width="100%" height="300" alt="image" src="https://github.com/user-attachments/assets/7b9a8c98-3dd6-40cf-85f7-57807dace285" />
+
+
 Langkah kerja:
 1. **Deklarasi VLAN ID dan Nama** pada Global Configuration Mode.
    ```
@@ -76,6 +79,9 @@ Langkah kerja:
      Switch(config-vlan)#exit
    ```
 2. **Verifikasi Database VLAN**  gunakan perintah `Switch(config)#do show vlan brief` untuk memastikan VLAN telah terdaftar.
+   
+   <img width="100%" height="300" alt="image" src="https://github.com/user-attachments/assets/a61ab37c-8cfc-4cd6-8adc-e44ffb6414f4" />
+
 3. **Mendaftarkan Port Switch ke VLAN (Access Mode)**  daftarkan port `fa0/1` ke VLAN 10 dan port `fa0/10` ke VLAN 20.
    ```
    Switch(config)#interface fastEthernet 0/1
