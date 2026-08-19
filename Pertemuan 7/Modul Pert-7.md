@@ -368,7 +368,7 @@ Berikut cheatsheet CLI untuk konfigurasi SSH:
 
 
 
-### 4. Tugas & Evaluasi Praktikum
+### 4. Latihan Praktikum
 1. Buat topologi sederhana di Cisco Packet Tracer menggunakan **1 Router** dan **1 PC** (hubungkan langsung menggunakan kabel console)!
 2. Konfigurasikan **password pada line console 0** dengan password bebas (contoh: `12345`), lalu aktifkan `login` supaya password diminta saat login!
 3. Screenshot hasil uji verifikasi (saat membuka kembali akses ke Router, harus muncul prompt `Password:`)!
