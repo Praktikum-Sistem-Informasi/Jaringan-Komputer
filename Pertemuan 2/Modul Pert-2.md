@@ -152,30 +152,41 @@ Pada jaringan berskala besar dengan puluhan switch, konfigurasi pembuatan VLAN s
 
 **Langkah Kerja Konfigurasi VTP** *(syarat utama: interface penghubung antar-switch sudah dikonfigurasi dalam mode Trunk)*:
 
+**Topologi Sederhana**
+
+<img width="100%" height="400" alt="image" src="https://github.com/user-attachments/assets/83e28a92-7aa2-42b1-bcc2-70e9229f7d87" />
+
 Konfigurasi Switch Server:
 ```
-Switch0(config)# vtp mode server
-Switch0(config)# vtp domain belajar
-Switch0(config)# vtp password rahasia
+Switch(config)# vtp mode server
+Switch(config)# vtp domain kelas
+Switch(config)# vtp password 123
 ```
 
 Konfigurasi Switch Transparent:
 ```
-Switch1(config)# vtp mode transparent
-Switch1(config)# vtp domain belajar
-Switch1(config)# vtp password rahasia
+Switch(config)# vtp mode transparent
+Switch(config)# vtp domain kelas
+Switch(config)# vtp password 123
 ```
 
 Konfigurasi Switch Client:
 ```
-Switch2(config)# vtp mode client
-Switch2(config)# vtp domain belajar
-Switch2(config)# vtp password rahasia
+Switch(config)# vtp mode client
+Switch(config)# vtp domain kelas
+Switch(config)# vtp password 123
 ```
+**Cek Status VTP** dengan perintah `#do show vtp status`
 
-**Uji Verifikasi:** Buat VLAN baru (misal VLAN 10 dan 20) di Switch Server, lalu jalankan perintah `#show vlan brief` di Switch Client. Jika database VLAN 10 dan 20 otomatis tersinkronisasi di switch client, maka konfigurasi VTP telah berhasil.
+<img width="32%" height="100%" alt="image" src="https://github.com/user-attachments/assets/93c1a0d3-ce17-400c-8d24-a33571759c6a" />
+<img width="32%" height="100%" alt="image" src="https://github.com/user-attachments/assets/e08757c4-11e5-4c1f-81f3-fac241121aa0" />
+<img width="32%" height="100%" alt="image" src="https://github.com/user-attachments/assets/25a0789e-40dc-47ac-b34e-ccef7bcd5a44" />
 
-### 6. Tugas & Evaluasi Praktikum
+
+
+**Uji Verifikasi:** Buat VLAN baru (misal VLAN 40 dan 50) di Switch Server, lalu jalankan perintah `#show vlan brief` di Switch Client. Jika database VLAN 10 dan 20 otomatis tersinkronisasi di switch client, maka konfigurasi VTP telah berhasil.
+
+### 6. Latihan Praktikum
 1. Rancang topologi di Cisco Packet Tracer menggunakan 3 Switch dan 6 PC!
 2. Konfigurasikan switch pertama sebagai VTP Server, switch kedua sebagai VTP Transparent, dan switch ketiga sebagai VTP Client!
 3. Buat VLAN 10 (Marketing) dan VLAN 20 (Sales) di Switch Server!
