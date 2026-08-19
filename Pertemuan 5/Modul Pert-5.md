@@ -214,12 +214,20 @@ berikut.
 
 <img width="565" height="405" alt="Screenshot 2026-08-18 012722" src="https://github.com/user-attachments/assets/e0f5caae-2d75-4671-89d9-ce8be74cb219" />   
 
+### 3. Latihan Praktikum
+1. Rancang topologi ring di Cisco Packet Tracer menggunakan 3 Router, 3 Switch, dan 3 PC, buat dalam dua topologi terpisah pada satu file .pkt (Topologi A dan Topologi B), masing-masing router terhubung langsung ke dua router lainnya!
+2. Konfigurasikan Topologi A menggunakan dynamic routing EIGRP (aktifkan router eigrp dengan AS number yang sama di tiap router), dan Topologi B menggunakan dynamic routing OSPF (aktifkan router ospf dengan seluruh network masuk area 0)!
+3. Lakukan verifikasi dengan ping dari PC1 ke PC2 dan PC3 pada kedua topologi, lalu bandingkan nilai metric pada show ip route — jelaskan perbedaan cara EIGRP (bandwidth & delay) dan OSPF (cost) dalam menghitung jalur terbaik!
+4. Putuskan link R1–R2 pada kedua topologi, lalu ulangi ping dari PC1 ke PC2. Jelaskan analisis Anda mengenai proses reconvergence EIGRP (feasible successor) dibanding OSPF (perhitungan ulang SPF), dan protokol mana yang lebih cepat pulih!
+
+
 
 ## 📝 Catatan
 - Deadline pengumpulan: [tanggal]
 - Asisten yang membawakan: [nama]
 
 ## 📚 Referensi
-- Modul Praktikum Jaringan Komputer
+- Modul Praktikum Jaringan Komputer - Pertemuan 5: Dynamic Routing (EIGRP & OSPF)
+
 
 
