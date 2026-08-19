@@ -64,11 +64,11 @@ routing mereka ke router yang berada di sebelahnya dan begitu pula sebaliknya.
 > Menampilkan daftar routing pada setiap router
 ```
 R1  
-<img width="465" height="170" alt="Screenshot 2026-08-18 010021" src="https://github.com/user-attachments/assets/911baf5e-ff22-4219-920a-2f019bdd330f" />  
+<img width="465" height="198" alt="Screenshot 2026-08-18 010021" src="https://github.com/user-attachments/assets/911baf5e-ff22-4219-920a-2f019bdd330f" />  
 R2  
 <img width="465" height="198" alt="Screenshot 2026-08-18 010051" src="https://github.com/user-attachments/assets/5e7086eb-5b03-4aaa-b81e-1fb7a02419be" />  
 R3  
-<img width="465" height="170" alt="Screenshot 2026-08-18 010115" src="https://github.com/user-attachments/assets/ddadf68f-7641-4132-a1a7-6064fc82e597" />  
+<img width="465" height="198" alt="Screenshot 2026-08-18 010115" src="https://github.com/user-attachments/assets/ddadf68f-7641-4132-a1a7-6064fc82e597" />  
 
 
 Dapat dilihat pada gambar di atas, sebelum dilakukan konfigurasi routing EIGRP pada
@@ -88,11 +88,11 @@ konfigurasi berikut.
 ```
 
 R1  
-<img width="465" height="61" alt="Screenshot 2026-08-18 011101" src="https://github.com/user-attachments/assets/a0943a93-bbaf-48e3-9940-dc0a247b508f" />  
+<img width="465" height="67" alt="Screenshot 2026-08-18 011101" src="https://github.com/user-attachments/assets/a0943a93-bbaf-48e3-9940-dc0a247b508f" />  
 R2  
-<img width="465" height="97" alt="Screenshot 2026-08-18 011156" src="https://github.com/user-attachments/assets/acda74fd-bce4-428b-91c6-c412ca68ed2c" />  
+<img width="465" height="100" alt="Screenshot 2026-08-18 011156" src="https://github.com/user-attachments/assets/acda74fd-bce4-428b-91c6-c412ca68ed2c" />  
 R3  
-<img width="465" height="63" alt="Screenshot 2026-08-18 011228" src="https://github.com/user-attachments/assets/965b786b-a154-4c79-ade4-607585dbc967" />  
+<img width="465" height="67" alt="Screenshot 2026-08-18 011228" src="https://github.com/user-attachments/assets/965b786b-a154-4c79-ade4-607585dbc967" />  
 
 Pada protokol routing EIGRP, router Cisco akan mengimplementasikan routing ID
 sebagai autentikasi pengelompokan routing yang akan dilakukan. Router dengan
@@ -110,11 +110,11 @@ terhubung pada router di sebelelahnya. (btw untuk notifikasi *%DUAL-5-NBRCHANGE:
 ```
 
 R1  
-<img width="465" height="197" alt="Screenshot 2026-08-18 012437" src="https://github.com/user-attachments/assets/64691495-a6ad-469b-b825-8af19d88ebf4" />  
+<img width="465" height="198" alt="Screenshot 2026-08-18 012437" src="https://github.com/user-attachments/assets/64691495-a6ad-469b-b825-8af19d88ebf4" />  
 R2  
-<img width="465" height="214" alt="Screenshot 2026-08-18 012455" src="https://github.com/user-attachments/assets/90715999-8294-47dd-a240-a6538536a5a8" />  
+<img width="465" height="198" alt="Screenshot 2026-08-18 012455" src="https://github.com/user-attachments/assets/90715999-8294-47dd-a240-a6538536a5a8" />  
 R3  
-<img width="465" height="195" alt="Screenshot 2026-08-18 012533" src="https://github.com/user-attachments/assets/5fefaabf-5886-436a-87ae-498ec32e8c7d" />  
+<img width="465" height="198" alt="Screenshot 2026-08-18 012533" src="https://github.com/user-attachments/assets/5fefaabf-5886-436a-87ae-498ec32e8c7d" />  
 
 Dapat dilihat pada gambar di atas, setiap router telah saling mengetahui informasi
 setiap jaringan yang terhubung pada setiap router ditandai dengan kode D (EIGRP) pada
@@ -159,11 +159,11 @@ Berikut adalah konfigurasi selengkapnya.
 > Menampilkan daftar routing pada setiap router
 ```
 R1  
-<img width="466" height="170" alt="Screenshot 2026-08-18 010021" src="https://github.com/user-attachments/assets/911baf5e-ff22-4219-920a-2f019bdd330f" />  
+<img width="466" height="198" alt="Screenshot 2026-08-18 010021" src="https://github.com/user-attachments/assets/911baf5e-ff22-4219-920a-2f019bdd330f" />  
 R2  
-<img width="465" height="198" alt="Screenshot 2026-08-18 010051" src="https://github.com/user-attachments/assets/5e7086eb-5b03-4aaa-b81e-1fb7a02419be" />  
-R3  
-<img width="465" height="170" alt="Screenshot 2026-08-18 010115" src="https://github.com/user-attachments/assets/ddadf68f-7641-4132-a1a7-6064fc82e597" />  
+<img width="465" height="198" alt="Screenshot 2026-08-18 010051" src="https://github.com/user-attachments/assets/5e7086eb-5b03-4aaa-b81e-1fb7a02419be" />    
+R3    
+<img width="465" height="198" alt="Screenshot 2026-08-18 010115" src="https://github.com/user-attachments/assets/ddadf68f-7641-4132-a1a7-6064fc82e597" />  
 
 ```
 #router ospf (Routing ID)
@@ -176,11 +176,11 @@ R3
 > Konfigurasi routing dengan protokol OSPF
 ```
 R1  
-<img width="465" height="38" alt="Screenshot 2026-08-18 013313" src="https://github.com/user-attachments/assets/b789c9c2-88e3-4bfb-ae51-dd0949c3a8a8" />  
+<img width="465" height="67" alt="Screenshot 2026-08-18 013313" src="https://github.com/user-attachments/assets/b789c9c2-88e3-4bfb-ae51-dd0949c3a8a8" />  
 R2  
-<img width="465" height="105" alt="Screenshot 2026-08-18 013449" src="https://github.com/user-attachments/assets/f435dc76-051b-4e8e-be83-1ae8bf64eb53" />
+<img width="465" height="105" alt="Screenshot 2026-08-18 013449" src="https://github.com/user-attachments/assets/f435dc76-051b-4e8e-be83-1ae8bf64eb53" />  
 R3   
-<img width="465" height="35" alt="Screenshot 2026-08-18 013601" src="https://github.com/user-attachments/assets/4a29ee1a-2e01-4296-9c8b-a8c083344432" />
+<img width="465" height="67" alt="Screenshot 2026-08-18 013601" src="https://github.com/user-attachments/assets/4a29ee1a-2e01-4296-9c8b-a8c083344432" />
 
 Wildcard Mask adalah sederet angka yang menentukan range IP untuk diizinkan
 pada suatu jaringan. Subnet mask dan wildcard mask merupakan dua hal yang serupa
