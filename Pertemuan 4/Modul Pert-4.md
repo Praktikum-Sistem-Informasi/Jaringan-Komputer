@@ -198,11 +198,16 @@ router yang berbeda seperti pada gambar berikut.
 
 <img width="565" height="300" alt="Screenshot 2026-08-17 032129" src="https://github.com/user-attachments/assets/0c108c7a-0893-41e5-93cd-18bdb5e95e69" />  
 
+### 4. Latihan Praktikum  
+1. Rancang topologi ring di Cisco Packet Tracer menggunakan 3 Router, 3 Switch, dan 3 PC, buat dalam dua topologi terpisah pada satu file .pkt (Topologi A dan Topologi B), masing-masing router terhubung langsung ke dua router lainnya!  
+2. Konfigurasikan Topologi A menggunakan static routing (tambahkan ip route di tiap router menuju LAN tetangga), dan Topologi B menggunakan dynamic routing RIP (aktifkan router rip dan daftarkan network di tiap router)!  
+3. Lakukan verifikasi dengan ping dari PC1 ke PC2 dan PC3 pada kedua topologi, pastikan seluruh LAN saling terhubung!  
+4. Putuskan link R1–R2 pada kedua topologi, lalu ulangi ping dari PC1 ke PC2. Jelaskan analisis Anda mengapa Topologi A (static) gagal memanfaatkan jalur alternatif lewat R3, sedangkan Topologi B (RIP) berhasil!
 
 ## 📝 Catatan
 - Deadline pengumpulan: [tanggal]
 - Asisten yang membawakan: [nama]
 
 ## 📚 Referensi
-- Modul Praktikum Jaringan Komputer
+- Modul Praktikum Jaringan Komputer - Pertemuan 4: Static Routing & Dynamic Routing (RIP)
 
