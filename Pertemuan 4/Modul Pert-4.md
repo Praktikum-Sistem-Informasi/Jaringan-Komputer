@@ -78,9 +78,9 @@ yang telah terkoneksi pada router menggunakan perintah berikut.
 > Menampilkan daftar alamat jaringan yang telah terdaftar pada router
 ```
 R1  
-<img width="465" height="175" alt="Screenshot 2026-08-17 015655" src="https://github.com/user-attachments/assets/5f2b95bb-d1b8-45d6-98ce-a9a256fe7c5e" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 015655" src="https://github.com/user-attachments/assets/5f2b95bb-d1b8-45d6-98ce-a9a256fe7c5e" />  
 R2  
-<img width="465" height="175" alt="Screenshot 2026-08-17 015734" src="https://github.com/user-attachments/assets/0708ee45-83e7-4e1d-88d8-b70ec47feed1" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 015734" src="https://github.com/user-attachments/assets/0708ee45-83e7-4e1d-88d8-b70ec47feed1" />  
 
 Dapat dilihat pada gambar di atas hanya jaringan yang terkoneksi secara langsung ke
 router yang terdaftar pada daftar routing. Hal tersebut menyebabkan PC 1 hanya bisa
@@ -88,7 +88,7 @@ melakukan komunikasi dengan PC 2 saja karena masih berada pada jaringan yang sam
 namun tidak bisa melakukan komunikasi dengan PC 3 dan PC 4 yang terdaftar pada
 jaringan berbeda (biru) dan berjarak 2 hop dari router gateway jaringan merah.  
 
-<img width="294" height="260" alt="Screenshot 2026-08-17 021303" src="https://github.com/user-attachments/assets/82d522be-3a58-4851-9463-accb78cecc38" />  
+<img width="465" height="300" alt="Screenshot 2026-08-17 021303" src="https://github.com/user-attachments/assets/82d522be-3a58-4851-9463-accb78cecc38" />  
  
 Agar PC 1 dan PC 2 pada jaringan merah bisa terkoneksi dengan PC 3 dan PC 4 pada
 jaringan biru maka Anda perlu melakukan routing pada kedua router yang
@@ -100,9 +100,9 @@ menghubungkan jaringan-jaringan tersebut dengan konfigurasi seperti berikut.
 ```
 
 R1  
-<img width="465" height="175" alt="Screenshot 2026-08-17 022646" src="https://github.com/user-attachments/assets/325321e6-64fd-4759-8275-80f4492e6665" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 022646" src="https://github.com/user-attachments/assets/325321e6-64fd-4759-8275-80f4492e6665" />  
 R2  
-<img width="465" height="175" alt="Screenshot 2026-08-17 022734" src="https://github.com/user-attachments/assets/ad2f8fb9-67ff-4cea-b134-be0efba2e778" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 022734" src="https://github.com/user-attachments/assets/ad2f8fb9-67ff-4cea-b134-be0efba2e778" />  
 
 Dapat dilihat pada daftar tabel routing yang terdapat pada Router 1 dan Router 2 di
 atas, setelah dilakukan konfigurasi routing maka akan terdapat jaringan tujuan yang telah
@@ -112,10 +112,10 @@ menuju jaringan tertentu yang lebih dari 2 hop, maka komputer yang ada di jaring
 jaringan tersebut telah terkoneksi satu sama lain.
 
 PC Ruangan Merah  
-<img width="465" height="175" alt="Screenshot 2026-08-17 022958" src="https://github.com/user-attachments/assets/c4f90fb6-469a-43cc-b3ba-ea3208bf4df2" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 022958" src="https://github.com/user-attachments/assets/c4f90fb6-469a-43cc-b3ba-ea3208bf4df2" />  
 
 Pc Ruangan Biru  
-<img width="465" height="175" alt="Screenshot 2026-08-17 023155" src="https://github.com/user-attachments/assets/54d5565a-8347-4af2-8d8d-ac3a98ad2e82" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 023155" src="https://github.com/user-attachments/assets/54d5565a-8347-4af2-8d8d-ac3a98ad2e82" />  
 
 ### 3. Konfigurasi dan Penjelasan Dynamic Routing (RIP)
 
@@ -149,11 +149,11 @@ pada tabel routing mereka ke router yang berada di sebelahnya dan begitu pula se
 > Menampilkan daftar routing pada setiap router
 ```
 R1  
-<img width="465" height="175" alt="Screenshot 2026-08-17 030642" src="https://github.com/user-attachments/assets/fc07d5c8-c1f6-49fb-84b5-d8665574d762" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 030642" src="https://github.com/user-attachments/assets/fc07d5c8-c1f6-49fb-84b5-d8665574d762" />  
 R2  
-<img width="465" height="175" alt="Screenshot 2026-08-17 030719" src="https://github.com/user-attachments/assets/6ce49818-8f53-4331-a1a6-f863ec89d689" />   
+<img width="465" height="200" alt="Screenshot 2026-08-17 030719" src="https://github.com/user-attachments/assets/6ce49818-8f53-4331-a1a6-f863ec89d689" />   
 R3  
-<img width="465" height="175" alt="Screenshot 2026-08-17 030803" src="https://github.com/user-attachments/assets/8bea67f6-5ff7-4ae7-bfb5-6e2a59c789e5" />
+<img width="465" height="200" alt="Screenshot 2026-08-17 030803" src="https://github.com/user-attachments/assets/8bea67f6-5ff7-4ae7-bfb5-6e2a59c789e5" />
 
 Dapat dilihat pada gambar di atas, sebelum dilakukan konfigurasi RIP pada ketiga
 router hanya mendeteksi jaringan yang terhubung secara langsung (default) pada mereka
@@ -166,11 +166,11 @@ router)
 > Konfigurasi routing dengan protokol RIP
 ```
 R1  
-<img width="230" height="80" alt="Screenshot 2026-08-17 031453" src="https://github.com/user-attachments/assets/05419ac9-ef55-445b-b20c-993b2d5ce063" />  
+<img width="330" height="130" alt="Screenshot 2026-08-17 031453" src="https://github.com/user-attachments/assets/05419ac9-ef55-445b-b20c-993b2d5ce063" />  
 R2  
-<img width="230" height="80" alt="Screenshot 2026-08-17 031508" src="https://github.com/user-attachments/assets/42093f7f-c9c2-4e30-aa13-f7971f1b671c" />  
+<img width="330" height="130" alt="Screenshot 2026-08-17 031508" src="https://github.com/user-attachments/assets/42093f7f-c9c2-4e30-aa13-f7971f1b671c" />  
 R3  
-<img width="230" height="80" alt="Screenshot 2026-08-17 031534" src="https://github.com/user-attachments/assets/7ef4d1f1-2529-4e17-a2dc-cc3b97f2d46f" />  
+<img width="330" height="130" alt="Screenshot 2026-08-17 031534" src="https://github.com/user-attachments/assets/7ef4d1f1-2529-4e17-a2dc-cc3b97f2d46f" />  
 
 Ketika ketiga router sudah dikonfigurasikan RIP, maka mereka akan saling bertukar
 informasi jaringan yang terhubung langsung pada mereka satu sama lain, sehingga setiap
@@ -181,11 +181,11 @@ router mengetahui setiap jaringan yang juga terhubung pada router di sebelelahny
 > Menampilkan daftar routing pada setiap router setelah dikonfigurasi
 ```
 R1  
-<img width="465" height="175" alt="Screenshot 2026-08-17 031816" src="https://github.com/user-attachments/assets/f127adce-0585-4bdf-8d4f-20e13083dd74" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 031816" src="https://github.com/user-attachments/assets/f127adce-0585-4bdf-8d4f-20e13083dd74" />  
 R2  
-<img width="465" height="175" alt="Screenshot 2026-08-17 031855" src="https://github.com/user-attachments/assets/5f4b35e4-ce02-4794-8dd3-129d6b5a3812" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 031855" src="https://github.com/user-attachments/assets/5f4b35e4-ce02-4794-8dd3-129d6b5a3812" />  
 R3  
-<img width="465" height="175" alt="Screenshot 2026-08-17 031920" src="https://github.com/user-attachments/assets/6afcce7d-f0cd-42f3-9b95-e3230643f5da" />  
+<img width="465" height="200" alt="Screenshot 2026-08-17 031920" src="https://github.com/user-attachments/assets/6afcce7d-f0cd-42f3-9b95-e3330643f5da" />  
 
 Dapat dilihat pada gambar di atas, setiap router telah saling mengetahui informasi
 setiap jaringan yang terhubung pada setiap router ditandai dengan kode R (RIP) pada tabel
@@ -195,7 +195,7 @@ setiap router yang menghubungkan mereka. Untuk memastikannya, Anda bisa melakuka
 test ping pada PC yang berada pada satu jaringan ke PC jaringan lain yang terhubung pada
 router yang berbeda seperti pada gambar berikut.  
 
-<img width="328" height="273" alt="Screenshot 2026-08-17 032129" src="https://github.com/user-attachments/assets/0c108c7a-0893-41e5-93cd-18bdb5e95e69" />  
+<img width="465" height="273" alt="Screenshot 2026-08-17 032129" src="https://github.com/user-attachments/assets/0c108c7a-0893-41e5-93cd-18bdb5e95e69" />  
 
 
 ## 📝 Catatan
