@@ -185,7 +185,8 @@ R1
 R2  
 <img width="465" height="200" alt="Screenshot 2026-08-17 031855" src="https://github.com/user-attachments/assets/5f4b35e4-ce02-4794-8dd3-129d6b5a3812" />  
 R3  
-<img width="465" height="200" alt="Screenshot 2026-08-17 031920" src="https://github.com/user-attachments/assets/6afcce7d-f0cd-42f3-9b95-e3330643f5da" />  
+<img width="465" height="200" alt="Screenshot 2026-08-19 173842" src="https://github.com/user-attachments/assets/14ee9fd4-728f-4f42-9b92-61614ea4645e" />  
+
 
 Dapat dilihat pada gambar di atas, setiap router telah saling mengetahui informasi
 setiap jaringan yang terhubung pada setiap router ditandai dengan kode R (RIP) pada tabel
