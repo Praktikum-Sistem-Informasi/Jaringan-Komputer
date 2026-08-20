@@ -15,8 +15,8 @@
 ├── soal/       # Soal atau instruksi tugas
 └── docs/       # Materi pendukung (slide, referensi)
 ```
-- `soal/` — berisi skenario tugas: ?
-- `docs/` — berisi modul ini beserta materi pendukung lain (?).
+- `soal/` — berisi skenario tugas
+- `docs/` — berisi materi pendukung lain.
 
 ## 🚀 Cara Menjalankan Cisco Packet Trace
 Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alur pengerjaannya:
