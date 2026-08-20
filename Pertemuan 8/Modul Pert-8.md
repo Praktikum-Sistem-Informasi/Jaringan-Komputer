@@ -132,8 +132,6 @@ Setelah domain dan akun siap, lanjutkan konfigurasi & pengiriman email di masing
 
 <img width="632" height="604" alt="image" src="https://github.com/user-attachments/assets/f83a3587-3890-495d-9f05-4fe496e0d35e" />
 
-   > 💡 Gunakan **nama domain** (`mail.com`), bukan IP address, pada Incoming/Outgoing Mail Server. Ini penting supaya konfigurasi DNS yang sudah dibuat di bagian A benar-benar diuji. Jika field ini diisi IP langsung (`192.168.10.10`), koneksi tetap akan berhasil tapi proses resolusi DNS tidak pernah dipakai — sehingga tidak sesuai tujuan pembelajaran.
-
 3. Klik **Save**, lalu buka menu **Compose** untuk menulis email baru ke `budi@mail.com`, isi subjek dan isi pesan, lalu klik **Send**.
 4. Lakukan konfigurasi email yang sama di PC1 untuk akun `budi` (Email Address: `budi@mail.com`, User Name: `budi`, Password: `12345`).
 5. Di PC1, klik **Receive** pada aplikasi Email untuk mengunduh email masuk dari server.
@@ -231,8 +229,6 @@ ftp> get nama.txt     (mengunduh file dari server ke PC)
 ftp> delete nama.txt  (menghapus file di server)
 ftp> quit             (keluar dari sesi FTP)
 ```
-
-> 💡 Sebelum menjalankan `put`, pastikan file yang akan diupload sudah tersedia di PC (bisa dibuat lewat menu Desktop > Text Editor di Packet Tracer, simpan sebagai contoh `test.txt`).
 
 **Uji Verifikasi:**
 
