@@ -42,8 +42,6 @@ Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alu
 
 ## 📖 Materi Praktikum
 
-Materi dibagi menjadi **2 poin utama**: semua hal yang berkaitan dengan **Mail Server** (konfigurasi sampai pengujian kirim/terima email) dijadikan satu poin, dan semua hal yang berkaitan dengan **FTP Server** (konfigurasi sampai pengujian transfer file) dijadikan satu poin lainnya.
-
 ### 1. Mail Server
 
 Mail Server adalah perangkat atau layanan yang bertugas menerima, menyimpan, dan meneruskan email antar pengguna dalam suatu jaringan. Layanan ini bekerja menggunakan dua protokol utama, yaitu **SMTP (Simple Mail Transfer Protocol)** pada port default **25** yang digunakan untuk mengirim email, dan **POP3 (Post Office Protocol v3)** pada port default **110** yang digunakan untuk mengambil/menerima email dari server. Agar pengguna dapat mengirim dan menerima email antar akun, server memerlukan sebuah domain name serta akun pengguna (username) yang terdaftar pada domain tersebut.
