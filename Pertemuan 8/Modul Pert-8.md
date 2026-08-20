@@ -251,8 +251,8 @@ Perintah `dir` menampilkan daftar file yang tersimpan di FTP Server, dan perinta
 
 ### 3. Latihan Praktikum
 
-1. Buat topologi sederhana di Cisco Packet Tracer menggunakan 1 Server dan 2 PC (hubungkan melalui Switch)!
-2. Konfigurasikan IP address pada Server dan kedua PC, lalu aktifkan layanan SMTP/POP3 dan DNS pada Server!
+1. Buat topologi sederhana di Cisco Packet Tracer menggunakan 1 Server dan 2 PC (hubungkan melalui Switch)
+2. Konfigurasikan IP address pada Server dan kedua PC, lalu aktifkan layanan SMTP/POP3 dan DNS pada Server
 
 ## 📝 Catatan
 - Deadline pengumpulan: [tanggal]
