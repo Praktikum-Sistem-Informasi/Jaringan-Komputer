@@ -6,7 +6,6 @@
 - Memahami konsep dasar layanan FTP Server sebagai media transfer file antar perangkat dalam jaringan.
 - Mengonfigurasi FTP Server, meliputi pengaturan IP, pembuatan kredensial (username/password), dan hak akses (permissions) file.
 - Melakukan pengujian end-to-end terhadap layanan Mail (kirim/terima surat) dan FTP (transfer file melalui CLI).
-- Mendokumentasikan hasil konfigurasi dalam bentuk laporan yang rapi disertai screenshot dan penjelasan.
 
 ## 📁 Struktur Folder
 ```
@@ -14,8 +13,8 @@
 ├── soal/       # Soal atau instruksi tugas
 └── docs/       # Materi pendukung (slide, referensi)
 ```
-- `soal/` — berisi skenario tugas praktikum: deskripsi topologi yang harus dibuat, daftar konfigurasi yang wajib dilakukan (Mail + FTP), dan target/screenshot yang harus dikumpulkan.
-- `docs/` — berisi modul ini (`README.md`), cheatsheet CLI FTP, dan materi pendukung lain (slide/referensi) jika tersedia.
+- `soal/` — berisi skenario tugas latihan praktikum
+- `docs/` — berisi materi pendukung lain.
 
 ## 🚀 Cara Menjalankan Cisco Packet Tracer
 Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alur pengerjaannya:
