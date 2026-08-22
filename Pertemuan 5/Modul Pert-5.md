@@ -33,7 +33,7 @@ Router(config-if)#no shutdown (Jalankan perintah `no shutdown` pada setiap port 
 ### 1. Konfigurasi dan Penjelasan Dynamic Routing EIGRP
 EIGRP adalah protokol routing dinamis buatan Cisco yang tergolong advanced distance-vector (hybrid), karena menggabungkan karakteristik distance-vector dengan efisiensi link-state. EIGRP menggunakan algoritma DUAL (Diffusing Update Algorithm) untuk menghitung jalur terbaik (successor) sekaligus menyiapkan jalur cadangan (feasible successor), sehingga proses convergence saat terjadi perubahan topologi menjadi sangat cepat.
 
-Metrik EIGRP bersifat komposit, dihitung dari kombinasi bandwidth, delay, reliability, dan load (secara default hanya bandwidth dan delay yang dipakai). Berbeda dari RIP, EIGRP tidak mengirim update routing secara periodik penuh, melainkan hanya mengirim update parsial saat terjadi perubahan (triggered update), sehingga lebih efisien pada jaringan besar. Agar dua router dapat bertetangga, keduanya harus berada dalam Autonomous System (AS) number yang sama.
+Metrik EIGRP bersifat komposit, dihitung dari kombinasi bandwidth, delay, reliability, dan load (secara default hanya bandwidth dan delay yang dipakai). Metrik EIGRP akurat karena menghitung dua faktor: bandwidth (kecepatan link terlambat) dan delay (total waktu tempuh). Hasilnya, EIGRP bisa memilih jalur terbaik secara stabil, bahkan mendukung load balancing di jalur dengan kecepatan berbeda. Berbeda dari RIP, EIGRP tidak mengirim update routing secara periodik penuh, melainkan hanya mengirim update parsial saat terjadi perubahan (triggered update), sehingga lebih efisien pada jaringan besar. Agar dua router dapat bertetangga, keduanya harus berada dalam Autonomous System (AS) number yang sama.
 ## Cheatsheet CLI Konfigurasi Dynamic Routing EIGRP
 
 | Fungsi                    | Perintah CLI                                               | Penjelasan                                                                                                 |
@@ -215,10 +215,10 @@ berikut.
 <img width="565" height="405" alt="Screenshot 2026-08-18 012722" src="https://github.com/user-attachments/assets/e0f5caae-2d75-4671-89d9-ce8be74cb219" />   
 
 ### 3. Latihan Praktikum
-1. Rancang topologi ring di Cisco Packet Tracer menggunakan 3 Router, 3 Switch, dan 3 PC, buat dalam dua topologi terpisah pada satu file .pkt (Topologi A dan Topologi B), masing-masing router terhubung langsung ke dua router lainnya!
-2. Konfigurasikan Topologi A menggunakan dynamic routing EIGRP (aktifkan router eigrp dengan AS number yang sama di tiap router), dan Topologi B menggunakan dynamic routing OSPF (aktifkan router ospf dengan seluruh network masuk area 0)!
-3. Lakukan verifikasi dengan ping dari PC1 ke PC2 dan PC3 pada kedua topologi, lalu bandingkan nilai metric pada show ip route — jelaskan perbedaan cara EIGRP (bandwidth & delay) dan OSPF (cost) dalam menghitung jalur terbaik!
-4. Putuskan link R1–R2 pada kedua topologi, lalu ulangi ping dari PC1 ke PC2. Jelaskan analisis Anda mengenai proses reconvergence EIGRP (feasible successor) dibanding OSPF (perhitungan ulang SPF), dan protokol mana yang lebih cepat pulih!
+1. Rancang topologi ring di Cisco Packet Tracer menggunakan 3 Router, 3 Switch, dan 3 PC, buat dalam dua topologi terpisah pada satu file .pkt (Topologi A dan Topologi B), masing-masing router terhubung langsung ke dua router lainnya. 
+2. Konfigurasikan Topologi A menggunakan dynamic routing EIGRP (aktifkan router eigrp dengan AS number yang sama di tiap router), dan Topologi B menggunakan dynamic routing OSPF (aktifkan router ospf dengan seluruh network masuk area 0).
+3. Lakukan verifikasi dengan ping dari PC1 ke PC2 dan PC3 pada kedua topologi, lalu bandingkan nilai metric pada show ip route dan jelaskan perbedaan cara EIGRP (bandwidth & delay) dan OSPF (cost) dalam menghitung jalur terbaik. 
+4. Putuskan link R1-R2 pada kedua topologi, lalu ulangi ping dari PC1 ke PC2. Jelaskan analisis Anda mengenai proses reconvergence EIGRP (feasible successor) dibanding OSPF (perhitungan ulang SPF), dan protokol mana yang lebih cepat pulih. 
 
 
 
