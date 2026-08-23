@@ -1,4 +1,4 @@
-# 🌐 Jaringan Komputer - Repository Praktikum
+# Panduan Reposotory praktikum Jaringan Komputer
 
 ![Cisco Packet Tracer](https://img.shields.io/badge/Cisco-Packet%20Tracer-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white "Cisco Packet Tracer") ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white "Windows") ![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=macos&logoColor=white "macOS") 
 
@@ -25,8 +25,14 @@ Repository ini berisi kumpulan materi, soal, dan file konfigurasi praktikum untu
 
 ```
   .
-  ├── Pertemuan-1/ ... Pertemuan-8/ #File topologi & konfigurasi tiap pertemuan
-  └── README.md #File panduan repository Mata Kuliah Jaringan Komputer
+  ├── Pertemuan 1/ # Folder Modul & Soal Checkpoint
+  ├── Pertemuan 2/ # Folder Modul & Soal Checkpoint
+  ├── Pertemuan 3/ # Folder Modul & Soal Checkpoint
+  ├── Pertemuan 4/ # Folder Modul & Soal Checkpoint
+  ├── Pertemuan 5/ # Folder Modul & Soal Checkpoint
+  ├── Pertemuan 6/ # Folder Modul & Soal Checkpoint
+  ├── Pertemuan 7/ # Folder Modul & Soal Checkpoint
+  └── Pertemuan 8/ # Folder Modul & Soal Checkpoint
 ```
 
 ## 📚 Daftar Materi
