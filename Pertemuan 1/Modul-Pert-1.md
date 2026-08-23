@@ -315,7 +315,7 @@ SM       : 255.255.255.256 - 32 = 255.255.255.224
 > 💡 **Catatan:** Kerjakan perhitungan subnetting secara manual dengan rumus di atas (tanpa kalkulator subnetting online) terlebih dahulu, agar benar-benar memahami konsep pembagian blok Network Address, Broadcast Address, dan Host Range sebelum menggunakan alat bantu otomatis.
 
 
-### 5. Tugas & Evaluasi Praktikum
+### 5. Latihan Praktikum
 1. Tentukan Total IP, Usable Host, Network Address, Broadcast Address, Host Range, dan Subnet Mask dari `192.168.5.70/26`!
 
 
