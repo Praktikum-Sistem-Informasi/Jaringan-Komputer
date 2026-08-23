@@ -1,4 +1,4 @@
-# Panduan Reposotory praktikum Jaringan Komputer
+# Panduan Repository praktikum Jaringan Komputer
 
 ![Cisco Packet Tracer](https://img.shields.io/badge/Cisco-Packet%20Tracer-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white "Cisco Packet Tracer") ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white "Windows") ![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=macos&logoColor=white "macOS") 
 
