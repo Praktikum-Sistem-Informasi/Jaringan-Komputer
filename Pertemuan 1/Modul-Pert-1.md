@@ -325,5 +325,6 @@ SM       : 255.255.255.256 - 32 = 255.255.255.224
 - Asisten yang membawakan: [nama]
 
 
+
 ## 📚 Referensi
 - Modul Praktikum Jaringan Komputer — Pertemuan 1: Pengenalan IP Address, Topologi Jaringan, dan Dasar-Dasar Subnetting
