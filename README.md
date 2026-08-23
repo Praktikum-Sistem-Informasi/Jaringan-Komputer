@@ -23,12 +23,11 @@ Repository ini berisi kumpulan materi, soal, dan file konfigurasi praktikum untu
 
 ## 📁 Struktur Folder
 
-.
-├── soal/ # Soal atau instruksi tugas praktikum per pertemuan
-├── src/ # File .pkt (Packet Tracer) hasil pengerjaan per pertemuan
-├── docs/ # Materi pendukung (slide, modul, referensi)
-└── Pertemuan-1/ ... Pertemuan-8/ # File topologi & konfigurasi tiap pertemuan
-
+```
+  .
+  ├── Pertemuan-1/ ... Pertemuan-8/ #File topologi & konfigurasi tiap pertemuan
+  └── README.md #File panduan repository Mata Kuliah Jaringan Komputer
+```
 
 ## 📚 Daftar Materi
 
