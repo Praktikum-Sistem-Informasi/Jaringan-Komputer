@@ -4,7 +4,7 @@
 
 ## 📌 Deskripsi
 
-Repository ini berisi kumpulan materi, soal, dan file konfigurasi praktikum untuk mata kuliah **Jaringan Komputer**. Terdiri dari 8 pertemuan yang membahas konsep dasar hingga implementasi jaringan komputer, mulai dari IP addressing, subnetting, VLAN, routing (static & dynamic), hingga konfigurasi server (DHCP, DNS, Web, Mail, FTP), dengan praktik langsung menggunakan Cisco Packet Tracer.
+Repository ini berisi kumpulan materi, soal, dan file konfigurasi praktikum untuk mata kuliah **Jaringan Komputer**. Terdiri dari 8 pertemuan yang membahas konsep dasar hingga implementasi jaringan komputer, mulai dari IP addressi, subnetting, VLAN, routing (static & dynamic), hingga konfigurasi server (DHCP, DNS, Web, Mail, FTP), dengan praktik langsung menggunakan Cisco Packet Tracer.
 
 ## 🎯 Tujuan Pembelajaran
 
@@ -48,7 +48,7 @@ Repository ini berisi kumpulan materi, soal, dan file konfigurasi praktikum untu
 | 7 | WLAN, SSH, Telnet | ⬜ |
 | 8 | Mail Server, FTP | ⬜ |
 
-> ✅ = selesai, ⬜ = belum. Ubah sesuai progres masing-masing pertemuan.
+> ✅ = selesai, ⬜ = belum.
 
 ## 🗂️ Demo Files (File Pertemuan)
 
@@ -71,12 +71,6 @@ Setiap pertemuan memiliki file `.pkt` (Cisco Packet Tracer) berisi topologi dan 
 - Cisco Packet Tracer (versi terbaru)
 - Git (untuk clone/pull materi terbaru)
 
-## 📝 Catatan
-
-- Simpan setiap file topologi dengan format nama `Pertemuan-N_NamaTopik.pkt`
-- Materi Pertemuan 3 (Multilayer Switch & ACL Dasar) bersifat opsional, tergantung waktu praktikum
-- Isi catatan tambahan lain bila diperlukan
-
 ## Tim Pengajar & Praktisi
 
 | Nama | NIM |
@@ -87,3 +81,8 @@ Setiap pertemuan memiliki file `.pkt` (Cisco Packet Tracer) berisi topologi dan 
 | Irvan Alif | 2409116071 |
 | Ahmad Dani | 2409116074 |
 | Moch. Farris Alfiansyah | 2409116079 |
+
+## 📝 Catatan
+
+- Simpan setiap file topologi dengan format nama `Pertemuan-N_NamaTopik.pkt`
+- Isi catatan tambahan lain bila diperlukan
