@@ -1,34 +1,84 @@
-# [Nama Mata Kuliah] - Pertemuan [N]: [Topik Pertemuan]
+# 🌐 Jaringan Komputer - Repository Praktikum
+
+![Cisco Packet Tracer](https://img.shields.io/badge/Cisco-Packet%20Tracer-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white "Cisco Packet Tracer") ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white "Windows") ![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=macos&logoColor=white "macOS") 
 
 ## 📌 Deskripsi
-Deskripsi singkat materi/topik yang dibahas pada pertemuan ini.
+
+Repository ini berisi kumpulan materi, soal, dan file konfigurasi praktikum untuk mata kuliah **Jaringan Komputer**. Terdiri dari 8 pertemuan yang membahas konsep dasar hingga implementasi jaringan komputer, mulai dari IP addressing, subnetting, VLAN, routing (static & dynamic), hingga konfigurasi server (DHCP, DNS, Web, Mail, FTP), dengan praktik langsung menggunakan Cisco Packet Tracer.
 
 ## 🎯 Tujuan Pembelajaran
-- Tujuan 1
-- Tujuan 2
-- Tujuan 3
+
+- Memahami konsep IP addressing, topologi jaringan, dan subnetting
+- Mampu mengonfigurasi VLAN, Inter-VLAN routing, dan ACL dasar pada perangkat Cisco
+- Mampu mengimplementasikan static & dynamic routing (RIP, OSPF, EIGRP)
+- Mampu mengonfigurasi layanan jaringan (DHCP, DNS, Web Server, Mail Server, FTP)
+- Mampu mengonfigurasi WLAN serta remote access (SSH & Telnet)
+- Mampu menggunakan Cisco Packet Tracer untuk simulasi jaringan skala kecil-menengah
 
 ## 🛠️ Bahasa / Tools
-- Bahasa: [Python / Java / C++ / dll]
-- Versi: [opsional]
-- Tools tambahan: [opsional]
+
+- Simulator: Cisco Packet Tracer
+- Sistem Operasi: Windows atau macOS
+- Version Control: Git & GitHub
 
 ## 📁 Struktur Folder
-```
-.
-├── soal/       # Soal atau instruksi tugas praktikum
-├── src/        # Tempat menulis kode jawaban
-└── docs/       # Materi pendukung (slide, referensi, dll)
-```
 
-## 🚀 Cara Menjalankan
-```
-# contoh, sesuaikan dengan bahasa yang dipakai
-python src/main.py
-```
+.
+├── soal/ # Soal atau instruksi tugas praktikum per pertemuan
+├── src/ # File .pkt (Packet Tracer) hasil pengerjaan per pertemuan
+├── docs/ # Materi pendukung (slide, modul, referensi)
+└── Pertemuan-1/ ... Pertemuan-8/ # File topologi & konfigurasi tiap pertemuan
+
+
+## 📚 Daftar Materi
+
+| Pertemuan | Topik | Status |
+|-----------|-------|--------|
+| 1 | Pengenalan IP (Class, Fungsi), Topologi Jaringan, Subnetting | ⬜ |
+| 2 | Pengenalan Cisco, VLAN (Trunking, Allowed VLAN, VTP) | ⬜ |
+| 3 | Inter-VLAN (Router), Multilayer Switch (opsional), ACL Dasar (opsional) | ⬜ |
+| 4 | Static Routing, Dynamic Routing (RIP) | ⬜ |
+| 5 | Dynamic Routing (OSPF, EIGRP) | ⬜ |
+| 6 | DHCP Server (Router & Server) & DNS, Web Server | ⬜ |
+| 7 | WLAN, SSH, Telnet | ⬜ |
+| 8 | Mail Server, FTP | ⬜ |
+
+> ✅ = selesai, ⬜ = belum. Ubah sesuai progres masing-masing pertemuan.
+
+## 🗂️ Demo Files (File Pertemuan)
+
+Setiap pertemuan memiliki file `.pkt` (Cisco Packet Tracer) berisi topologi dan konfigurasi sesuai topik.
+
+| Folder / File | Isi Materi / Konfigurasi |
+|----------------|---------------------------|
+| `Pertemuan-1/` | IP Address (class, fungsi), topologi jaringan, perhitungan subnetting |
+| `Pertemuan-2/` | Pengenalan perangkat Cisco, konfigurasi VLAN, trunking, allowed VLAN, VTP |
+| `Pertemuan-3/` | Inter-VLAN routing (router-on-a-stick), multilayer switch, ACL dasar |
+| `Pertemuan-4/` | Konfigurasi static routing & dynamic routing (RIP) |
+| `Pertemuan-5/` | Konfigurasi dynamic routing (OSPF, EIGRP) |
+| `Pertemuan-6/` | DHCP server (via router & server), DNS server, Web server |
+| `Pertemuan-7/` | Konfigurasi WLAN, akses remote via SSH & Telnet |
+| `Pertemuan-8/` | Konfigurasi Mail server & FTP server |
+
+**Kebutuhan Minimum:**
+
+- Laptop dengan sistem operasi Windows atau macOS
+- Cisco Packet Tracer (versi terbaru)
+- Git (untuk clone/pull materi terbaru)
 
 ## 📝 Catatan
-- Isi catatan bila diperlukan
 
-## 📚 Referensi
-- [link/slide/materi]
+- Simpan setiap file topologi dengan format nama `Pertemuan-N_NamaTopik.pkt`
+- Materi Pertemuan 3 (Multilayer Switch & ACL Dasar) bersifat opsional, tergantung waktu praktikum
+- Isi catatan tambahan lain bila diperlukan
+
+## Tim Pengajar & Praktisi
+
+| Nama | NIM |
+|------|-----|
+| Narendra Augusta Srianandha | 2409116010 |
+| Muhammad Sadikin Samir | 2409116031 |
+| Prakasa Wira Mukti | 2409116054 |
+| Irvan Alif | 2409116071 |
+| Ahmad Dani | 2409116074 |
+| Moch. Farris Alfiansyah | 2409116079 |
