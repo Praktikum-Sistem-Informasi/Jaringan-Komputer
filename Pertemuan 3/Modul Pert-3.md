@@ -401,7 +401,12 @@ R1# ping 192.168.10.10 source 192.168.30.10   ! HARUS gagal / Request timed out 
 | Trafik yang seharusnya diizinkan malah ditolak | Urutan ACE salah | Susun ulang dari yang paling spesifik ke paling umum |
 | Trafik sumber lain ikut terblokir | Standard ACL diterapkan terlalu dekat sumber | Pindahkan ke interface dekat destination, atau ganti ke Extended ACL |
 
-### 6. Tugas & Evaluasi Praktikum
+### 6. Latiihan Praktikum
+
+1. Rancang sebuah topologi di Cisco Packet Tracer dimana terdapat 2 ruangan (Ruang Dosen dan Ruang Lab) yang masing masing terdiri dari 2 PC dan terdapat 1 switch dan 1 router.
+2. Buat Vlan 10 (Dosen) dan Vlan 20 (Lab) di switch.
+3. Konfigurasikan intervlan Router On A Stick pada router.
+4. Lakukan Validasi, apakah kedua ruangan tersebut bisa saling terhubung.
 
 
 ## 📝 Catatan
