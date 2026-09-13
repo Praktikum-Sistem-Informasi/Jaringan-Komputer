@@ -1,404 +1,161 @@
-# Pertemuan 3: Inter-VLAN Routing & Access Control List (ACL)
+# Inter - Vlan routing dan acl
 
-## 🎯 Tujuan Pembelajaran
-- Praktikan mampu memahami konsep dasar dan cara kerja Inter-VLAN Routing.
-- Praktikan mampu menjelaskan peran VLAN tagging (IEEE 802.1Q) dan trunk link dalam proses routing antar-VLAN.
-- Praktikan mampu membedakan karakteristik metode Router-on-a-Stick (RoAS) dan Switch Virtual Interface (SVI).
-- Praktikan mampu mengonfigurasi Inter-VLAN Routing menggunakan metode RoAS dan SVI pada perangkat Cisco.
-- Praktikan mampu memahami konsep dasar dan cara kerja Access Control List (ACL), termasuk wildcard mask.
-- Praktikan mampu membedakan karakteristik Standard ACL, Extended ACL, dan Named ACL beserta aturan penempatannya.
-- Praktikan mampu mengonfigurasi Standard, Extended, dan Named ACL pada router Cisco.
-- Praktikan mampu melakukan verifikasi dan troubleshooting konfigurasi Inter-VLAN Routing maupun ACL.
+### Intervlan Routing
 
-## 📁 Struktur Folder
-```
-.
-├── soal/       # Soal atau instruksi tugas
-└── docs/       # Materi pendukung (slide, referensi)
-```
-- `soal/` — berisi skenario tugas: rancangan topologi router + switch + multi-subnet, serta instruksi konfigurasi RoAS/SVI dan Standard/Extended/Named ACL.
-- `docs/` — berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi VLAN/ACL).
+##### Pengertian
 
-## 🚀 Cara Menjalankan
-Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alur pengerjaannya:
-```
-# 1. Buka file topologi pada Cisco Packet Tracer (src/topologi.pkt)
-# 2. Klik perangkat Router/Switch, buka tab CLI, lalu masukkan perintah konfigurasi, contoh:
-Router> enable
-Router# configure terminal
-Router(config)# interface gigabitEthernet 0/0.10
-```
+Inter-VLAN routing adalah proses merutekan (routing) traffic antar VLAN yang berbeda. Secara default, VLAN yang berbeda **tidak bisa saling berkomunikasi** meskipun terhubung ke switch fisik yang sama — karena VLAN memisahkan broadcast domain di Layer 2 (MAC address).
 
-## 📖 Materi Praktikum
+Supaya perangkat di VLAN 10 bisa "ngobrol" dengan perangkat di VLAN 20, dibutuhkan perangkat yang bekerja di **Layer 3** (paham IP address) — yaitu router atau Layer 3 switch. Perangkat inilah yang menjembatani komunikasi antar VLAN.
 
-# Bagian A — Inter-VLAN Routing
+Intinya: **VLAN memecah jaringan → Inter-VLAN routing menyambungkannya kembali secara terkontrol.**
 
-### 1. Pengertian Inter-VLAN Routing
+##### Fungsi
 
-Inter-VLAN Routing adalah proses routing yang dijalankan oleh router agar masing-masing komputer pada VLAN yang berbeda bisa saling berhubungan. VLAN diasosiasikan dengan IP subnet yang unik pada network, sehingga konfigurasi subnet akan memfasilitasi proses routing pada lingkungan beberapa VLAN. Tujuan utama Inter-VLAN Routing adalah meneruskan trafik antar-VLAN, yaitu menghubungkan dua buah VLAN yang berbeda ID-nya.
+- **Menghubungkan VLAN yang terpisah** — memungkinkan device di VLAN berbeda saling kirim data.
+- **Tetap mempertahankan manfaat segmentasi VLAN** — broadcast domain tetap kecil dan terpisah, hanya traffic yang memang perlu saja yang dirutekan.
+- **Kontrol akses antar VLAN** — karena traffic harus lewat Layer 3 (router/L3 switch), admin bisa pasang **Access Control List (ACL)** untuk membatasi siapa boleh akses VLAN mana.
+- **Sentralisasi layanan** — satu server (DHCP, DNS, file server, dsb) bisa melayani banyak VLAN sekaligus tanpa perlu duplikasi.
+- **Efisiensi penggunaan IP dan perangkat** — tidak perlu router/interface fisik terpisah untuk tiap VLAN.
 
-Sebagaimana diketahui, VLAN membagi sebuah jaringan menjadi beberapa segmen dan broadcast domain, di mana paket data tidak akan diteruskan ke VLAN yang bukan tujuannya. Untuk dapat menghubungkan antar-VLAN, dibutuhkan perangkat yang memiliki kapasitas untuk melakukan routing, yaitu router atau switch Layer 3.
+##### Tujuan
 
-> **Ilustrasi:** Bayangkan sebuah gedung kantor dengan tiga departemen — Keuangan, Operasional, dan IT — yang masing-masing berada di VLAN terpisah. Komputer di departemen Keuangan dan komputer di departemen Operasional tidak bisa langsung bertukar data karena berada di broadcast domain yang berbeda. Agar keduanya bisa berkomunikasi saat diperlukan, misalnya mengakses server bersama, dibutuhkan mekanisme routing di antara kedua VLAN tersebut.
+- **Memungkinkan komunikasi lintas departemen/VLAN** yang memang dibutuhkan secara bisnis (misal akses ke server pusat, printer bersama, aplikasi internal).
+- **Menjaga keseimbangan antara keamanan dan fungsionalitas** — VLAN mengamankan, inter-VLAN routing membuka jalur yang memang perlu dibuka saja (bisa dikombinasikan dengan ACL untuk membatasi lebih spesifik).
+- **Mendukung skalabilitas jaringan** — jaringan enterprise besar dengan banyak divisi tetap bisa saling terhubung tanpa harus flat network (network besar tanpa segmentasi) yang rawan macet dan tidak aman.
+- **Efisiensi infrastruktur** — satu physical link atau satu switch bisa menangani routing banyak VLAN sekaligus (terutama di metode router-on-a-stick).
 
-### 2. Cara Kerja Inter-VLAN Routing
+#### Metode Inter-VLAN Routing
 
-Ketika sebuah perangkat di VLAN 10 ingin mengirim data ke perangkat di VLAN 20, alurnya adalah sebagai berikut:
+Ada dua pendekatan utama: **Router-on-a-Stick** dan **Layer 3 Switch (SVI)**. Pemilihan metode tergantung hardware yang tersedia — Layer 3 switch umumnya lebih cepat karena routing diproses di hardware (ASIC), sedangkan router-on-a-stick memproses routing di software sehingga lebih lambat dan rawan jadi bottleneck kalau traffic tinggi.
 
-1. Perangkat pengirim di VLAN 10 mengirimkan paket ke *default gateway* milik VLAN 10 — ini adalah alamat IP yang dikonfigurasi di router atau switch Layer 3.
-2. Paket masuk ke perangkat Layer 3. Perangkat ini memeriksa tabel routing untuk menentukan jalur terbaik ke subnet tujuan (VLAN 20).
-3. Perangkat Layer 3 meneruskan paket ke interface atau sub-interface yang terhubung ke VLAN 20.
-4. Paket sampai ke perangkat tujuan di VLAN 20.
+##### Router-on-a-Stick
 
-Yang membedakan Inter-VLAN Routing dari routing biasa antar-jaringan WAN adalah skala dan konteksnya: prosesnya terjadi di dalam satu gedung atau satu infrastruktur lokal yang sama, menggunakan VLAN tagging (**IEEE 802.1Q**) sebagai cara membedakan lalu lintas dari berbagai VLAN.
+Model di mana **satu interface fisik router** dihubungkan ke **satu port trunk** di switch, lalu interface fisik itu dipecah jadi beberapa **subinterface virtual** — satu subinterface untuk tiap VLAN. Router lalu merutekan traffic antar subinterface tersebut.
 
-Standar 802.1Q memungkinkan satu koneksi fisik membawa lalu lintas dari banyak VLAN sekaligus — inilah yang disebut **trunk link**. Frame yang melewati trunk link diberi tag berupa VLAN ID, sehingga perangkat penerima tahu frame tersebut berasal dari VLAN berapa. Pemahaman tentang trunk link ini penting karena kedua metode Inter-VLAN Routing yang dibahas pada modul ini bergantung padanya.
+Disebut "on a stick" karena hanya ada **satu kabel/link** (satu "tongkat") yang membawa semua traffic VLAN menuju router
 
-### 3. Metode Inter-VLAN Routing
+| Kelebihan | Kekurangan |
+| --- | --- |
+| Murah — cuma butuh 1 router & 1 kabel | Semua traffic antar VLAN numpuk di 1 link fisik → rawan jadi bottleneck |
+| Mudah dikonfigurasi | Routing diproses di software (CPU router) → lebih lambat |
+| Cocok untuk jaringan kecil/menengah | Kurang cocok untuk traffic tinggi / enterprise besar |
 
-Ada dua metode utama yang umum digunakan untuk mengimplementasikan Inter-VLAN Routing pada jaringan masa kini, yaitu **Router-on-a-Stick (RoAS)** dan **Switch Virtual Interface (SVI)**. Keduanya memiliki karakteristik, kelebihan, serta keterbatasan yang berbeda, terutama dari sisi perangkat yang dibutuhkan, performa, dan skalabilitas.
+###### Cara Kerja
 
-#### 3.1 Router-on-a-Stick (RoAS)
+1. Frame dari VLAN manapun yang keluar dari switch menuju router akan **ditag** dengan nomor VLAN-nya (pakai 802.1Q) karena link-nya adalah trunk.
+2. Router menerima frame yang sudah ditag itu di satu interface fisik, lalu subinterface yang sesuai dengan nomor tag itu yang memprosesnya.
+3. Kalau traffic mau pindah dari VLAN 10 ke VLAN 20, router men-decapsulate tag VLAN 10, mengecek routing table, lalu mengirim ulang paket dengan tag VLAN 20 ke switch.
+4. Switch menerima, membaca tag VLAN 20, dan meneruskan ke port yang sesuai.
 
-RoAS adalah metode Inter-VLAN Routing yang hanya menggunakan satu interface fisik router, namun dipecah menjadi beberapa sub-interface logis (virtual). Setiap sub-interface diberi *encapsulation* 802.1Q dan dikonfigurasi sebagai *default gateway* untuk satu VLAN tertentu. Interface fisik router tersebut dihubungkan ke port trunk pada switch, sehingga satu kabel dapat membawa trafik banyak VLAN sekaligus.
+###### Konfigurasi
 
-**Karakteristik RoAS:**
-- Menggunakan router eksternal (bukan switch) sebagai perangkat Layer 3.
-- Satu interface fisik (misal `GigabitEthernet0/0`) dipecah menjadi sub-interface (`G0/0.10`, `G0/0.20`, dst).
-- Port switch yang terhubung ke router dikonfigurasi sebagai trunk.
-- Cocok untuk jaringan kecil-menengah, atau ketika hanya tersedia router (tanpa switch Layer 3).
-- Kekurangan: satu link fisik menjadi titik kemacetan (*bottleneck*) karena seluruh trafik antar-VLAN melewati satu kabel yang sama.
-
-**Konfigurasi RoAS** *(dilakukan pada dua perangkat: Switch dan Router)*:
+Di Switch (siapkan trunk ke router):
 
 ```
-! ===== 1. Membuat VLAN pada Switch =====
-SW1> enable
-SW1# configure terminal
-SW1(config)# vlan 10
-SW1(config-vlan)# name Finance
-SW1(config-vlan)# exit
-SW1(config)# vlan 20
-SW1(config-vlan)# name Sales
-SW1(config-vlan)# exit
-
-! ===== 2. Konfigurasi Port Access ke PC =====
-SW1(config)# interface fastEthernet 0/1
-SW1(config-if)# switchport mode access
-SW1(config-if)# switchport access vlan 10
-SW1(config-if)# exit
-
-SW1(config)# interface fastEthernet 0/2
-SW1(config-if)# switchport mode access
-SW1(config-if)# switchport access vlan 20
-SW1(config-if)# exit
-
-! ===== 3. Konfigurasi Port Trunk ke Router =====
-SW1(config)# interface fastEthernet 0/3
-SW1(config-if)# switchport mode trunk
-SW1(config-if)# switchport trunk allowed vlan 10,20
-SW1(config-if)# exit
+Switch(config)# interface fastEthernet 0/1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20
 ```
 
-```
-! ===== 4. Konfigurasi Sub-interface pada Router =====
-R1> enable
-R1# configure terminal
-R1(config)# interface gigabitEthernet 0/0
-R1(config-if)# no shutdown
-R1(config-if)# exit
-
-! Sub-interface untuk VLAN 10
-R1(config)# interface gigabitEthernet 0/0.10
-R1(config-subif)# encapsulation dot1Q 10
-R1(config-subif)# ip address 192.168.10.1 255.255.255.0
-R1(config-subif)# exit
-
-! Sub-interface untuk VLAN 20
-R1(config)# interface gigabitEthernet 0/0.20
-R1(config-subif)# encapsulation dot1Q 20
-R1(config-subif)# ip address 192.168.20.1 255.255.255.0
-R1(config-subif)# exit
-```
-
-> ⚠️ **Catatan:** Angka pada perintah `encapsulation dot1Q <id>` harus sama persis dengan VLAN ID yang diizinkan pada port trunk switch. Interface fisik utama (`G0/0`) tetap harus dalam kondisi `no shutdown` agar sub-interface dapat aktif.
-
-**Konfigurasi IP pada PC:**
-
-| Perangkat | IP Address | Subnet Mask | Default Gateway |
-|---|---|---|---|
-| PC1 (VLAN 10) | 192.168.10.10 | 255.255.255.0 | 192.168.10.1 |
-| PC2 (VLAN 20) | 192.168.20.10 | 255.255.255.0 | 192.168.20.1 |
-
-#### 3.2 Switch Virtual Interface (SVI)
-
-SVI adalah interface virtual pada switch Layer 3 (*multilayer switch*) yang mewakili sebuah VLAN dalam bentuk logis. Setiap VLAN dapat memiliki satu SVI yang berfungsi sebagai *default gateway*. Routing antar-VLAN dilakukan sepenuhnya di dalam switch itu sendiri (di ASIC), tanpa memerlukan router eksternal.
-
-**Karakteristik SVI:**
-- Memerlukan switch Layer 3 (*multilayer switch*), misalnya Cisco Catalyst 3560/3650/3750 ke atas.
-- Fitur `ip routing` harus diaktifkan secara global pada switch.
-- Setiap VLAN memiliki interface virtual (`interface vlan <id>`) yang diberi alamat IP sebagai gateway.
-- Tidak memerlukan trunk khusus ke router karena routing terjadi langsung di switch (kecuali jika tetap butuh trunk antar-switch).
-- Performa lebih baik dibanding RoAS karena proses routing dilakukan dengan hardware switching (*line-rate*), bukan melalui satu link fisik yang sama.
-
-**Konfigurasi SVI** *(dilakukan pada satu perangkat saja: switch Layer 3, tanpa router eksternal)*:
+Di Router (bikin subinterface per VLAN):
 
 ```
-! ===== 1. Membuat VLAN =====
-SW1> enable
-SW1# configure terminal
-SW1(config)# vlan 10
-SW1(config-vlan)# name Finance
-SW1(config-vlan)# exit
-SW1(config)# vlan 20
-SW1(config-vlan)# name Sales
-SW1(config-vlan)# exit
+Router(config)# interface fastEthernet 0/0
+Router(config-if)# no shutdown
+Router(config-if)# exit
 
-! ===== 2. Konfigurasi Port Access ke PC =====
-SW1(config)# interface fastEthernet 0/1
-SW1(config-if)# switchport mode access
-SW1(config-if)# switchport access vlan 10
-SW1(config-if)# exit
+Router(config)# interface fastEthernet 0/0.10
+Router(config-subif)# encapsulation dot1Q 10
+Router(config-subif)# ip address 192.168.10.1 255.255.255.0
+Router(config-subif)# exit
 
-SW1(config)# interface fastEthernet 0/2
-SW1(config-if)# switchport mode access
-SW1(config-if)# switchport access vlan 20
-SW1(config-if)# exit
-
-! ===== 3. Mengaktifkan IP Routing =====
-SW1(config)# ip routing
-
-! ===== 4. Membuat dan Mengaktifkan SVI =====
-SW1(config)# interface vlan 10
-SW1(config-if)# ip address 192.168.10.1 255.255.255.0
-SW1(config-if)# no shutdown
-SW1(config-if)# exit
-
-SW1(config)# interface vlan 20
-SW1(config-if)# ip address 192.168.20.1 255.255.255.0
-SW1(config-if)# no shutdown
-SW1(config-if)# exit
+Router(config)# interface fastEthernet 0/0.20
+Router(config-subif)# encapsulation dot1Q 20
+Router(config-subif)# ip address 192.168.20.1 255.255.255.0
+Router(config-subif)# exit
 ```
 
-> ⚠️ **Catatan:** Perintah `interface vlan <id>` hanya akan aktif (*up/up*) bila VLAN tersebut sudah dibuat dan memiliki minimal satu port access yang statusnya *up* pada VLAN itu.
+**Catatan Penting:**
 
-**Konfigurasi IP pada PC:**
+- `no shutdown` di interface fisik **wajib**, karena kalau interface fisik down, semua subinterface ikut down.
+- Nomor di `encapsulation dot1Q <nomor>` **harus sama persis** dengan VLAN ID yang dikonfigurasi di switch, kalau tidak, tag tidak akan dikenali.
+- IP address subinterface inilah yang jadi **default gateway** untuk PC di VLAN tersebut.
 
-Sama seperti pada metode RoAS, PC1 dan PC2 dikonfigurasi dengan IP address, subnet mask, dan default gateway sesuai VLAN masing-masing (lihat tabel pada bagian 3.1).
+###### Analogi
 
-#### 3.3 Perbandingan RoAS vs SVI
+**Router-on-a-stick** ibarat gedung yang cuma punya **satu lift** untuk menghubungkan semua lantai. Semua orang dari lantai manapun yang mau ke lantai lain harus lewat lift itu satu-satu — kalau orangnya banyak dan naik-turun terus, lift ini jadi antrean panjang (bottleneck).
 
-| Aspek | RoAS | SVI |
-|---|---|---|
-| Perangkat | Router + Switch Layer 2 biasa | Switch Layer 3 (*multilayer switch*) |
-| Performa | Terbatas oleh bandwidth 1 link fisik | Lebih tinggi (*line-rate*, hardware switching) |
-| Skalabilitas | Kurang ideal untuk VLAN banyak/trafik tinggi | Lebih baik untuk jaringan besar |
-| Biaya perangkat | Relatif lebih murah | Lebih mahal |
-| Cocok untuk | Jaringan kecil, lab, cabang kecil | Jaringan menengah-besar, kampus, kantor pusat |
+#### Layer 3 Switch (Switch Virtual Interface / SVI)
 
-### 4. Verifikasi Inter-VLAN Routing
+Layer 3 switch adalah switch yang **selain bisa switching Layer 2, juga bisa routing Layer 3**. Alih-alih pakai router eksternal, switch ini punya interface logis yang disebut **SVI (Switch Virtual Interface)** — satu SVI per VLAN, dan SVI inilah yang berfungsi sebagai gateway untuk VLAN tersebut.
 
-| Perintah | Fungsi |
-|---|---|
-| `show vlan brief` | Menampilkan daftar VLAN dan port anggotanya |
-| `show interfaces trunk` | Menampilkan status dan VLAN yang diizinkan pada port trunk |
-| `show ip interface brief` | Menampilkan status IP dan up/down setiap interface / SVI |
-| `show ip route` | Menampilkan tabel routing (*connected routes* antar-VLAN) |
-| `ping <ip tujuan>` | Menguji konektivitas antar-host/antar-VLAN |
+Tidak butuh kabel trunk menuju perangkat lain, karena routing terjadi **di dalam switch itu sendiri**.
 
-**Uji Verifikasi:** Lakukan tes ping dari PC1 (VLAN 10) ke PC2 (VLAN 20) dan sebaliknya. Jika Inter-VLAN Routing berhasil dikonfigurasi (baik dengan RoAS maupun SVI), hasil ping harus *Reply*, bukan lagi *Request Timed Out* (RTO).
+| Kelebihan | Kekurangan |
+| --- | --- |
+| Jauh lebih cepat (routing di hardware/ASIC) | Perangkatnya lebih mahal dari switch Layer 2 biasa |
+| Tidak ada single point of bottleneck seperti router-on-a-stick | Konfigurasi sedikit lebih kompleks (butuh paham routing + switching) |
+| Cocok untuk jaringan besar/enterprise dengan traffic tinggi |     |
 
-# Bagian B — Access Control List (ACL)
+###### Cara Kerja
 
-### 5. Pengertian ACL
+1. Switch tetap melakukan switching Layer 2 biasa untuk traffic dalam VLAN yang sama.
+2. Kalau traffic ditujukan ke VLAN lain (device tahu ini dari default gateway-nya beda subnet), traffic dikirim ke SVI VLAN asal.
+3. Switch, dengan `ip routing` aktif, mengecek routing table secara internal (diproses di hardware/ASIC — makanya cepat) dan meneruskan ke SVI VLAN tujuan.
+4. Dari SVI tujuan, traffic di-switch secara Layer 2 ke port device tujuan di VLAN itu.
 
-Access Control List (ACL) adalah kumpulan aturan berurutan (*sequential statements*) yang dikonfigurasi pada router atau switch Layer 3 untuk mengizinkan (*permit*) atau menolak (*deny*) paket data yang melewati sebuah interface, berdasarkan kriteria seperti alamat IP sumber/tujuan, jenis protokol (TCP, UDP, ICMP, dan lain-lain), serta nomor port.
-
-ACL bekerja layaknya seorang penjaga gerbang: setiap paket yang melewati interface yang dipasangi ACL akan dicocokkan dengan daftar aturan yang telah dibuat, kemudian diizinkan atau ditolak berdasarkan aturan yang paling pertama cocok.
-
-> **Ilustrasi:** Melanjutkan topologi Bagian A, misalkan perusahaan tidak ingin VLAN Sales (VLAN 20) bisa mengakses server data keuangan sama sekali, sementara VLAN Finance (VLAN 10) boleh mengaksesnya. Setelah Inter-VLAN Routing aktif, semua VLAN sebenarnya sudah bisa saling terhubung — ACL-lah yang memberi router kemampuan untuk secara selektif menyaring trafik semacam ini.
-
-**Fungsi dan manfaat ACL:**
-- **Keamanan jaringan** — membatasi akses ke perangkat atau subnet tertentu.
-- **Kontrol trafik** — membatasi jenis trafik tertentu untuk menghemat bandwidth.
-- **Filtering rute** — memfilter update routing bersama fitur `distribute-list`.
-- **QoS** — mengklasifikasikan trafik untuk diprioritaskan.
-- **NAT & VPN** — menentukan trafik mana yang perlu di-translate atau dienkripsi.
-
-### 6. Cara Kerja ACL
-
-Setiap ACL terdiri atas satu atau lebih *access control entries* (ACE) yang diproses secara berurutan dari atas ke bawah (*top-down*). Alurnya sebagai berikut:
-
-1. Paket dibandingkan dengan ACE pertama pada ACL.
-2. Jika kondisi cocok, aksi *permit* atau *deny* langsung dijalankan; proses pencocokan berhenti.
-3. Jika tidak cocok, paket dibandingkan dengan ACE berikutnya, dan seterusnya hingga akhir daftar.
-4. Jika paket tidak cocok dengan ACE mana pun, paket tersebut akan ditolak secara otomatis oleh aturan *implicit deny* yang tersembunyi di akhir setiap ACL.
-
-> ⚠️ **Implicit Deny:** Setiap ACL Cisco selalu diakhiri dengan aturan `deny any` yang tidak terlihat pada konfigurasi. Artinya, jika sebuah ACL hanya berisi aturan *permit* tanpa ada satu pun *deny* eksplisit, seluruh trafik yang tidak memenuhi kriteria *permit* tersebut akan otomatis ditolak.
-
-**Wildcard Mask:** ACL Cisco tidak menggunakan subnet mask biasa, melainkan *wildcard mask* untuk menentukan rentang IP yang dicocokkan. Prinsipnya berkebalikan dengan subnet mask: bit `0` berarti oktet harus cocok persis, bit `1` berarti oktet boleh bernilai apa saja (diabaikan).
-
-| Kebutuhan | Subnet Mask | Wildcard Mask |
-|---|---|---|
-| Host tunggal (192.168.10.5) | 255.255.255.255 | 0.0.0.0 |
-| Subnet /24 (192.168.10.0) | 255.255.255.0 | 0.0.0.255 |
-| Subnet /16 (172.16.0.0) | 255.255.0.0 | 0.0.255.255 |
-| Semua alamat (any) | 0.0.0.0 | 255.255.255.255 |
-
-Cara cepat menghitung wildcard mask: kurangi setiap oktet subnet mask dari 255. Contoh: `255.255.255.192` → wildcard `0.0.0.63` (255−192=63). Kata kunci `any` adalah singkatan dari `0.0.0.0 255.255.255.255`, sedangkan `host <ip>` adalah singkatan dari `<ip> 0.0.0.0`.
-
-### 7. Jenis-Jenis ACL
-
-Ada tiga jenis utama ACL pada Cisco IOS, dibedakan dari kriteria penyaringan dan cara identifikasinya: **Standard ACL**, **Extended ACL**, dan **Named ACL**.
-
-#### 7.1 Standard ACL
-
-Standard ACL hanya menyaring paket berdasarkan alamat IP **sumber** saja, diidentifikasi dengan nomor **1–99** atau **1300–1999** (*expanded*).
-
-**Karakteristik:**
-- Hanya mengenali IP sumber, tidak bisa berdasarkan IP tujuan, protokol, atau port.
-- Karena hanya mengenali IP sumber, sebaiknya diterapkan **sedekat mungkin dengan tujuan (destination)**.
-- Cocok untuk kebutuhan filtering sederhana, misalnya memblokir satu subnet agar tidak bisa mengakses jaringan lain sama sekali.
-
-**Konfigurasi Standard ACL** — *Skenario: blokir seluruh trafik dari VLAN 20 (Sales, 192.168.20.0/24) menuju subnet Server (192.168.30.0/24), subnet lain tetap diizinkan.*
+###### Konfigurasi
 
 ```
-! ===== 1. Membuat ACL =====
-R1> enable
-R1# configure terminal
-R1(config)# access-list 10 deny 192.168.20.0 0.0.0.255
-R1(config)# access-list 10 permit any
+Layer3Switch(config)# interface vlan 10
+Layer3Switch(config-if)# ip address 192.168.10.1 255.255.255.0
+Layer3Switch(config-if)# no shutdown
+Layer3Switch(config-if)# exit
 
-! ===== 2. Menerapkan ACL pada interface (dekat tujuan, arah outbound) =====
-R1(config)# interface gigabitEthernet 0/2
-R1(config-if)# ip access-group 10 out
-R1(config-if)# exit
+Layer3Switch(config)# interface vlan 20
+Layer3Switch(config-if)# ip address 192.168.20.1 255.255.255.0
+Layer3Switch(config-if)# no shutdown
+
+Layer3Switch(config)# ip routing
 ```
 
-> ⚠️ **Catatan:** Baris `permit any` wajib ditambahkan secara eksplisit. Tanpa baris ini, seluruh trafik lain (termasuk dari VLAN Finance) ikut ditolak karena *implicit deny*.
+**Catatan Penting:**
 
-**Verifikasi:**
-```
-R1# show access-lists 10
-Standard IP access list 10
-    10 deny 192.168.20.0, wildcard bits 0.0.0.255
-    20 permit any
-```
+- `ip routing` **wajib** diaktifkan, kalau tidak, switch cuma akan switching biasa dan SVI tidak akan merutekan apa pun walau IP sudah diset.
+- `no shutdown` tetap wajib di tiap interface VLAN (SVI), defaultnya SVI dalam kondisi down/administratively down.
 
-#### 7.2 Extended ACL
+###### Analogi
 
-Extended ACL menyaring berdasarkan kombinasi IP sumber, IP **tujuan**, protokol (TCP/UDP/ICMP/IP), serta nomor port. Diidentifikasi dengan nomor **100–199** atau **2000–2699** (*expanded*).
+**Layer 3 switch (SVI)** ibarat gedung yang punya **beberapa lift/tangga tersebar** di titik-titik strategis, jadi perpindahan antar lantai jauh lebih cepat dan tidak numpuk di satu titik saja.
 
-**Karakteristik:**
-- Dapat memfilter berdasarkan IP sumber DAN tujuan, protokol, serta port.
-- Karena sudah mengenali IP tujuan, sebaiknya diterapkan **sedekat mungkin dengan sumber (source)**.
-- Lebih fleksibel namun lebih kompleks dibanding Standard ACL.
+#### Troubleshooting Umum
 
-**Konfigurasi Extended ACL** — *Skenario: PC1 (192.168.10.10, VLAN Finance) hanya boleh mengakses Server1 (192.168.30.10) via HTTP (port 80); trafik lain dari PC1 ke Server1 ditolak; tujuan lain tetap diizinkan.*
+1. **VLAN mismatch** — VLAN ID di switch dan subinterface/SVI router tidak sama. Ini penyebab paling umum inter-VLAN routing gagal.
+2. **Trunk belum diset dengan benar** — port yang menghubungkan switch ke router harus `switchport mode trunk`, bukan access.
+3. **Lupa `no shutdown`** — baik di interface fisik router (router-on-a-stick) maupun SVI (Layer 3 switch), interface default-nya down.
+4. **`ip routing` belum diaktifkan** di Layer 3 switch — SVI sudah dikonfigurasi IP tapi routing tetap tidak jalan kalau ini lupa.
+5. **Default gateway PC salah** — pastikan IP gateway di PC sama persis dengan IP subinterface/SVI VLAN-nya.
+6. **Cek dengan:**
+  - `do show ip interface brief` → pastikan semua interface/subinterface/SVI status **up/up**.
+  - `do show vlan brief` → pastikan port sudah masuk VLAN yang benar.
+  - `do show interfaces trunk` → pastikan trunk aktif dan VLAN yang dibutuhkan diizinkan lewat.
+  - `ping` dan `tracert`/`traceroute` dari PC untuk menelusuri di titik mana koneksi terputus.
 
-```
-! ===== 1. Membuat ACL =====
-R1> enable
-R1# configure terminal
-R1(config)# access-list 110 permit tcp host 192.168.10.10 host 192.168.30.10 eq 80
-R1(config)# access-list 110 deny ip host 192.168.10.10 host 192.168.30.10
-R1(config)# access-list 110 permit ip any any
+#### WHY
 
-! ===== 2. Menerapkan ACL pada interface (dekat sumber, arah inbound) =====
-R1(config)# interface gigabitEthernet 0/0
-R1(config-if)# ip access-group 110 in
-R1(config-if)# exit
-```
+1. Kenapa harus VLAN kalau pada akhirnya disambung (intervlan) lagi?
 
-**Verifikasi:**
-```
-R1# show access-lists 110
-Extended IP access list 110
-    10 permit tcp host 192.168.10.10 host 192.168.30.10 eq www
-    20 deny ip host 192.168.10.10 host 192.168.30.10
-    30 permit ip any any
-```
+VLAN bukan mutusin total, tapi ngecilin broadcast domain dan bikin satu pintu terkontrol (bisa dipasang ACL). Tanpa VLAN, semua device satu broadcast domain besar tanpa checkpoint. Dengan VLAN, broadcast tetap kecil, komunikasi yang perlu tetap bisa lewat lewat gerbang yang diawasi.
 
-#### 7.3 Named ACL
+2. Beda inter-VLAN routing vs routing biasa?
 
-Named ACL pada dasarnya adalah Standard/Extended ACL yang diberi **nama** (bukan nomor) sebagai identitasnya, sehingga lebih mudah dibaca dan dikelola.
+Konsepnya sama — sama-sama Layer 3 pakai routing table. Bedanya cuma pemisah network-nya: routing biasa beda kabel fisik, inter-VLAN routing beda tag VLAN walau lewat kabel yang sama. Makanya butuh dot1Q atau SVI buat baca tag itu.
 
-**Karakteristik:**
-- Menggunakan nama deskriptif (misal `ONLY_HTTP_TO_SERVER`) alih-alih nomor.
-- Mendukung penghapusan/penyisipan satu baris (ACE) tertentu tanpa menghapus seluruh ACL, menggunakan nomor *sequence*.
-- Tetap harus dideklarasikan sebagai `standard` atau `extended` saat pembuatan.
+3. Kenapa harus encapsulation dot1Q?
 
-**Konfigurasi Named ACL** — *skenario sama seperti 7.2, ditulis ulang dengan nama:*
+Karena link switch-router itu trunk, satu kabel bawa banyak VLAN sekaligus, tercampur. Dot1Q itu tag penanda "ini punya VLAN berapa". Tanpa itu, router nggak bisa bedain frame VLAN 10 dari VLAN 20 yang datang bareng.
 
-```
-! ===== 1. Membuat Named ACL =====
-R1> enable
-R1# configure terminal
-R1(config)# ip access-list extended ONLY_HTTP_TO_SERVER
-R1(config-ext-nacl)# permit tcp host 192.168.10.10 host 192.168.30.10 eq 80
-R1(config-ext-nacl)# deny ip host 192.168.10.10 host 192.168.30.10
-R1(config-ext-nacl)# permit ip any any
-R1(config-ext-nacl)# exit
+4. Kenapa SVI harus ip routing?
 
-! ===== 2. Menerapkan pada interface =====
-R1(config)# interface gigabitEthernet 0/0
-R1(config-if)# ip access-group ONLY_HTTP_TO_SERVER in
-R1(config-if)# exit
-```
-
-**Menyisipkan/menghapus baris tertentu:**
-```
-R1(config)# ip access-list extended ONLY_HTTP_TO_SERVER
-! Menyisipkan aturan baru di antara sequence 10 dan 20
-R1(config-ext-nacl)# 15 permit tcp host 192.168.10.10 host 192.168.30.10 eq 443
-! Menghapus baris sequence 20 tanpa menghapus ACL secara keseluruhan
-R1(config-ext-nacl)# no 20
-R1(config-ext-nacl)# exit
-```
-
-#### 7.4 Perbandingan Jenis ACL
-
-| Aspek | Standard ACL | Extended ACL | Named ACL |
-|---|---|---|---|
-| Kriteria filter | IP sumber saja | IP sumber, tujuan, protokol, port | Sama seperti Standard/Extended |
-| Identifikasi | Nomor 1–99 / 1300–1999 | Nomor 100–199 / 2000–2699 | Nama (teks) |
-| Penempatan ideal | Dekat tujuan (destination) | Dekat sumber (source) | Mengikuti jenis dasarnya |
-| Edit per baris | Tidak | Tidak | Ya (sequence number) |
-
-### 8. Aturan Penempatan ACL
-
-- **Inbound ACL** — paket diperiksa ACL sebelum diproses tabel routing; lebih efisien jika paket memang akan ditolak.
-- **Outbound ACL** — paket diproses routing dulu, baru diperiksa ACL sebelum keluar interface.
-- **Standard ACL** → letakkan dekat **tujuan**, karena tidak mengenali IP tujuan sehingga berisiko memblokir trafik yang seharusnya masih boleh lewat jika diletakkan terlalu dekat sumber.
-- **Extended ACL** → letakkan dekat **sumber**, karena sudah mengenali IP tujuan & protokol, sehingga paket yang seharusnya ditolak bisa langsung dibuang lebih awal.
-- Setiap interface hanya boleh punya maksimal **satu ACL per arah, per protokol**.
-
-### 9. Verifikasi ACL
-
-| Perintah | Fungsi |
-|---|---|
-| `show access-lists` | Menampilkan semua ACL beserta jumlah paket yang cocok (*match*) tiap baris |
-| `show access-lists <nomor/nama>` | Menampilkan detail satu ACL tertentu |
-| `show ip interface <interface>` | Menampilkan ACL yang diterapkan pada suatu interface beserta arahnya |
-| `show running-config` | Menampilkan konfigurasi ACL secara lengkap sesuai urutan baris |
-| `ping` / `traceroute` | Menguji apakah trafik benar-benar diizinkan atau ditolak sesuai ACL |
-
-**Masalah umum:**
-
-| Gejala | Penyebab | Solusi |
-|---|---|---|
-| Semua trafik terblokir | Lupa `permit any` di akhir ACL | Tambahkan baris permit eksplisit sebelum implicit deny |
-| ACL tidak berefek | Belum ada `ip access-group` di interface | Terapkan ACL pada interface dengan arah in/out yang benar |
-| Trafik yang seharusnya diizinkan malah ditolak | Urutan ACE salah | Susun ulang dari yang paling spesifik ke paling umum |
-| Trafik sumber lain ikut terblokir | Standard ACL diterapkan terlalu dekat sumber | Pindahkan ke interface dekat destination |
-
-### 10. Tugas & Evaluasi Praktikum
-
-
-
-## 📝 Catatan
-- Deadline pengumpulan: [tanggal]
-- Asisten yang membawakan: [nama]
-
-## 📚 Referensi
-- Modul Praktikum Jaringan Komputer — Inter-VLAN Routing (RoAS & SVI) dan Access Control List (Standard, Extended, Named ACL)
+Defaultnya Layer 3 switch cuma switching biasa, walau hardware-nya sanggup routing. `ip routing` itu saklar buat ngaktifin kemampuan Layer 3-nya. Kalau lupa, SVI tetap up/up dan ada IP, tapi switch nggak pernah cek routing table — jadi nggak bisa nyeberang VLAN walau kelihatannya semua udah bener.
