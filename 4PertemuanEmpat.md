@@ -85,20 +85,30 @@ Static routing adalah metode routing di mana administrator jaringann mengonfigur
 Router1> enable
 Router1# configure terminal
 
-! Konfigurasi interface ke jaringan lokal (192.168.10.0)
-Router1(config)# interface fastethernet 0/0
-Router1(config-if)# ip address 192.168.10.1 255.255.255.0
+! Konfigurasi interface ke vlan 10
+Router1(config)# interface fastethernet 0/0.10
+Router1(config-if)# encapsulation dot1q 10
+Router1(config-if)# ip address 192.168.10.14 255.255.255.240
 Router1(config-if)# no shutdown
 Router1(config-if)# exit
+
+! Konfigurasi interface ke vlan 20
+Router1(config)# interface fastethernet 0/0.20
+Router1(config-if)# encapsulation dot1q 20
+Router1(config-if)# ip address 192.168.20.14 255.255.255.240
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
+
 
 ! Konfigurasi interface ke Router2 (1.1.1.0)
-Router1(config)# interface serial 0/0/0
-Router1(config-if)# ip address 1.1.1.1 255.255.255.0
+Router1(config)# interface fa0/1
+Router1(config-if)# ip address 1.1.1.1 255.255.255.252
 Router1(config-if)# no shutdown
 Router1(config-if)# exit
 
-! Static routing menuju jaringan 192.168.20.0 
-Router1(config)# ip route 192.168.20.0 255.255.255.0 1.1.1.2
+! Static routing menuju jaringan 192.168.30.0  192.168.40.0
+Router1(config)# ip route 192.168.30.0 255.255.255.240 1.1.1.2
+Router1(config)# ip route 192.168.40.0 255.255.255.240 1.1.1.2
 ```
 
 ###### Router 2
@@ -107,20 +117,29 @@ Router1(config)# ip route 192.168.20.0 255.255.255.0 1.1.1.2
 Router2> enable
 Router2# configure terminal
 
-! Konfigurasi interface ke jaringan lokal (192.168.20.0)
-Router2(config)# interface fastethernet 0/0
-Router2(config-if)# ip address 192.168.20.1 255.255.255.0
-Router2(config-if)# no shutdown
-Router2(config-if)# exit
+! Konfigurasi interface ke vlan 30
+Router1(config)# interface fastethernet 0/0.30
+Router1(config-if)# encapsulation dot1q 30
+Router1(config-if)# ip address 192.168.30.14 255.255.255.240
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
+
+! Konfigurasi interface ke vlan 40
+Router1(config)# interface fastethernet 0/0.40
+Router1(config-if)# encapsulation dot1q 40
+Router1(config-if)# ip address 192.168.40.14 255.255.255.240
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
 
 ! Konfigurasi interface ke Router1 (1.1.1.0)
-Router2(config)# interface serial 0/0/0
-Router2(config-if)# ip address 1.1.1.2 255.255.255.0
+Router2(config)# interface fa0/0
+Router2(config-if)# ip address 1.1.1.2 255.255.255.252
 Router2(config-if)# no shutdown
 Router2(config-if)# exit
 
-! Static routing menuju jaringan 192.168.10.
-Router2(config)# ip route 192.168.10.0 255.255.255.0 1.1.1.1
+! Static routing menuju jaringan 192.168.10.0  192.168.20.0
+Router1(config)# ip route 192.168.10.0 255.255.255.240 1.1.1.1
+Router1(config)# ip route 192.168.20.0 255.255.255.240 1.1.1.1
 ```
 
 ### Dynamic Routing (Routing Information Protocol/RIP)
@@ -165,23 +184,33 @@ RIP adalah salah satu protokol routing dinamis tertua dan paling sederhana, yang
 Router1> enable
 Router1# configure terminal
 
-! Konfigurasi interface ke jaringan lokal (192.168.10.0)
-Router1(config)# interface fastethernet 0/0
-Router1(config-if)# ip address 192.168.10.1 255.255.255.0
+! Konfigurasi interface ke vlan 10
+Router1(config)# interface fastethernet 0/0.10
+Router1(config-if)# encapsulation dot1q 10
+Router1(config-if)# ip address 192.168.10.14 255.255.255.240
 Router1(config-if)# no shutdown
 Router1(config-if)# exit
+
+! Konfigurasi interface ke vlan 20
+Router1(config)# interface fastethernet 0/0.20
+Router1(config-if)# encapsulation dot1q 20
+Router1(config-if)# ip address 192.168.20.14 255.255.255.240
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
+
 
 ! Konfigurasi interface ke Router2 (1.1.1.0)
-Router1(config)# interface serial 0/0/0
-Router1(config-if)# ip address 1.1.1.1 255.255.255.0
+Router1(config)# interface fa0/1
+Router1(config-if)# ip address 1.1.1.1 255.255.255.252
 Router1(config-if)# no shutdown
 Router1(config-if)# exit
 
-! Konfigurasi RIP
-Router1(config)# router rip
-Router1(config-router)# network 192.168.10.0
-Router1(config-router)# network 1.1.1.0
+! Static routing menuju jaringan 192.168.30.0  192.168.40.0
+Router1(config)# ip route 192.168.30.0 255.255.255.240 1.1.1.2
+Router1(config)# ip route 192.168.40.0 255.255.255.240 1.1.1.2
 ```
+
+###### Router 2
 
 ###### Router 2
 
@@ -189,29 +218,40 @@ Router1(config-router)# network 1.1.1.0
 Router2> enable
 Router2# configure terminal
 
-! Konfigurasi interface ke jaringan lokal (192.168.20.0)
-Router2(config)# interface fastethernet 0/0
-Router2(config-if)# ip address 192.168.20.1 255.255.255.0
-Router2(config-if)# no shutdown
-Router2(config-if)# exit
+! Konfigurasi interface ke vlan 30
+Router1(config)# interface fastethernet 0/0.30
+Router1(config-if)# encapsulation dot1q 30
+Router1(config-if)# ip address 192.168.30.14 255.255.255.240
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
+
+! Konfigurasi interface ke vlan 40
+Router1(config)# interface fastethernet 0/0.40
+Router1(config-if)# encapsulation dot1q 40
+Router1(config-if)# ip address 192.168.40.14 255.255.255.240
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
 
 ! Konfigurasi interface ke Router1 (1.1.1.0)
-Router2(config)# interface serial 0/0/0
-Router2(config-if)# ip address 1.1.1.2 255.255.255.0
+Router2(config)# interface fa0/0
+Router2(config-if)# ip address 1.1.1.2 255.255.255.252
 Router2(config-if)# no shutdown
 Router2(config-if)# exit
 
-! Konfigurasi interface ke Router3 (2.2.2.0)
-Router2(config)# interface serial 0/0/1
-Router2(config-if)# ip address 2.2.2.1 255.255.255.0
+! Konfigurasi interface ke Router3 (1.1.1.4)
+Router2(config)# interface fa1/0
+Router2(config-if)# ip address 1.1.1.5 255.255.255.252
 Router2(config-if)# no shutdown
 Router2(config-if)# exit
 
-! Konfigurasi RIP
+! Static routing menuju jaringan 192.168.10.0  192.168.20.0
+Router1(config)# ip route 192.168.10.0 255.255.255.240 1.1.1.1
+Router1(config)# ip route 192.168.20.0 255.255.255.240 1.1.1.1
+
+! Konfigurasi RIP ke 192.168.50.0 
 Router2(config)# router rip
-Router2(config-router)# network 192.168.20.0
-Router2(config-router)# network 1.1.1.0
-Router2(config-router)# network 2.2.2.0
+Router2(config-router)# network 192.168.50.0
+Router2(config-router)# network 1.1.1.4
 ```
 
 ###### Router 3
@@ -220,24 +260,28 @@ Router2(config-router)# network 2.2.2.0
 Router3> enable
 Router3# configure terminal
 
-! Konfigurasi interface ke jaringan lokal (192.168.30.0)
-Router3(config)# interface fastethernet 0/0
-Router3(config-if)# ip address 192.168.30.1 255.255.255.0
-Router3(config-if)# no shutdown
-Router3(config-if)# exit
+! Konfigurasi interface ke vlan 50
+Router1(config)# interface fastethernet 0/0.50
+Router1(config-if)# encapsulation dot1q 50
+Router1(config-if)# ip address 192.168.50.14 255.255.255.240
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
 
 ! Konfigurasi interface ke Router2 (2.2.2.0)
-Router3(config)# interface serial 0/0/0
-Router3(config-if)# ip address 2.2.2.2 255.255.255.0
+Router3(config)# interface fa0/1
+Router3(config-if)# ip address 1.1.1.6 255.255.255.252
 Router3(config-if)# no shutdown
 Router3(config-if)# exit
 
 ! Konfigurasi RIP
 Router3(config)# router rip
+Router3(config-router)# network 192.168.10.0
+Router3(config-router)# network 192.168.20.0
 Router3(config-router)# network 192.168.30.0
-Router3(config-router)# network 2.2.2.0
+Router3(config-router)# network 192.168.40.0
+Router3(config-router)# network 1.1.1.4
+Router3(config-router)# network 1.1.1.0
 ```
-
 
 
 ### Istilah
