@@ -267,7 +267,7 @@ Router1(config-if)# ip address 192.168.50.14 255.255.255.240
 Router1(config-if)# no shutdown
 Router1(config-if)# exit
 
-! Konfigurasi interface ke Router2 (2.2.2.0)
+! Konfigurasi interface ke Router2 
 Router3(config)# interface fa0/1
 Router3(config-if)# ip address 1.1.1.6 255.255.255.252
 Router3(config-if)# no shutdown
@@ -275,12 +275,9 @@ Router3(config-if)# exit
 
 ! Konfigurasi RIP
 Router3(config)# router rip
-Router3(config-router)# network 192.168.10.0
-Router3(config-router)# network 192.168.20.0
 Router3(config-router)# network 192.168.30.0
 Router3(config-router)# network 192.168.40.0
 Router3(config-router)# network 1.1.1.4
-Router3(config-router)# network 1.1.1.0
 ```
 
 
