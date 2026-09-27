@@ -1,152 +1,190 @@
-# Pertemuan 6: DHCP, DNS, dan Web Server
+# Pertemuan 6: DHCP, DNS, dan Web Server (Disesuaikan dengan Topologi Praktik)
 
 ## 🎯 Tujuan Pembelajaran
 - Praktikan mampu memahami konsep dasar DHCP dan proses DORA (Discover, Offer, Request, Acknowledge) dalam pemberian alamat IP secara otomatis.
-- Praktikan mampu mengonfigurasi DHCP server bawaan (IOS) pada perangkat Router.
-- Praktikan mampu mengonfigurasi layanan DHCP pada perangkat Server di Cisco Packet Tracer.
+- Praktikan mampu mengonfigurasi DHCP server bawaan (IOS) pada perangkat Router untuk segmen VLAN kecil (VLAN 40).
+- Praktikan mampu mengonfigurasi layanan DHCP pada perangkat Server untuk segmen VLAN besar (VLAN 50) yang berada di luar broadcast domain server tersebut.
+- Praktikan mampu mengonfigurasi **inter-VLAN routing (router-on-a-stick)** menggunakan subinterface dan trunk, sebagai prasyarat DHCP untuk VLAN yang lewat trunk.
+- Praktikan mampu mengonfigurasi **`ip helper-address`** agar broadcast DHCP dari client dapat diteruskan (relay) ke DHCP server yang berada di segmen berbeda.
 - Praktikan mampu mengonfigurasi topologi yang menggabungkan DHCP router dan DHCP server secara bersamaan tanpa terjadi konflik scope.
 - Praktikan mampu menjelaskan alasan penggunaan DHCP server (bukan hanya router) untuk kebutuhan jaringan berskala besar.
 - Praktikan mampu memahami konsep DNS dan mengonfigurasi resource record pada DNS server agar sebuah domain dapat diakses menggunakan nama, bukan alamat IP.
 - Praktikan mampu memahami konsep dasar Web Server dan mengonfigurasi layanan HTTP pada perangkat Server di Cisco Packet Tracer.
-- Praktikan mampu menghubungkan DHCP, DNS, dan Web Server dalam satu alur kerja: client mendapat IP dari DHCP, mengetik nama domain di browser, domain tersebut diterjemahkan oleh DNS, lalu halaman web diambil dari Web Server.
-- Praktikan mampu melakukan verifikasi konfigurasi menggunakan perintah `show ip dhcp binding`, `show ip dhcp pool`, `nslookup`, dan pengujian akses lewat Web Browser pada PC.
+- Praktikan mampu menghubungkan DHCP, DNS, dan Web Server dalam satu alur kerja: client mendapat IP dari DHCP (lewat relay), mengetik nama domain di browser, domain tersebut diterjemahkan oleh DNS, lalu halaman web diambil dari Web Server.
+- Praktikan mampu melakukan verifikasi konfigurasi menggunakan perintah `show ip dhcp binding`, `show ip interface brief`, `show interfaces trunk`, `nslookup`, dan pengujian akses lewat Web Browser pada PC.
 
-## 📁 Struktur Folder
-```
-.
-├── soal/       # Soal atau instruksi tugas
-└── docs/       # Materi pendukung (slide, referensi)
-```
-- `soal/`: berisi skenario tugas rancangan topologi dengan DHCP router dan DHCP server, DNS, serta Web Server pada satu topologi.
-- `docs/`: berisi modul ini beserta materi pendukung lain (cheatsheet CLI, referensi DHCP, DNS, dan HTTP).
-
-## 🚀 Cara Menjalankan
-Praktikum ini menggunakan **Cisco Packet Tracer**, bukan bahasa pemrograman. Alur pengerjaannya:
-```
-# 1. Buka file topologi pada Cisco Packet Tracer, pastikan untuk mematikan internet
-# 2. Klik perangkat Router, buka tab CLI, lalu masukkan perintah konfigurasi, contoh:
-Router> enable
-Router# configure terminal
-Router(config)#
-```
-
+## 🗺️ Gambaran Topologi
+- **VLAN 40 – Administrasi** (`192.168.40.0/28`): DHCP dari **Router0** (IOS DHCP Server), segmen kecil/lokal, access port biasa.
+- **VLAN 50 – HRD** (`192.168.50.0/28`, gateway `192.168.50.14`): DHCP dari **Server0**, dijangkau via **inter-VLAN routing (router-on-a-stick)** di Router1 karena koneksi Router1–Switch2 adalah **trunk**.
+- **Server0** berada di segmen terpisah `192.168.100.0/29` (gateway `192.168.100.1` di Fa1/1 Router1), menjalankan service **DHCP, DNS, dan HTTP** sekaligus.
+- Karena Server0 tidak berada satu segmen fisik dengan VLAN 50, dibutuhkan **`ip helper-address`** di subinterface Router1 agar request DHCP dari PC VLAN 50 bisa diteruskan ke Server0.
 
 ## 📖 Materi Praktikum
 
 ### 1. Konsep Dasar DHCP
-DHCP (Dynamic Host Configuration Protocol) adalah protokol yang digunakan untuk memberikan konfigurasi IP address, subnet mask, default gateway, dan DNS secara otomatis kepada client, tanpa perlu konfigurasi manual satu per satu. Proses pemberian alamat ini dikenal sebagai **DORA**:
+DHCP (Dynamic Host Configuration Protocol) memberikan konfigurasi IP address, subnet mask, default gateway, dan DNS secara otomatis kepada client. Proses ini dikenal sebagai **DORA**:
 
-- **Discover**. Client mengirim broadcast untuk mencari DHCP server yang aktif di jaringan.
-- **Offer**. DHCP server merespons dengan menawarkan satu alamat IP yang tersedia.
-- **Request**. Client meminta secara resmi alamat IP yang ditawarkan tersebut.
-- **Acknowledge**. Server mengonfirmasi, dan client resmi menggunakan alamat IP tersebut untuk periode waktu tertentu (lease time).
+- **Discover** – Client broadcast mencari DHCP server.
+- **Offer** – Server menawarkan satu IP yang tersedia.
+- **Request** – Client meminta resmi IP yang ditawarkan.
+- **Acknowledge** – Server mengonfirmasi, client resmi memakai IP tersebut (lease time).
 
-Sesuai arahan Praz, DHCP tetap dipakai pada praktikum ini karena mekanismenya merepresentasikan kondisi jaringan nyata, di mana alokasi IP jarang dilakukan secara statis satu per satu. Pada pertemuan ini, DHCP dikonfigurasi menggunakan **kombinasi antara Router dan Server** dalam satu topologi.
+Pada praktikum ini, DHCP dikonfigurasi dengan **kombinasi Router (VLAN 40) dan Server (VLAN 50)** dalam satu topologi — dan khusus VLAN 50, ditambah **relay DHCP** karena server tidak nempel langsung di segmen tersebut.
 
-### 2. Konfigurasi DHCP pada Router
+### 2. Konfigurasi DHCP pada Router (VLAN 40)
 
-Router Cisco memiliki fitur DHCP server bawaan (IOS DHCP Server) yang bisa langsung diaktifkan lewat CLI, tanpa perlu perangkat tambahan. Cocok dipakai untuk segmen jaringan kecil/lokal.
+Cocok untuk segmen kecil/lokal, diaktifkan langsung lewat CLI tanpa perangkat tambahan.
 
-**Cheatsheet CLI Konfigurasi DHCP Router:**
-
-| Fungsi | Perintah CLI | Penjelasan |
-|---|---|---|
-| Mengecualikan alamat | `Router(config)# ip dhcp excluded-address [ip_awal] [ip_akhir]` | Mencadangkan alamat tertentu (biasanya gateway) agar tidak dibagikan ke client. |
-| Membuat pool DHCP | `Router(config)# ip dhcp pool [nama_pool]` | Membuat sekaligus masuk ke mode konfigurasi pool DHCP. |
-| Menentukan network | `Router(dhcp-config)# network [network_id] [subnet_mask]` | Menentukan rentang alamat yang akan dibagikan ke client. |
-| Menentukan gateway | `Router(dhcp-config)# default-router [ip_gateway]` | Menentukan default gateway yang diterima client. |
-| Menentukan DNS | `Router(dhcp-config)# dns-server [ip_dns]` | Menentukan alamat DNS server yang diterima client. |
-| Mengatur lease time | `Router(dhcp-config)# lease [hari] [jam] [menit]` | Mengatur durasi sewa alamat IP (default 24 jam). |
-| Melihat binding | `Router# show ip dhcp binding` | Menampilkan daftar IP yang sudah disewakan ke client beserta MAC address-nya. |
-| Melihat pool | `Router# show ip dhcp pool` | Menampilkan status dan statistik pool DHCP yang aktif. |
-
-**Langkah kerja:**
+**Langkah kerja (Router0):**
 ```
-Router(config)# ip dhcp excluded-address 192.168.10.1 192.168.10.10
-Router(config)# ip dhcp pool LAN_ROUTER
-Router(dhcp-config)# network 192.168.10.0 255.255.255.0
-Router(dhcp-config)# default-router 192.168.10.1
-Router(dhcp-config)# dns-server 8.8.8.8
-Router(dhcp-config)# exit
+Router0(config)# interface FastEthernet0/1
+Router0(config-if)# ip address 192.168.40.1 255.255.255.240
+Router0(config-if)# no shutdown
+Router0(config-if)# exit
+
+Router0(config)# ip dhcp excluded-address 192.168.40.1 192.168.40.2
+Router0(config)# ip dhcp pool VLAN40_ADMIN
+Router0(dhcp-config)# network 192.168.40.0 255.255.255.240
+Router0(dhcp-config)# default-router 192.168.40.1
+Router0(dhcp-config)# dns-server 192.168.100.2
+Router0(dhcp-config)# exit
 ```
 
-**Uji Verifikasi:** Ubah pengaturan IP pada PC client di segmen tersebut menjadi **DHCP**, lalu jalankan `ipconfig` (di Command Prompt PC). PC harus menerima IP sesuai rentang `network` yang dikonfigurasi. Jalankan juga `show ip dhcp binding` di router untuk memastikan IP client tercatat.
+**Uji Verifikasi:** Set PC di VLAN 40 ke DHCP → `ipconfig` → cek IP sesuai pool. Jalankan `Router0# show ip dhcp binding` untuk memastikan IP client tercatat di router.
 
-### 3. Konfigurasi DHCP pada Server
+### 3. Inter-VLAN Routing (Router-on-a-Stick) untuk VLAN 50
 
-Untuk segmen jaringan yang lebih besar, DHCP dijalankan dari perangkat **Server** (bukan router) menggunakan fitur *Services* di Packet Tracer.
+Karena koneksi Router1–Switch2 adalah **trunk** (bukan access), IP gateway VLAN 50 **tidak** dipasang langsung di interface fisik, melainkan di **subinterface**.
 
-**Langkah kerja:**
-1. Klik perangkat **Server**, buka tab **Desktop**, pilih **IP Configuration**, lalu set IP address server secara **Static** (server tidak boleh dapat IP dari DHCP-nya sendiri).
-2. Masih di perangkat Server, buka tab **Config**, pilih menu **DHCP** pada bagian Services.
-3. Isi parameter layanan:
-   - **Service**: On
-   - **Default Gateway**: sesuai gateway segmen tersebut
-   - **DNS Server**: sesuai kebutuhan
-   - **Start IP Address**: alamat awal rentang yang dibagikan
-   - **Subnet Mask**: sesuai segmen
-   - **Maximum Number of Users**: sesuai kebutuhan jumlah client
-4. Klik **Save**, lalu pastikan status pool menjadi aktif.
+**Langkah kerja (Router1):**
+```
+Router1(config)# interface FastEthernet0/0
+Router1(config-if)# no ip address
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
 
-**Uji Verifikasi:** Sambungkan PC ke segmen server tersebut, set IP Configuration PC ke **DHCP**, lalu cek apakah PC menerima IP sesuai rentang yang dikonfigurasi di server.
+Router1(config)# interface FastEthernet0/0.50
+Router1(config-subif)# encapsulation dot1Q 50
+Router1(config-subif)# ip address 192.168.50.14 255.255.255.240
+Router1(config-subif)# ip helper-address 192.168.100.2
+Router1(config-subif)# exit
+```
 
-### 4. Kombinasi DHCP Router dan Server dalam Satu Topologi
+**Wajib dicek di Switch2** — port yang mengarah ke Router1 harus trunk:
+```
+Switch2(config)# interface FastEthernet0/1
+Switch2(config-if)# switchport mode trunk
+```
+Verifikasi: `Switch2# show interfaces trunk` harus menampilkan port tersebut sebagai trunk. Tanpa ini, subinterface `.50` tidak akan pernah menerima frame apa pun dari VLAN 50.
 
-Karena DHCP router dan DHCP server berjalan bersamaan dalam satu topologi, **konfigurasi pool/scope di router tidak boleh sama dengan konfigurasi di server**, baik dari sisi network address maupun rentang IP yang dibagikan. Jika keduanya menggunakan rentang yang sama atau tumpang tindih, akan terjadi **konflik alamat (IP conflict)**, di mana dua perangkat berbeda berpotensi mendapatkan IP yang identik dari dua sumber DHCP yang berbeda.
+> ⚠️ Perhitungan subnet `/28` untuk `192.168.50.0/28`: Network `192.168.50.0`, host valid `192.168.50.1`–`192.168.50.14`, broadcast `192.168.50.15`. Karena gateway memakai `.14`, sisa host yang bisa dibagikan DHCP adalah `.1`–`.13` (13 alamat).
 
-**Contoh pembagian scope yang benar (tidak bentrok):**
+### 4. `ip helper-address` — Kunci Relay DHCP Lintas Segmen
+
+Broadcast DHCP Discover **tidak bisa** melewati router secara default. Karena Server0 berada di segmen lain (`192.168.100.0/29`), broadcast dari PC VLAN 50 akan mentok di Router1 kecuali diberi tahu ke mana harus diteruskan:
+
+```
+Router1(config-subif)# ip helper-address 192.168.100.2
+```
+
+Perintah ini membuat Router1 mengubah broadcast DHCP menjadi unicast dan mengirimkannya langsung ke `192.168.100.2` (Server0). Alur DORA-nya jadi:
+
+1. PC broadcast Discover di VLAN 50
+2. Router1 (di `Fa0/0.50`) merelay ke Server0 (`192.168.100.2`)
+3. Server0 balas Offer → diteruskan balik ke PC lewat Router1
+4. Request → Acknowledge dengan mekanisme relay yang sama
+
+> ⚠️ Jika `ip helper-address` tidak ada/salah alamat, service DHCP di server bisa saja sudah aktif dan pool sudah benar, tapi PC tetap mendapat APIPA (`169.254.x.x`) karena request tidak pernah sampai ke server.
+
+### 5. Konfigurasi DHCP pada Server (VLAN 50)
+
+**Langkah kerja pada Server0:**
+
+1. Tab **Desktop → IP Configuration** → set **Static**:
+   - IP Address: `192.168.100.2`
+   - Subnet Mask: `255.255.255.248`
+   - Default Gateway: `192.168.100.1`
+
+2. Tab **Config/Services → DHCP**:
+   - Service: **On**
+   - Default Gateway: `192.168.50.14`
+   - DNS Server: `192.168.100.2` (IP Server0 sendiri, **bukan** IP router)
+   - Start IP Address: `192.168.50.1`
+   - Subnet Mask: `255.255.255.240`
+   - Maximum Number of Users: `13`
+   - Klik **Add** (jika pool baru) lalu **Save**
+
+**Uji Verifikasi:** Set PC di VLAN 50 ke DHCP → `ipconfig` → harus dapat IP dari rentang `.1`–`.13`, bukan APIPA. Cek juga daftar client di panel DHCP Server0 (bukan `show ip dhcp binding`, karena binding-nya tercatat di **server**, bukan router).
+
+### 6. Kombinasi DHCP Router dan Server dalam Satu Topologi
+
+Scope router (VLAN 40) dan scope server (VLAN 50) **harus berbeda network**, tidak boleh tumpang tindih.
 
 | Sumber DHCP | Segmen | Network | Rentang yang dibagikan |
 |---|---|---|---|
-| Router | LAN lokal (kecil) | 192.168.10.0/24 | 192.168.10.11 – 192.168.10.254 |
-| Server | LAN besar | 192.168.20.0/24 | 192.168.20.11 – 192.168.20.254 |
+| Router0 | VLAN 40 – Administrasi | 192.168.40.0/28 | 192.168.40.3 – 192.168.40.14 |
+| Server0 | VLAN 50 – HRD | 192.168.50.0/28 | 192.168.50.1 – 192.168.50.13 |
 
-> ⚠️ **Peringatan Konfigurasi:** Jangan pernah menyamakan `network` pada pool router dengan rentang start/end pada server untuk segmen yang sama. Selalu pastikan setiap sumber DHCP memiliki rentang alamat yang eksklusif dan tidak tumpang tindih satu sama lain sebelum melakukan uji koneksi.
+**Uji Verifikasi Gabungan:** Set PC di kedua VLAN ke DHCP, pastikan masing-masing dapat IP dari sumber yang seharusnya, dan tidak ada duplikasi IP antar segmen.
 
-**Uji Verifikasi Gabungan:** Sambungkan PC pada masing-masing segmen (segmen router dan segmen server), set keduanya ke DHCP, lalu pastikan setiap PC menerima IP dari sumber DHCP yang seharusnya (bukan tertukar), dan tidak ada duplikasi IP antar segmen saat dicek dengan `show ip dhcp binding` di router serta daftar client di server.
+### 7. Alasan Penggunaan DHCP Server
 
-### 5. Alasan Penggunaan DHCP Server
+- Menangani volume permintaan IP lebih banyak dan stabil dibanding fitur DHCP bawaan router.
+- Manajemen terpusat, administrasi dan logging lebih mudah dari satu titik.
+- Lebih mudah diskalakan tanpa membebani performa router.
+- Dalam topologi ini, DHCP server juga sekaligus menjalankan DNS dan HTTP — mencontohkan bagaimana satu server bisa melayani banyak fungsi untuk segmen besar.
 
-Meskipun router juga mampu menjalankan fungsi DHCP, penggunaan DHCP server tersendiri lebih relevan untuk kebutuhan **jaringan berskala besar**. Beberapa alasannya:
+### 8. Konsep dan Konfigurasi DNS
 
-- Server DHCP dirancang untuk menangani volume permintaan IP yang jauh lebih banyak dan lebih stabil dibanding fitur DHCP bawaan router.
-- Manajemen lebih terpusat, sehingga administrasi, monitoring, dan pencatatan (logging) alokasi IP lebih mudah dilakukan dari satu titik.
-- Lebih mudah diskalakan ketika jaringan bertambah besar, tanpa membebani performa router yang idealnya fokus pada fungsi routing.
-
-Karena itu, kombinasi router (untuk segmen kecil/lokal) dan server (untuk kebutuhan jaringan besar) menjadi pendekatan yang lebih realistis dibanding hanya mengandalkan salah satunya.
-
-### 6. Konsep dan Konfigurasi DNS
-
-DNS (Domain Name System) adalah layanan yang menerjemahkan nama domain yang mudah diingat manusia (misalnya `praktisi-unmul.web.id`) menjadi alamat IP yang sebenarnya dipakai perangkat untuk saling terhubung. Tanpa DNS, pengguna harus mengetik alamat IP secara langsung setiap kali ingin mengakses sebuah layanan.
-
-**Langkah kerja pada Server:**
-1. Klik perangkat **Server**, buka tab **Config**, pilih menu **DNS** pada bagian Services.
-2. Aktifkan **Service: On**.
-3. Tambahkan record baru dengan mengisi:
-   - **Type**: A Record
-   - **Name**: nama domain yang diinginkan, misalnya `praktisi-unmul.web.id`
-   - **Address**: IP address Server itu sendiri
-4. Klik **Add**, lalu pastikan record tersebut muncul di daftar.
+**Langkah kerja pada Server0 (Config/Services → DNS):**
+1. DNS Service: **On**
+2. Isi Resource Record:
+   - Type: `A Record`
+   - Name: `web-praktisi.local`
+   - Address: `192.168.100.2`
+3. Klik **Add** dulu (memasukkan ke tabel), baru **Save**
+4. Pastikan record muncul di tabel (kolom No./Name/Type/Detail terisi) — kalau tabel masih kosong, record belum tersimpan dan `nslookup` akan tetap gagal.
 
 **Langkah kerja pada Client:**
-1. Buka PC, masuk ke **IP Configuration**.
-2. Isi kolom **DNS Server** dengan IP address Server yang menjalankan layanan DNS (atau pastikan opsi ini otomatis terisi jika PC menerima IP lewat DHCP yang sudah dikonfigurasi dengan `dns-server`).
+Field DNS Server pada PC akan otomatis terisi `192.168.100.2` kalau IP didapat lewat DHCP yang sudah dikonfigurasi dengan `dns-server 192.168.100.2` (untuk VLAN 40 lewat router) atau field DNS Server di pool (untuk VLAN 50 lewat server).
 
-**Uji Verifikasi:** Buka **Command Prompt** pada PC, lalu jalankan `nslookup [nama_domain]` untuk memastikan domain tersebut berhasil diterjemahkan ke IP address Server yang benar.
+**Uji Verifikasi:** `nslookup web-praktisi.local` di Command Prompt PC harus resolve ke `192.168.100.2`.
 
-### 7. Konsep dan Konfigurasi Web Server
+### 9. Konsep dan Konfigurasi Web Server
 
-Web Server adalah perangkat atau layanan yang menyimpan dan menyajikan halaman web kepada client melalui protokol **HTTP** (Hypertext Transfer Protocol) pada port 80. Ketika client mengetik alamat domain atau IP di browser, permintaan tersebut dikirim ke Web Server, yang kemudian membalas dengan konten halaman web yang diminta.
+**Langkah kerja pada Server0 (Config/Services → HTTP):**
+1. HTTP: **On**
+2. Edit `index.html`, contoh sederhana:
+   ```html
+   <html>
+   <head>
+   <title>Web Server PRAKTISI</title>
+   </head>
+   <body>
 
-**Langkah kerja pada Server:**
-1. Klik perangkat **Server**, buka tab **Config**, pilih menu **HTTP** pada bagian Services.
-2. Aktifkan **HTTP: On**.
-3. Buka tab file `index.html` yang tersedia, lalu ubah isi kontennya sesuai kebutuhan (misalnya nama kelompok atau judul praktikum) sebagai bukti konfigurasi berhasil dilakukan.
-4. Simpan perubahan.
+   <h1>Halo, ini Web Server VLAN 50</h1>
+   <p>Dikonfigurasi oleh: [nama kamu]</p>
+   <p>Pertemuan 6 - DHCP, DNS, Web Server</p>
 
-**Uji Verifikasi:** Buka PC, pilih aplikasi **Web Browser** pada tab Desktop, lalu ketik IP address Server atau nama domain yang sudah didaftarkan di DNS (jika DNS sudah dikonfigurasi pada langkah sebelumnya). Halaman `index.html` yang sudah diubah harus tampil di browser.
+   </body>
+   </html>
+   ```
+3. **Save**
 
-> ⚠️ **Catatan:** Jika mengetik nama domain di browser tidak berhasil, tetapi mengetik IP address berhasil, kemungkinan besar konfigurasi DNS pada PC atau record di Server belum benar. Periksa kembali langkah pada bagian DNS sebelum melanjutkan.
+**Uji Verifikasi (urutan disarankan):**
+1. Buka Web Browser di PC → ketik `http://192.168.100.2` dulu (pastikan HTTP jalan lepas dari DNS)
+2. Kalau berhasil, lanjut ketik `http://web-praktisi.local` (buktikan DNS + HTTP nyambung)
+
+> ⚠️ Kalau (1) gagal: cek PC sudah dapat IP dari DHCP (bukan APIPA), dan bisa `ping 192.168.100.2` — kalau ping gagal, masalah di routing/`ip helper-address`, bukan di HTTP.
+> Kalau (1) berhasil tapi (2) gagal: cek record DNS sudah ter-*Add* dan ter-*Save*, serta field DNS Server di pool DHCP sudah benar (`192.168.100.2`), lalu renew DHCP di PC.
+
+## ✅ Ringkasan Urutan Konfigurasi
+1. Router0: IP interface + DHCP pool untuk VLAN 40
+2. Switch2: set port ke Router1 jadi **trunk**
+3. Router1: subinterface `Fa0/0.50` (encapsulation dot1Q 50) + `ip helper-address` ke Server0
+4. Router1: interface `Fa1/1` ke Server0 (`192.168.100.1/29`)
+5. Server0: Static IP, lalu aktifkan DHCP (untuk VLAN 50), DNS, dan HTTP
+6. Uji: DHCP binding (router untuk VLAN 40, panel server untuk VLAN 50) → `nslookup` → Web Browser
 
 ## 📝 Catatan
 - Deadline pengumpulan: [tanggal]
@@ -154,6 +192,7 @@ Web Server adalah perangkat atau layanan yang menyimpan dan menyajikan halaman w
 
 ## 📚 Referensi
 - Cisco. *IP Addressing: DHCP Configuration Guide, Configuring the Cisco IOS DHCP Server*. [cisco.com](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/15-mt/dhcp-15-mt-book/config-dhcp-server.html)
-- Droms, R. *RFC 2131, Dynamic Host Configuration Protocol*. Internet Engineering Task Force (IETF). [datatracker.ietf.org/doc/html/rfc2131](https://datatracker.ietf.org/doc/html/rfc2131)
-- Mockapetris, P. *RFC 1035, Domain Names, Implementation and Specification*. Internet Engineering Task Force (IETF). [datatracker.ietf.org/doc/html/rfc1035](https://datatracker.ietf.org/doc/html/rfc1035)
-- Fielding, R., dan Reschke, J. *RFC 7230, Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing*. Internet Engineering Task Force (IETF). [datatracker.ietf.org/doc/html/rfc7230](https://datatracker.ietf.org/doc/html/rfc7230)
+- Cisco. *Configuring DHCP Relay (ip helper-address)*. [cisco.com](https://www.cisco.com/c/en/us/support/docs/ip/dynamic-address-allocation-resolution/13725-30.html)
+- Droms, R. *RFC 2131, Dynamic Host Configuration Protocol*. IETF. [datatracker.ietf.org/doc/html/rfc2131](https://datatracker.ietf.org/doc/html/rfc2131)
+- Mockapetris, P. *RFC 1035, Domain Names, Implementation and Specification*. IETF. [datatracker.ietf.org/doc/html/rfc1035](https://datatracker.ietf.org/doc/html/rfc1035)
+- Fielding, R., dan Reschke, J. *RFC 7230, Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing*. IETF. [datatracker.ietf.org/doc/html/rfc7230](https://datatracker.ietf.org/doc/html/rfc7230)
