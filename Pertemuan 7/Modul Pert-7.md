@@ -1,4 +1,4 @@
-# Pertemuan 7: Konfigurasi WLAN, Keamanan CLI, dan Remote Access
+# Pertemuan 7: Konfigurasi WLAN, Keamanan CLI, Remote Access, dan ACL
 
 ## 🎯 Tujuan Pembelajaran
 - Memahami konsep dasar jaringan nirkabel (WLAN) dan cara kerja Access Point dalam menyediakan koneksi wireless.
