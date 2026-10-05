@@ -243,13 +243,6 @@ Sama seperti pada metode RoAS, PC1 dan PC2 dikonfigurasi dengan IP address, subn
 3. Konfigurasikan Inter-VLAN Router-on-a-Stick pada router.
 4. Lakukan validasi, apakah kedua ruangan tersebut bisa saling terhubung.
 
-**Latihan 2 — ACL**
-1. Tambahkan VLAN 30 (Server) dengan network 192.168.30.0/24 dan satu PC/server pada topologi Latihan 1.
-2. Buat **Standard Numbered ACL** agar VLAN 10 (Dosen) tidak bisa mengakses VLAN 30, dengan VLAN 20 tetap bisa. Tentukan sendiri interface dan arah pemasangannya, lalu jelaskan alasannya.
-3. Ulangi dengan **Extended Numbered ACL** agar VLAN 10 ↔ VLAN 30 terblokir dua arah dalam **satu** ACL.
-4. Tulis ulang soal 2 dan 3 sebagai **Standard Named** dan **Extended Named ACL**.
-5. Pada Extended Named ACL, sisipkan pengecualian agar VLAN 10 tetap bisa mengakses web server (port 80) di VLAN 30. Ingat: balasan juga perlu diizinkan.
-6. Verifikasi dengan `show access-lists` dan ping dari PC. Catat jumlah *match(es)* tiap baris.
 
 ---
 
